@@ -25,10 +25,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'products',
-    'vehicles',
-    'cart',
-    'orders',
     'users',
 ]
 
@@ -64,16 +60,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'car_parts_shop.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # or an absolute path
-    },
-    'postgress': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='car_parts_shop'),
+        'NAME': config('DB_NAME', default='revline'),
         'USER': config('DB_USER', default='postgres'),
         'PASSWORD': config('DB_PASSWORD', default=''),
         'HOST': config('DB_HOST', default='localhost'),
