@@ -1,0 +1,366 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ site_settings.site_name }} - Premium Sport Car Parts{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Unleash Your Car's
+                    <span style="background: linear-gradient(135deg, #ff6b35 0%, #f39c12 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Performance</span>
+                </h1>
+                <p class="lead mb-4">Premium sport car parts and accessories for the ultimate driving experience. Quality parts, competitive prices, expert service.</p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-lightning-fill me-2"></i>Shop Now
+                    </a>
+                    <a href="{% url 'core:about' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-play-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=400&fit=crop&auto=format" 
+                         alt="Sport Car" class="img-fluid rounded-4 shadow-lg" style="max-height: 400px;">
+                    <div class="position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-primary fs-6 px-3 py-2">Premium Quality</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-truck text-white fs-2"></i>
+                    </div>
+                    <h5>Free Shipping</h5>
+                    <p class="text-muted">Free shipping on orders over ${{ site_settings.free_shipping_threshold }}</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-shield-check text-white fs-2"></i>
+                    </div>
+                    <h5>Quality Guarantee</h5>
+                    <p class="text-muted">30-day money back guarantee on all products</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-headset text-white fs-2"></i>
+                    </div>
+                    <h5>Expert Support</h5>
+                    <p class="text-muted">Professional technical support and guidance</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-lightning-charge text-white fs-2"></i>
+                    </div>
+                    <h5>Fast Delivery</h5>
+                    <p class="text-muted">Quick processing and fast shipping nationwide</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+{% if featured_products %}
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
+                <p class="lead text-muted">Handpicked premium parts for maximum performance</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for product in featured_products %}
+            <div class="col-lg-3 col-md-6">
+                <div class="card product-card h-100">
+                    {% if product.images.exists %}
+                        <img src="{{ product.images.first.image.url }}" 
+                             class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        {% if product.is_on_sale %}
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge-sale">{{ product.discount_percentage }}% OFF</span>
+                            </div>
+                        {% endif %}
+                        
+                        <h6 class="card-title">{{ product.name }}</h6>
+                        <p class="text-muted small">{{ product.brand.name }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div>
+                                    <span class="price">{{ site_settings.currency_symbol }}{{ product.get_price }}</span>
+                                    {% if product.is_on_sale %}
+                                        <span class="price-old ms-2">{{ site_settings.currency_symbol }}{{ product.price }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if product.average_rating > 0 %}
+                                    <div class="text-warning">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= product.average_rating %}
+                                                <i class="bi bi-star-fill"></i>
+                                            {% else %}
+                                                <i class="bi bi-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <small class="text-muted">({{ product.review_count }})</small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary flex-fill">View Details</a>
+                                <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-primary" 
+                                            {% if not product.is_in_stock %}disabled{% endif %}>
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            {% if not product.is_in_stock %}
+                                <small class="text-danger mt-1">Out of Stock</small>
+                            {% elif product.is_low_stock %}
+                                <small class="text-warning mt-1">Low Stock</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'products:product_list' %}?is_featured=true" class="btn btn-outline-primary btn-lg">
+                View All Featured Products <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Categories Section -->
+{% if categories %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Shop by Category</h2>
+                <p class="lead text-muted">Find the perfect parts for your vehicle</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ category.get_absolute_url }}" class="text-decoration-none">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}" 
+                                     class="mb-3 rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 80px; height: 80px;">
+                                    <i class="bi bi-gear text-white fs-2"></i>
+                                </div>
+                            {% endif %}
+                            <h5 class="card-title">{{ category.name }}</h5>
+                            <p class="text-muted">{{ category.description|truncatewords:15 }}</p>
+                            <small class="text-primary">{{ category.products.count }} products</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- New Arrivals Section -->
+{% if new_products %}
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">New Arrivals</h2>
+                <p class="lead text-muted">Latest additions to our premium collection</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for product in new_products %}
+            <div class="col-lg-3 col-md-6">
+                <div class="card product-card h-100">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-success">New</span>
+                    </div>
+                    
+                    {% if product.images.exists %}
+                        <img src="{{ product.images.first.image.url }}" 
+                             class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title">{{ product.name }}</h6>
+                        <p class="text-muted small">{{ product.brand.name }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="mb-3">
+                                <span class="price">{{ site_settings.currency_symbol }}{{ product.get_price }}</span>
+                            </div>
+                            
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100">
+                                View Details <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'products:product_list' %}?sort=-created_at" class="btn btn-outline-primary btn-lg">
+                View All New Products <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Brands Section -->
+{% if brands %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Trusted Brands</h2>
+                <p class="lead text-muted">We partner with the world's leading automotive brands</p>
+            </div>
+        </div>
+        
+        <div class="row g-4 align-items-center">
+            {% for brand in brands %}
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="text-center p-3">
+                    {% if brand.logo %}
+                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" 
+                             class="img-fluid" style="max-height: 60px; opacity: 0.7;">
+                    {% else %}
+                        <h6 class="text-muted">{{ brand.name }}</h6>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="py-5" style="background: var(--gradient-primary);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <h2 class="display-5 fw-bold mb-4">Ready to Upgrade Your Ride?</h2>
+                <p class="lead mb-4">Join thousands of satisfied customers who trust us for their performance needs.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-cart me-2"></i>Start Shopping
+                    </a>
+                    <a href="{% url 'core:contact' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-chat-dots me-2"></i>Get Expert Advice
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Add to cart functionality
+    $('.add-to-cart-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const form = $(this);
+        const productId = form.data('product-id');
+        const button = form.find('button');
+        const originalIcon = button.find('i').attr('class');
+        
+        // Show loading state
+        button.prop('disabled', true);
+        button.find('i').attr('class', 'bi bi-arrow-repeat spinner-border spinner-border-sm');
+        
+        $.ajax({
+            url: '{% url "cart:add_to_cart" %}',
+            method: 'POST',
+            data: {
+                'product_id': productId,
+                'quantity': 1,
+                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    updateCartBadge(response.cart_total_items);
+                    
+                    // Change button to success state temporarily
+                    button.find('i').attr('class', 'bi bi-check-lg text-success');
+                    setTimeout(function() {
+                        button.find('i').attr('class', originalIcon);
+                        button.prop('disabled', false);
+                    }, 2000);
+                } else {
+                    showToast(response.error, 'danger');
+                    button.find('i').attr('class', originalIcon);
+                    button.prop('disabled', false);
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+                button.find('i').attr('class', originalIcon);
+                button.prop('disabled', false);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
