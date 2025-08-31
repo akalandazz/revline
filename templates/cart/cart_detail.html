@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart - {{ site_settings.site_name }}{% endblock %}
+
+{% block meta_description %}Review your shopping cart and proceed to checkout. View item details, update quantities, and complete your purchase securely.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="py-3 bg-light">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item active">Shopping Cart</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Cart Content -->
+<section class="py-5">
+    <div class="container">
+        {% if cart_items %}
+            <div class="row">
+                <!-- Cart Items -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0 py-3">
+                            <h4 class="mb-0 fw-bold">
+                                <i class="bi bi-cart3 me-2"></i>Shopping Cart ({{ cart.total_items }} item{{ cart.total_items|pluralize }})
+                            </h4>
+                        </div>
+                        <div class="card-body p-0">
+                            {% for item in cart_items %}
+                            <div class="cart-item border-bottom p-4" data-product-id="{{ item.product.id }}">
+                                <div class="row align-items-center">
+                                    <!-- Product Image -->
+                                    <div class="col-md-3 col-4">
+                                        <div class="position-relative">
+                                            {% if item.product.images.exists %}
+                                                <img src="{{ item.product.images.first.image.url }}"
+                                                     alt="{{ item.product.name }}"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="max-height: 120px; object-fit: cover;">
+                                            {% else %}
+                                                <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                                     style="height: 120px;">
+                                                    <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                                </div>
+                                            {% endif %}
+
+                                            {% if item.product.is_on_sale %}
+                                                <div class="position-absolute top-0 start-0 m-1">
+                                                    <span class="badge bg-danger">{{ item.product.discount_percentage }}% OFF</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Details -->
+                                    <div class="col-md-5 col-8">
+                                        <h6 class="mb-1">
+                                            <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none text-dark">
+                                                {{ item.product.name }}
+                                            </a>
+                                        </h6>
+                                        <p class="text-muted small mb-2">{{ item.product.brand.name }}</p>
+
+                                        <!-- Price -->
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="price fw-bold">{{ site_settings.currency_symbol }}{{ item.total_price }}</span>
+                                            {% if item.product.is_on_sale %}
+                                                <span class="price-old text-muted">{{ site_settings.currency_symbol }}{{ item.product.price }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <!-- Stock Status -->
+                                        {% if item.product.manage_stock %}
+                                            {% if item.product.stock_quantity < item.quantity %}
+                                                <small class="text-danger mt-1 d-block">
+                                                    Only {{ item.product.stock_quantity }} left in stock
+                                                </small>
+                                            {% elif item.product.stock_quantity <= 5 %}
+                                                <small class="text-warning mt-1 d-block">
+                                                    Low stock ({{ item.product.stock_quantity }} remaining)
+                                                </small>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Quantity Controls -->
+                                    <div class="col-md-2 col-6">
+                                        <div class="quantity-controls d-flex align-items-center">
+                                            <button class="btn btn-outline-secondary btn-sm quantity-btn"
+                                                    data-action="decrease"
+                                                    {% if item.quantity <= 1 %}disabled{% endif %}>
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+
+                                            <input type="number" class="form-control form-control-sm text-center mx-2 quantity-input"
+                                                   value="{{ item.quantity }}" min="1"
+                                                   {% if item.product.manage_stock %}max="{{ item.product.stock_quantity }}"{% endif %}
+                                                   style="width: 60px;">
+
+                                            <button class="btn btn-outline-secondary btn-sm quantity-btn"
+                                                    data-action="increase"
+                                                    {% if item.product.manage_stock and item.quantity >= item.product.stock_quantity %}disabled{% endif %}>
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Remove Button -->
+                                    <div class="col-md-2 col-6 text-end">
+                                        <button class="btn btn-outline-danger btn-sm remove-item"
+                                                data-product-id="{{ item.product.id }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Cart Actions -->
+                        <div class="card-footer bg-white border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">
+                                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                                </a>
+                                <button class="btn btn-outline-secondary clear-cart">
+                                    <i class="bi bi-cart-x me-2"></i>Clear Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                        <div class="card-header bg-white border-0 py-3">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="bi bi-receipt me-2"></i>Order Summary
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Subtotal -->
+                            <div class="d-flex justify-content-between mb-3">
+                                <span>Subtotal ({{ cart.total_items }} item{{ cart.total_items|pluralize }})</span>
+                                <span class="fw-bold">{{ site_settings.currency_symbol }}{{ cart.total_price }}</span>
+                            </div>
+
+                            <!-- Shipping -->
+                            {% if cart.total_price < site_settings.free_shipping_threshold %}
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Shipping</span>
+                                    <span class="text-muted">{{ site_settings.currency_symbol }}{{ site_settings.shipping_cost|default:"10.00" }}</span>
+                                </div>
+
+                                <!-- Free Shipping Notice -->
+                                <div class="alert alert-info py-2 mb-3">
+                                    <small>
+                                        Add {{ site_settings.currency_symbol }}{{ site_settings.free_shipping_threshold|add:cart.total_price|floatformat:2 }}
+                                        more for free shipping!
+                                    </small>
+                                </div>
+                            {% else %}
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Shipping</span>
+                                    <span class="text-success">FREE</span>
+                                </div>
+                            {% endif %}
+
+                            <!-- Tax (if applicable) -->
+                            {% if site_settings.tax_rate %}
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Tax ({{ site_settings.tax_rate }}%)</span>
+                                    <span>{{ site_settings.currency_symbol }}{% widthratio cart.total_price site_settings.tax_rate 100 %}</span>
+                                </div>
+                            {% endif %}
+
+                            <hr>
+
+                            <!-- Total -->
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="h5 mb-0">Total</span>
+                                <span class="h5 mb-0 fw-bold text-primary">{{ site_settings.currency_symbol }}{{ cart.total_price }}</span>
+                            </div>
+
+                            <!-- Checkout Button -->
+                            <a href="{% url 'checkout:checkout' %}" class="btn btn-primary w-100 mb-3">
+                                <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+                            </a>
+
+                            <!-- Payment Methods -->
+                            <div class="text-center">
+                                <small class="text-muted">We accept</small>
+                                <div class="mt-2">
+                                    <i class="bi bi-credit-card me-2" title="Credit Card"></i>
+                                    <i class="bi bi-paypal me-2" title="PayPal"></i>
+                                    <i class="bi bi-cash me-2" title="Cash on Delivery"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="alert alert-light border mt-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-shield-check text-success me-2"></i>
+                            <small class="text-muted">
+                                Secure checkout with SSL encryption. Your payment information is protected.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- Empty Cart -->
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="bi bi-cart-x text-muted" style="font-size: 4rem;"></i>
+                </div>
+                <h3 class="text-muted mb-3">Your cart is empty</h3>
+                <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+                <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-shop me-2"></i>Start Shopping
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.cart-item:hover {
+    background-color: #f8f9fa;
+}
+
+.quantity-controls .btn {
+    border-radius: 50% !important;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-input {
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .cart-item .col-4, .cart-item .col-8 {
+        padding: 0.5rem;
+    }
+
+    .quantity-controls {
+        flex-direction: column;
+        gap: 0.25rem !important;
+    }
+
+    .quantity-input {
+        order: -1;
+        margin: 0 !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Update quantity
+    $('.quantity-btn').on('click', function() {
+        const button = $(this);
+        const cartItem = button.closest('.cart-item');
+        const productId = cartItem.data('product-id');
+        const quantityInput = cartItem.find('.quantity-input');
+        const action = button.data('action');
+
+        let currentQuantity = parseInt(quantityInput.val());
+
+        if (action === 'increase') {
+            currentQuantity++;
+        } else if (action === 'decrease' && currentQuantity > 1) {
+            currentQuantity--;
+        }
+
+        updateCartItem(productId, currentQuantity);
+    });
+
+    // Update quantity on input change
+    $('.quantity-input').on('change', function() {
+        const input = $(this);
+        const cartItem = input.closest('.cart-item');
+        const productId = cartItem.data('product-id');
+        const quantity = parseInt(input.val());
+
+        if (quantity > 0) {
+            updateCartItem(productId, quantity);
+        }
+    });
+
+    // Remove item
+    $('.remove-item').on('click', function() {
+        const button = $(this);
+        const productId = button.data('product-id');
+
+        if (confirm('Are you sure you want to remove this item from your cart?')) {
+            removeFromCart(productId);
+        }
+    });
+
+    // Clear cart
+    $('.clear-cart').on('click', function() {
+        if (confirm('Are you sure you want to clear your entire cart?')) {
+            clearCart();
+        }
+    });
+
+    function updateCartItem(productId, quantity) {
+        $.ajax({
+            url: '{% url "cart:update_cart_item" %}',
+            method: 'POST',
+            data: JSON.stringify({
+                'product_id': productId,
+                'quantity': quantity
+            }),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    updateCartBadge(response.cart_total_items);
+
+                    // Reload page to update totals
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showToast(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+            }
+        });
+    }
+
+    function removeFromCart(productId) {
+        $.ajax({
+            url: `/cart/remove/${productId}/`,
+            method: 'POST',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    updateCartBadge(response.cart_total_items);
+
+                    // Reload page to update cart
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showToast(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+            }
+        });
+    }
+
+    function clearCart() {
+        $.ajax({
+            url: '{% url "cart:clear_cart" %}',
+            method: 'POST',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    updateCartBadge(0);
+
+                    // Reload page to show empty cart
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showToast('An error occurred.', 'danger');
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
