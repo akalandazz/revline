@@ -1,26 +1,15 @@
 #!/bin/bash
 
-# Wait for database
-echo "Waiting for database..."
-while ! nc -z db 5432; do
-  sleep 0.1
+# Wait for db to be ready
+export PGPASSWORD=revline_pass
+until pg_isready -h db -p 5432 -U revline_user -d revline_db; do
+  echo "Waiting for database..."
+  sleep 2
 done
-echo "Database is ready!"
 
 # Run migrations
 python manage.py makemigrations
 python manage.py migrate
-
-# Create superuser if it doesn't exist
-python manage.py shell << EOF
-from django.contrib.auth import get_user_model
-User = get_user_model()
-if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@revline.com', 'admin123')
-    print('Superuser created successfully!')
-else:
-    print('Superuser already exists')
-EOF
 
 # Collect static files
 python manage.py collectstatic --noinput

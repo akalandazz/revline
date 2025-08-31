@@ -36,7 +36,6 @@ LOCAL_APPS = [
     'accounts',
     'products',
     'cart',
-    'orders',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -53,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'revline.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
