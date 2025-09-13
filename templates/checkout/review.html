@@ -272,8 +272,17 @@
 {{ block.super }}
 <script>
 $(document).ready(function() {
+    // Prevent double submission
+    let formSubmitted = false;
+    
     // Form submission handling
     $('form').on('submit', function(e) {
+        // Prevent double submission
+        if (formSubmitted) {
+            e.preventDefault();
+            return false;
+        }
+        
         const termsAccepted = $('#{{ form.terms_accepted.id_for_label }}').is(':checked');
         
         if (!termsAccepted) {
@@ -283,6 +292,9 @@ $(document).ready(function() {
             return;
         }
         
+        // Mark form as submitted to prevent double submission
+        formSubmitted = true;
+        
         // Disable button and show loading state
         const submitBtn = $('#place-order-btn');
         submitBtn.prop('disabled', true);
@@ -290,16 +302,6 @@ $(document).ready(function() {
         
         // Show processing message
         showToast('Processing your order, please wait...', 'info');
-    });
-    
-    // Prevent double submission
-    let formSubmitted = false;
-    $('form').on('submit', function(e) {
-        if (formSubmitted) {
-            e.preventDefault();
-            return false;
-        }
-        formSubmitted = true;
     });
     
     // Edit links functionality
