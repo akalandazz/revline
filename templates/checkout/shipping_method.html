@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                             <div class="text-end">
-                                {% if method.is_free_for_order:cart.total_price %}
+                                {% if method.free_shipping_threshold and cart.total_price >= method.free_shipping_threshold %}
                                     <span class="h6 text-success mb-0">FREE</span>
                                     <br><small class="text-muted text-decoration-line-through">{{ site_settings.currency_symbol }}{{ method.cost }}</small>
                                 {% else %}
