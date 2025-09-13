@@ -182,7 +182,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'core:home' %}">
+            <a class="navbar-brand" href="{% url 'shop:home' %}">
                 <i class="bi bi-speedometer2 me-2"></i>{{ site_settings.site_name }}
             </a>
             
@@ -192,7 +192,7 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Search Bar -->
-                <form class="d-flex mx-auto" style="width: 100%; max-width: 400px;" method="get" action="{% url 'core:search' %}">
+                <form class="d-flex mx-auto" style="width: 100%; max-width: 400px;" method="get" action="{% url 'shop:search' %}">
                     <div class="input-group">
                         <input class="form-control search-bar" type="search" name="q" placeholder="Search car parts..." value="{{ request.GET.q }}">
                         <button class="btn btn-primary" type="submit">
@@ -307,10 +307,10 @@
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h6 class="mb-3">Support</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'core:contact' %}" class="text-light text-decoration-none">Contact Us</a></li>
-                        <li><a href="{% url 'core:faq' %}" class="text-light text-decoration-none">FAQ</a></li>
-                        <li><a href="{% url 'core:shipping_returns' %}" class="text-light text-decoration-none">Shipping & Returns</a></li>
-                        <li><a href="{% url 'core:terms_of_service' %}" class="text-light text-decoration-none">Terms of Service</a></li>
+                        <li><a href="{% url 'shop:contact' %}" class="text-light text-decoration-none">Contact Us</a></li>
+                        <li><a href="{% url 'shop:faq' %}" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="{% url 'shop:shipping_returns' %}" class="text-light text-decoration-none">Shipping & Returns</a></li>
+                        <li><a href="{% url 'shop:terms_of_service' %}" class="text-light text-decoration-none">Terms of Service</a></li>
                     </ul>
                 </div>
                 
@@ -337,8 +337,8 @@
                     <p class="text-light mb-0">&copy; 2024 {{ site_settings.site_name }}. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <a href="{% url 'core:privacy_policy' %}" class="text-light text-decoration-none me-3">Privacy Policy</a>
-                    <a href="{% url 'core:terms_of_service' %}" class="text-light text-decoration-none">Terms of Service</a>
+                    <a href="{% url 'shop:privacy_policy' %}" class="text-light text-decoration-none me-3">Privacy Policy</a>
+                    <a href="{% url 'shop:terms_of_service' %}" class="text-light text-decoration-none">Terms of Service</a>
                 </div>
             </div>
         </div>
@@ -382,7 +382,7 @@
             submitBtn.prop('disabled', true);
             
             $.ajax({
-                url: '{% url "core:newsletter_subscribe" %}',
+                url: '{% url "shop:newsletter_subscribe" %}',
                 method: 'POST',
                 data: form.serialize(),
                 headers: {'X-CSRFToken': csrftoken},

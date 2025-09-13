@@ -10,7 +10,7 @@
 <nav aria-label="breadcrumb" class="py-3 bg-light">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}">Products</a></li>
             <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
             <li class="breadcrumb-item active">{{ product.name }}</li>

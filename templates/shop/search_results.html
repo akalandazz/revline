@@ -10,7 +10,7 @@
 <nav aria-label="breadcrumb" class="py-3 bg-light">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
             <li class="breadcrumb-item active">Search Results</li>
         </ol>
     </div>
@@ -57,7 +57,7 @@
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-4">
-                        <form method="get" action="{% url 'core:search' %}" class="search-form">
+                        <form method="get" action="{% url 'shop:search' %}" class="search-form">
                             <div class="input-group input-group-lg">
                                 <input type="text" name="q" class="form-control search-input" 
                                        placeholder="Search for car parts, brands, categories..." 
@@ -94,7 +94,7 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <form method="get" action="{% url 'core:search' %}" id="filter-form">
+                            <form method="get" action="{% url 'shop:search' %}" id="filter-form">
                                 <input type="hidden" name="q" value="{{ query }}">
                                 
                                 <!-- Categories -->
@@ -192,7 +192,7 @@
                                 <!-- Clear Filters -->
                                 {% if request.GET.category or request.GET.brand or request.GET.min_price or request.GET.max_price or request.GET.condition or request.GET.in_stock %}
                                 <div class="mb-0">
-                                    <a href="{% url 'core:search' %}?q={{ query }}" class="btn btn-outline-secondary btn-sm w-100">
+                                    <a href="{% url 'shop:search' %}?q={{ query }}" class="btn btn-outline-secondary btn-sm w-100">
                                         <i class="bi bi-x-circle me-1"></i>Clear All Filters
                                     </a>
                                 </div>
@@ -427,7 +427,7 @@
                     <a href="{% url 'products:product_list' %}?is_featured=true" class="btn btn-outline-primary">
                         <i class="bi bi-star me-2"></i>Featured Products
                     </a>
-                    <a href="{% url 'core:contact' %}" class="btn btn-outline-secondary">
+                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-secondary">
                         <i class="bi bi-chat-dots me-2"></i>Need Help?
                     </a>
                 </div>
@@ -449,14 +449,14 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="d-flex flex-wrap justify-content-center gap-2">
-                    <a href="{% url 'core:search' %}?q=brake+pads" class="btn btn-outline-primary btn-sm">Brake Pads</a>
-                    <a href="{% url 'core:search' %}?q=engine+oil" class="btn btn-outline-primary btn-sm">Engine Oil</a>
-                    <a href="{% url 'core:search' %}?q=air+filter" class="btn btn-outline-primary btn-sm">Air Filter</a>
-                    <a href="{% url 'core:search' %}?q=suspension" class="btn btn-outline-primary btn-sm">Suspension</a>
-                    <a href="{% url 'core:search' %}?q=headlights" class="btn btn-outline-primary btn-sm">Headlights</a>
-                    <a href="{% url 'core:search' %}?q=tires" class="btn btn-outline-primary btn-sm">Tires</a>
-                    <a href="{% url 'core:search' %}?q=battery" class="btn btn-outline-primary btn-sm">Battery</a>
-                    <a href="{% url 'core:search' %}?q=exhaust" class="btn btn-outline-primary btn-sm">Exhaust</a>
+                    <a href="{% url 'shop:search' %}?q=brake+pads" class="btn btn-outline-primary btn-sm">Brake Pads</a>
+                    <a href="{% url 'shop:search' %}?q=engine+oil" class="btn btn-outline-primary btn-sm">Engine Oil</a>
+                    <a href="{% url 'shop:search' %}?q=air+filter" class="btn btn-outline-primary btn-sm">Air Filter</a>
+                    <a href="{% url 'shop:search' %}?q=suspension" class="btn btn-outline-primary btn-sm">Suspension</a>
+                    <a href="{% url 'shop:search' %}?q=headlights" class="btn btn-outline-primary btn-sm">Headlights</a>
+                    <a href="{% url 'shop:search' %}?q=tires" class="btn btn-outline-primary btn-sm">Tires</a>
+                    <a href="{% url 'shop:search' %}?q=battery" class="btn btn-outline-primary btn-sm">Battery</a>
+                    <a href="{% url 'shop:search' %}?q=exhaust" class="btn btn-outline-primary btn-sm">Exhaust</a>
                 </div>
             </div>
         </div>
@@ -621,7 +621,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         const formData = $(this).serialize();
-        const url = '{% url "core:search" %}?' + formData;
+        const url = '{% url "shop:search" %}?' + formData;
 
         // Show loading state
         $('#products-grid').addClass('opacity-50');

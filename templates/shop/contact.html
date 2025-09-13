@@ -11,7 +11,7 @@
 <nav aria-label="breadcrumb" class="py-3 bg-light">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
             <li class="breadcrumb-item active">Contact Us</li>
         </ol>
     </div>
@@ -131,10 +131,10 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="d-grid gap-2">
-                            <a href="{% url 'core:faq' %}" class="btn btn-outline-primary">
+                            <a href="{% url 'shop:faq' %}" class="btn btn-outline-primary">
                                 <i class="bi bi-question-circle me-2"></i>FAQ
                             </a>
-                            <a href="{% url 'core:shipping_returns' %}" class="btn btn-outline-primary">
+                            <a href="{% url 'shop:shipping_returns' %}" class="btn btn-outline-primary">
                                 <i class="bi bi-truck me-2"></i>Shipping & Returns
                             </a>
                             <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">

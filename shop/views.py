@@ -36,12 +36,12 @@ def home(request):
         # Newsletter form
         'newsletter_form': NewsletterForm(),
     }
-    return render(request, 'core/home.html', context)
+    return render(request, 'shop/home.html', context)
 
 
 def about(request):
     """About us page."""
-    return render(request, 'core/about.html')
+    return render(request, 'shop/about.html')
 
 
 def contact(request):
@@ -51,7 +51,7 @@ def contact(request):
         if form.is_valid():
             contact_message = form.save()
             messages.success(request, 'Thank you for your message! We\'ll get back to you soon.')
-            return redirect('core:contact')
+            return redirect('shop:contact')
     else:
         form = ContactForm()
     
@@ -59,8 +59,7 @@ def contact(request):
         'form': form,
         'site_settings': SiteSettings.get_settings(),
     }
-    return render(request, 'core/contact.html', context)
-
+    return render(request, 'shop/contact.html', context)
 
 @require_POST
 def newsletter_subscribe(request):
@@ -97,7 +96,7 @@ def newsletter_subscribe(request):
             return JsonResponse({'success': False, 'error': error_message})
         messages.error(request, error_message)
     
-    return redirect('core:home')
+    return redirect('shop:home')
 
 
 def search(request):
@@ -128,17 +127,17 @@ def search(request):
         'products': products_page,
         'total_results': paginator.count,
     }
-    return render(request, 'core/search_results.html', context)
+    return render(request, 'shop/search_results.html', context)
 
 
 def privacy_policy(request):
     """Privacy policy page."""
-    return render(request, 'core/privacy_policy.html')
+    return render(request, 'shop/privacy_policy.html')
 
 
 def terms_of_service(request):
     """Terms of service page."""
-    return render(request, 'core/terms_of_service.html')
+    return render(request, 'shop/terms_of_service.html')
 
 
 def shipping_returns(request):
@@ -146,9 +145,9 @@ def shipping_returns(request):
     context = {
         'site_settings': SiteSettings.get_settings(),
     }
-    return render(request, 'core/shipping_returns.html', context)
+    return render(request, 'shop/shipping_returns.html', context)
 
 
 def faq(request):
     """Frequently asked questions page."""
-    return render(request, 'core/faq.html')
+    return render(request, 'shop/faq.html')
