@@ -87,3 +87,23 @@ def delete_address(request, address_id):
     except Address.DoesNotExist:
         messages.error(request, 'Address not found.')
     return redirect('accounts:profile')
+
+
+@login_required
+def edit_address(request, address_id):
+    """Edit user address."""
+    try:
+        address = Address.objects.get(id=address_id, user=request.user)
+    except Address.DoesNotExist:
+        messages.error(request, 'Address not found.')
+        return redirect('accounts:profile')
+    
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Address updated successfully!')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    
+    return redirect('accounts:profile')

@@ -117,7 +117,18 @@
                                             <i class="bi bi-three-dots"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                                            <li><a class="dropdown-item edit-address-btn" href="#"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#editAddressModal"
+                                                   data-address-id="{{ address.id }}"
+                                                   data-address-type="{{ address.address_type }}"
+                                                   data-street-address="{{ address.street_address }}"
+                                                   data-apartment="{{ address.apartment }}"
+                                                   data-city="{{ address.city }}"
+                                                   data-state="{{ address.state }}"
+                                                   data-postal-code="{{ address.postal_code }}"
+                                                   data-country="{{ address.country }}"
+                                                   data-is-default="{{ address.is_default }}"><i class="bi bi-pencil me-2"></i>Edit</a></li>
                                             <li><a class="dropdown-item text-danger" href="{% url 'accounts:delete_address' address.id %}"><i class="bi bi-trash me-2"></i>Delete</a></li>
                                         </ul>
                                     </div>
@@ -255,6 +266,70 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Address Modal -->
+<div class="modal fade" id="editAddressModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 border-0">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-geo-alt-fill me-2 text-primary"></i>Edit Address
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form method="post" id="editAddressForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="edit_address_type" class="form-label">Address Type</label>
+                        <select class="form-select" id="edit_address_type" name="address_type" required>
+                            <option value="billing">Billing</option>
+                            <option value="shipping">Shipping</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_street_address" class="form-label">Street Address</label>
+                        <input type="text" class="form-control" id="edit_street_address" name="street_address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_apartment" class="form-label">Apartment, suite, etc. (Optional)</label>
+                        <input type="text" class="form-control" id="edit_apartment" name="apartment">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="edit_city" name="city" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="edit_state" class="form-label">State</label>
+                            <input type="text" class="form-control" id="edit_state" name="state" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="edit_postal_code" class="form-label">Postal Code</label>
+                            <input type="text" class="form-control" id="edit_postal_code" name="postal_code" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="edit_country" name="country" value="United States" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="edit_is_default" name="is_default">
+                        <label class="form-check-label" for="edit_is_default">
+                            Set as default address
+                        </label>
+                    </div>
+                    <div class="modal-footer border-0 p-0 pt-3">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-2"></i>Update Address
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_css %}
@@ -331,4 +406,43 @@
     }
 }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle edit address button clicks
+    const editButtons = document.querySelectorAll('.edit-address-btn');
+    editButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get address data from data attributes
+            const addressId = this.dataset.addressId;
+            const addressType = this.dataset.addressType;
+            const streetAddress = this.dataset.streetAddress;
+            const apartment = this.dataset.apartment;
+            const city = this.dataset.city;
+            const state = this.dataset.state;
+            const postalCode = this.dataset.postalCode;
+            const country = this.dataset.country;
+            const isDefault = this.dataset.isDefault === 'True';
+            
+            // Populate the edit form
+            document.getElementById('edit_address_type').value = addressType;
+            document.getElementById('edit_street_address').value = streetAddress;
+            document.getElementById('edit_apartment').value = apartment || '';
+            document.getElementById('edit_city').value = city;
+            document.getElementById('edit_state').value = state;
+            document.getElementById('edit_postal_code').value = postalCode;
+            document.getElementById('edit_country').value = country;
+            document.getElementById('edit_is_default').checked = isDefault;
+            
+            // Update form action URL
+            const form = document.getElementById('editAddressForm');
+            form.action = `/accounts/edit-address/${addressId}/`;
+        });
+    });
+});
+</script>
 {% endblock %}
