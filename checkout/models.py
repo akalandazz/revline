@@ -150,6 +150,20 @@ class Order(models.Model):
         self.status = 'delivered'
         self.delivered_at = timezone.now()
         self.save()
+    
+    def cancel_order(self):
+        """Cancel the order and restore stock."""
+        if not self.can_be_cancelled():
+            raise ValueError("Order cannot be cancelled")
+        
+        self.status = 'cancelled'
+        self.save()
+        
+        # Restore product stock if managed
+        for item in self.items.all():
+            if item.product and item.product.manage_stock:
+                item.product.stock_quantity += item.quantity
+                item.product.save()
 
 
 class OrderItem(models.Model):

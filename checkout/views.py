@@ -351,6 +351,118 @@ def order_list(request):
     return render(request, 'checkout/order_list.html', context)
 
 
+@login_required
+@require_POST
+def cancel_order(request, order_number):
+    """Cancel an order."""
+    try:
+        order = get_object_or_404(Order, order_number=order_number, user=request.user)
+        
+        # Check if order can be cancelled
+        if not order.can_be_cancelled():
+            return JsonResponse({
+                'success': False,
+                'error': 'This order cannot be cancelled.'
+            })
+        
+        # Cancel the order
+        with transaction.atomic():
+            order.cancel_order()
+            
+            # Create status history entry
+            OrderStatusHistory.objects.create(
+                order=order,
+                status='cancelled',
+                notes='Order cancelled by customer',
+                created_by=request.user
+            )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Order cancelled successfully.'
+        })
+        
+    except Order.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'error': 'Order not found.'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': 'An error occurred while cancelling the order.'
+        })
+
+
+@login_required
+@require_POST
+def reorder_items(request, order_number):
+    """Add all items from an order to the cart."""
+    try:
+        order = get_object_or_404(Order, order_number=order_number, user=request.user)
+        cart = get_or_create_cart(request)
+        
+        items_added = 0
+        items_unavailable = []
+        
+        with transaction.atomic():
+            for order_item in order.items.all():
+                # Check if product still exists and is available
+                if not order_item.product:
+                    items_unavailable.append(order_item.product_name)
+                    continue
+                
+                # Check stock availability
+                if order_item.product.manage_stock and order_item.product.stock_quantity < order_item.quantity:
+                    items_unavailable.append(f"{order_item.product_name} (only {order_item.product.stock_quantity} available)")
+                    continue
+                
+                # Add to cart or update existing cart item
+                from cart.models import CartItem
+                cart_item, created = CartItem.objects.get_or_create(
+                    cart=cart,
+                    product=order_item.product,
+                    defaults={'quantity': order_item.quantity}
+                )
+                
+                if not created:
+                    # Update quantity if item already in cart
+                    new_quantity = cart_item.quantity + order_item.quantity
+                    if order_item.product.manage_stock and order_item.product.stock_quantity < new_quantity:
+                        items_unavailable.append(f"{order_item.product_name} (insufficient stock)")
+                        continue
+                    cart_item.quantity = new_quantity
+                    cart_item.save()
+                
+                items_added += 1
+        
+        # Prepare response message
+        message = f"{items_added} item{'s' if items_added != 1 else ''} added to cart."
+        if items_unavailable:
+            message += f" {len(items_unavailable)} item{'s' if len(items_unavailable) != 1 else ''} unavailable: {', '.join(items_unavailable[:3])}"
+            if len(items_unavailable) > 3:
+                message += f" and {len(items_unavailable) - 3} more."
+        
+        return JsonResponse({
+            'success': True,
+            'message': message,
+            'cart_total_items': cart.total_items,
+            'items_added': items_added,
+            'items_unavailable': len(items_unavailable)
+        })
+        
+    except Order.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'error': 'Order not found.'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': 'An error occurred while adding items to cart.'
+        })
+
+
 # Helper functions
 
 def get_checkout_cart(request):
