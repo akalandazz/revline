@@ -76,11 +76,68 @@ def checkout_shipping(request):
         return redirect('checkout:contact')
     
     if request.method == 'POST':
-        form = ShippingAddressForm(request.POST, user=request.user)
-        if form.is_valid():
-            # Store shipping info in session
-            request.session['checkout_shipping'] = form.cleaned_data
-            return redirect('checkout:billing')
+        # Check if user selected a saved address
+        saved_address_id = request.POST.get('saved_address')
+        
+        if saved_address_id and saved_address_id != 'new' and request.user.is_authenticated:
+            # User selected a saved address
+            try:
+                from accounts.models import Address
+                address = Address.objects.get(
+                    id=saved_address_id,
+                    user=request.user,
+                    address_type='shipping'
+                )
+                
+                # Store shipping info from saved address in session
+                shipping_data = {
+                    'street_address': address.street_address,
+                    'apartment': address.apartment,
+                    'city': address.city,
+                    'state': address.state,
+                    'postal_code': address.postal_code,
+                    'country': address.country,
+                }
+                request.session['checkout_shipping'] = shipping_data
+                
+                # Handle save address checkbox if present
+                if request.POST.get('save_address'):
+                    # Address is already saved, no need to save again
+                    pass
+                
+                return redirect('checkout:billing')
+                
+            except Address.DoesNotExist:
+                messages.error(request, 'Selected address not found.')
+        else:
+            # User entered new address
+            form = ShippingAddressForm(request.POST, user=request.user)
+            if form.is_valid():
+                # Store shipping info in session
+                shipping_data = form.cleaned_data
+                request.session['checkout_shipping'] = shipping_data
+                
+                # Save address if requested and user is authenticated
+                if request.POST.get('save_address') and request.user.is_authenticated:
+                    try:
+                        from accounts.models import Address
+                        Address.objects.create(
+                            user=request.user,
+                            address_type='shipping',
+                            street_address=shipping_data['street_address'],
+                            apartment=shipping_data.get('apartment', ''),
+                            city=shipping_data['city'],
+                            state=shipping_data['state'],
+                            postal_code=shipping_data['postal_code'],
+                            country=shipping_data['country'],
+                            is_default=False  # Don't make it default automatically
+                        )
+                        messages.success(request, 'Address saved for future use.')
+                    except Exception as e:
+                        # Don't fail checkout if address saving fails
+                        messages.warning(request, 'Address could not be saved, but checkout will continue.')
+                
+                return redirect('checkout:billing')
     else:
         # Pre-fill form with session data if available
         initial_data = request.session.get('checkout_shipping', {})

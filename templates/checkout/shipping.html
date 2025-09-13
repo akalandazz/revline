@@ -182,23 +182,71 @@
 
 {% block extra_js %}
 {{ block.super }}
+
+<!-- Address data as JSON -->
+<script type="application/json" id="address-data">
+{
+    {% for address in user.addresses.all %}
+    {% if address.address_type == 'shipping' %}
+    "{{ address.id }}": {
+        "street_address": "{{ address.street_address|escapejs }}",
+        "apartment": "{{ address.apartment|escapejs }}",
+        "city": "{{ address.city|escapejs }}",
+        "state": "{{ address.state|escapejs }}",
+        "postal_code": "{{ address.postal_code|escapejs }}",
+        "country": "{{ address.country|escapejs }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endif %}
+    {% endfor %}
+}
+</script>
+
 <script>
 $(document).ready(function() {
+    // Get address data from JSON script tag
+    const addressDataElement = document.getElementById('address-data');
+    const addressData = addressDataElement ? JSON.parse(addressDataElement.textContent) : {};
+
     // Handle saved address selection
     $('input[name="saved_address"]').on('change', function() {
         if ($(this).val() === 'new') {
             $('#new-address-form').show();
+            // Clear form fields
+            $('#id_street_address').val('');
+            $('#id_apartment').val('');
+            $('#id_city').val('');
+            $('#id_state').val('');
+            $('#id_postal_code').val('');
+            $('#id_country').val('United States');
         } else {
             $('#new-address-form').hide();
             // Fill form with selected address data
             const addressId = $(this).val();
-            // You could make an AJAX call here to get address details
+            const address = addressData[addressId];
+            if (address) {
+                $('#id_street_address').val(address.street_address);
+                $('#id_apartment').val(address.apartment);
+                $('#id_city').val(address.city);
+                $('#id_state').val(address.state);
+                $('#id_postal_code').val(address.postal_code);
+                $('#id_country').val(address.country);
+            }
         }
     });
 
-    // Initialize form visibility
-    if ($('input[name="saved_address"]:checked').val() !== 'new') {
+    // Initialize form visibility and populate if saved address is selected
+    const selectedAddress = $('input[name="saved_address"]:checked').val();
+    if (selectedAddress && selectedAddress !== 'new') {
         $('#new-address-form').hide();
+        const address = addressData[selectedAddress];
+        if (address) {
+            $('#id_street_address').val(address.street_address);
+            $('#id_apartment').val(address.apartment);
+            $('#id_city').val(address.city);
+            $('#id_state').val(address.state);
+            $('#id_postal_code').val(address.postal_code);
+            $('#id_country').val(address.country);
+        }
     }
 
     // Postal code formatting
@@ -236,12 +284,18 @@ $(document).ready(function() {
 
     // Form submission validation
     $('form').on('submit', function(e) {
-        if ($('input[name="saved_address"]:checked').val() === 'new') {
+        const selectedAddress = $('input[name="saved_address"]:checked').val();
+        if (selectedAddress === 'new') {
             if (!validateAddress()) {
                 e.preventDefault();
-                showToast('Please fill in all required address fields.', 'danger');
+                if (typeof showToast === 'function') {
+                    showToast('Please fill in all required address fields.', 'danger');
+                } else {
+                    alert('Please fill in all required address fields.');
+                }
             }
         }
+        // If using saved address, validation is not needed as address is already validated
     });
 });
 </script>
