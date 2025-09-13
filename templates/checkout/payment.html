@@ -1,0 +1,393 @@
+{% extends 'checkout/base_checkout.html' %}
+{% load crispy_forms_tags %}
+
+{% block checkout_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-4">
+        <p class="text-muted">
+            Choose your payment method and complete your order securely.
+        </p>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="mb-4">
+        <h6 class="mb-3">Payment Method</h6>
+        
+        {% for choice in form.payment_method.field.choices %}
+        <div class="card mb-3 payment-method-card" data-method="{{ choice.0 }}">
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input payment-method-radio" type="radio" 
+                           name="{{ form.payment_method.name }}" 
+                           id="payment_{{ choice.0 }}" 
+                           value="{{ choice.0 }}">
+                    <label class="form-check-label w-100" for="payment_{{ choice.0 }}">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                {% if choice.0 == 'credit_card' %}
+                                    <i class="bi bi-credit-card text-primary" style="font-size: 1.5rem;"></i>
+                                {% elif choice.0 == 'paypal' %}
+                                    <i class="bi bi-paypal text-primary" style="font-size: 1.5rem;"></i>
+                                {% elif choice.0 == 'cash_on_delivery' %}
+                                    <i class="bi bi-cash text-success" style="font-size: 1.5rem;"></i>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ choice.1 }}</h6>
+                                <small class="text-muted">
+                                    {% if choice.0 == 'credit_card' %}
+                                        Pay securely with your credit or debit card
+                                    {% elif choice.0 == 'paypal' %}
+                                        Pay with your PayPal account
+                                    {% elif choice.0 == 'cash_on_delivery' %}
+                                        Pay when your order is delivered
+                                    {% endif %}
+                                </small>
+                            </div>
+                            {% if choice.0 == 'credit_card' %}
+                            <div class="payment-icons">
+                                <i class="bi bi-credit-card me-1" title="Visa"></i>
+                                <i class="bi bi-credit-card me-1" title="Mastercard"></i>
+                                <i class="bi bi-credit-card" title="American Express"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% if form.payment_method.errors %}
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                {{ form.payment_method.errors.0 }}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Credit Card Fields -->
+    <div id="credit-card-fields" style="display: none;">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-credit-card me-2"></i>Credit Card Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="{{ form.card_number.id_for_label }}" class="form-label">
+                                Card Number <span class="text-danger">*</span>
+                            </label>
+                            {{ form.card_number }}
+                            {% if form.card_number.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.card_number.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="{{ form.card_name.id_for_label }}" class="form-label">
+                                Name on Card <span class="text-danger">*</span>
+                            </label>
+                            {{ form.card_name }}
+                            {% if form.card_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.card_name.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.card_expiry.id_for_label }}" class="form-label">
+                                Expiry Date <span class="text-danger">*</span>
+                            </label>
+                            {{ form.card_expiry }}
+                            {% if form.card_expiry.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.card_expiry.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.card_cvv.id_for_label }}" class="form-label">
+                                CVV <span class="text-danger">*</span>
+                            </label>
+                            {{ form.card_cvv }}
+                            {% if form.card_cvv.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.card_cvv.errors.0 }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                <i class="bi bi-question-circle me-1"></i>
+                                3-4 digit security code on the back of your card
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-shield-check me-2"></i>
+                        <small>
+                            Your payment information is encrypted and secure. We never store your credit card details.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PayPal Notice -->
+    <div id="paypal-notice" style="display: none;">
+        <div class="alert alert-info">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-paypal me-2"></i>
+                <div>
+                    <strong>PayPal Payment</strong><br>
+                    <small>You will be redirected to PayPal to complete your payment securely.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cash on Delivery Notice -->
+    <div id="cod-notice" style="display: none;">
+        <div class="alert alert-warning">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-cash me-2"></i>
+                <div>
+                    <strong>Cash on Delivery</strong><br>
+                    <small>
+                        You will pay when your order is delivered. Please have the exact amount ready. 
+                        Additional COD fees may apply.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Notes -->
+    <div class="mb-4">
+        <h6 class="mb-3">Order Notes (Optional)</h6>
+        <div class="mb-3">
+            <label for="{{ form.notes.id_for_label }}" class="form-label">
+                Special Instructions
+            </label>
+            {{ form.notes }}
+            {% if form.notes.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.notes.errors.0 }}
+                </div>
+            {% endif %}
+            <div class="form-text">
+                Any special instructions for your order (e.g., delivery preferences, gift message)
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="{% url 'checkout:shipping_method' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Shipping
+        </a>
+        <button type="submit" class="btn btn-primary" id="continue-btn" disabled>
+            Review Order <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    // Handle payment method selection
+    $('.payment-method-radio').on('change', function() {
+        const method = $(this).val();
+        
+        // Hide all method-specific content
+        $('#credit-card-fields, #paypal-notice, #cod-notice').hide();
+        
+        // Show relevant content
+        if (method === 'credit_card') {
+            $('#credit-card-fields').slideDown();
+        } else if (method === 'paypal') {
+            $('#paypal-notice').slideDown();
+        } else if (method === 'cash_on_delivery') {
+            $('#cod-notice').slideDown();
+        }
+        
+        // Highlight selected method
+        $('.payment-method-card').removeClass('border-primary');
+        $(this).closest('.payment-method-card').addClass('border-primary');
+        
+        // Enable continue button
+        $('#continue-btn').prop('disabled', false);
+        
+        // Update button text based on method
+        if (method === 'paypal') {
+            $('#continue-btn').html('Continue to PayPal <i class="bi bi-arrow-right ms-2"></i>');
+        } else {
+            $('#continue-btn').html('Review Order <i class="bi bi-arrow-right ms-2"></i>');
+        }
+    });
+    
+    // Credit card number formatting
+    $('#{{ form.card_number.id_for_label }}').on('input', function() {
+        let value = $(this).val().replace(/\D/g, '');
+        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        $(this).val(value);
+        
+        // Basic card type detection
+        const firstDigit = value.charAt(0);
+        let cardType = '';
+        if (firstDigit === '4') cardType = 'Visa';
+        else if (firstDigit === '5') cardType = 'Mastercard';
+        else if (firstDigit === '3') cardType = 'American Express';
+        
+        // You could update UI to show card type
+    });
+    
+    // Expiry date formatting
+    $('#{{ form.card_expiry.id_for_label }}').on('input', function() {
+        let value = $(this).val().replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        $(this).val(value);
+    });
+    
+    // CVV formatting
+    $('#{{ form.card_cvv.id_for_label }}').on('input', function() {
+        let value = $(this).val().replace(/\D/g, '');
+        $(this).val(value.substring(0, 4));
+    });
+    
+    // Form validation
+    $('form').on('submit', function(e) {
+        const selectedMethod = $('.payment-method-radio:checked').val();
+        
+        if (!selectedMethod) {
+            e.preventDefault();
+            showToast('Please select a payment method.', 'danger');
+            return;
+        }
+        
+        if (selectedMethod === 'credit_card') {
+            if (!validateCreditCard()) {
+                e.preventDefault();
+                showToast('Please fill in all required credit card fields.', 'danger');
+                return;
+            }
+        }
+    });
+    
+    function validateCreditCard() {
+        const requiredFields = ['card_number', 'card_name', 'card_expiry', 'card_cvv'];
+        let isValid = true;
+        
+        requiredFields.forEach(function(field) {
+            const input = $(`#id_${field}`);
+            if (!input.val().trim()) {
+                input.addClass('is-invalid');
+                isValid = false;
+            } else {
+                input.removeClass('is-invalid');
+            }
+        });
+        
+        return isValid;
+    }
+    
+    // Click on card to select method
+    $('.payment-method-card').on('click', function(e) {
+        if (e.target.type !== 'radio') {
+            $(this).find('.payment-method-radio').prop('checked', true).trigger('change');
+        }
+    });
+    
+    // Hover effects
+    $('.payment-method-card').on('mouseenter', function() {
+        if (!$(this).find('.payment-method-radio').is(':checked')) {
+            $(this).addClass('border-secondary');
+        }
+    }).on('mouseleave', function() {
+        if (!$(this).find('.payment-method-radio').is(':checked')) {
+            $(this).removeClass('border-secondary');
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.payment-method-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid #dee2e6;
+}
+
+.payment-method-card:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.payment-method-card.border-primary {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.payment-icons i {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+#credit-card-fields {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+@media (max-width: 768px) {
+    .payment-method-card .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .payment-icons {
+        margin-top: 0.5rem;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends 'checkout/base_checkout.html' %}
+{% load crispy_forms_tags %}
+
+{% block shipping_summary %}
+<div class="d-flex justify-content-between mb-2">
+    <span>Shipping</span>
+    <span id="shipping-cost">{{ site_settings.currency_symbol }}0.00</span>
+</div>
+{% endblock %}
+
+{% block total_summary %}
+<div class="d-flex justify-content-between mb-3">
+    <span class="h6 mb-0">Total</span>
+    <span class="h6 mb-0 fw-bold text-primary" id="order-total">{{ site_settings.currency_symbol }}{{ cart.total_price }}</span>
+</div>
+{% endblock %}
+
+{% block checkout_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-4">
+        <p class="text-muted">
+            Choose your preferred shipping method. Delivery times are estimates and may vary.
+        </p>
+    </div>
+
+    <div class="shipping-methods">
+        {% for method in form.shipping_method.field.queryset %}
+        <div class="card mb-3 shipping-method-card" data-method-id="{{ method.id }}">
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input shipping-method-radio" type="radio" 
+                           name="{{ form.shipping_method.name }}" 
+                           id="method_{{ method.id }}" 
+                           value="{{ method.id }}"
+                           data-cost="{{ method.cost }}"
+                           data-name="{{ method.name }}"
+                           data-days="{{ method.estimated_days }}">
+                    <label class="form-check-label w-100" for="method_{{ method.id }}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ method.name }}</h6>
+                                <p class="text-muted small mb-2">{{ method.description }}</p>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-clock me-1 text-muted"></i>
+                                    <small class="text-muted">
+                                        {{ method.estimated_days }} business day{{ method.estimated_days|pluralize }}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                {% if method.is_free_for_order:cart.total_price %}
+                                    <span class="h6 text-success mb-0">FREE</span>
+                                    <br><small class="text-muted text-decoration-line-through">{{ site_settings.currency_symbol }}{{ method.cost }}</small>
+                                {% else %}
+                                    <span class="h6 mb-0">{{ site_settings.currency_symbol }}{{ method.cost }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            No shipping methods are currently available. Please contact support for assistance.
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if form.shipping_method.errors %}
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            {{ form.shipping_method.errors.0 }}
+        </div>
+    {% endif %}
+
+    <!-- Free Shipping Notice -->
+    {% if cart.total_price < 100 %}
+    <div class="alert alert-info">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-truck me-2"></i>
+            <div>
+                <strong>Free Shipping Available!</strong><br>
+                <small>
+                    Add {{ site_settings.currency_symbol }}{{ 100|floatformat:2|add:cart.total_price|floatformat:2 }} 
+                    more to your order to qualify for free standard shipping.
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="{% url 'checkout:billing' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Billing
+        </a>
+        <button type="submit" class="btn btn-primary" id="continue-btn" disabled>
+            Continue to Payment <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    const subtotal = parseFloat('{{ cart.total_price }}');
+    
+    // Handle shipping method selection
+    $('.shipping-method-radio').on('change', function() {
+        if ($(this).is(':checked')) {
+            const cost = parseFloat($(this).data('cost'));
+            const name = $(this).data('name');
+            const days = $(this).data('days');
+            
+            // Update shipping cost display
+            $('#shipping-cost').text('{{ site_settings.currency_symbol }}' + cost.toFixed(2));
+            
+            // Update total
+            const newTotal = subtotal + cost;
+            $('#order-total').text('{{ site_settings.currency_symbol }}' + newTotal.toFixed(2));
+            
+            // Enable continue button
+            $('#continue-btn').prop('disabled', false);
+            
+            // Highlight selected method
+            $('.shipping-method-card').removeClass('border-primary');
+            $(this).closest('.shipping-method-card').addClass('border-primary');
+            
+            // Show delivery estimate
+            showDeliveryEstimate(days);
+        }
+    });
+    
+    // Initialize if a method is already selected
+    const selectedMethod = $('.shipping-method-radio:checked');
+    if (selectedMethod.length) {
+        selectedMethod.trigger('change');
+    }
+    
+    function showDeliveryEstimate(days) {
+        const today = new Date();
+        const deliveryDate = new Date(today);
+        deliveryDate.setDate(today.getDate() + parseInt(days));
+        
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const formattedDate = deliveryDate.toLocaleDateString('en-US', options);
+        
+        // Remove existing estimate
+        $('.delivery-estimate').remove();
+        
+        // Add new estimate
+        const selectedCard = $('.shipping-method-radio:checked').closest('.shipping-method-card');
+        selectedCard.find('.card-body').append(`
+            <div class="delivery-estimate mt-2 p-2 bg-light rounded">
+                <small class="text-success">
+                    <i class="bi bi-calendar-check me-1"></i>
+                    Estimated delivery: <strong>${formattedDate}</strong>
+                </small>
+            </div>
+        `);
+    }
+    
+    // Form validation
+    $('form').on('submit', function(e) {
+        if (!$('.shipping-method-radio:checked').length) {
+            e.preventDefault();
+            showToast('Please select a shipping method.', 'danger');
+        }
+    });
+    
+    // Hover effects
+    $('.shipping-method-card').on('mouseenter', function() {
+        if (!$(this).find('.shipping-method-radio').is(':checked')) {
+            $(this).addClass('border-secondary');
+        }
+    }).on('mouseleave', function() {
+        if (!$(this).find('.shipping-method-radio').is(':checked')) {
+            $(this).removeClass('border-secondary');
+        }
+    });
+    
+    // Click on card to select method
+    $('.shipping-method-card').on('click', function(e) {
+        if (e.target.type !== 'radio') {
+            $(this).find('.shipping-method-radio').prop('checked', true).trigger('change');
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.shipping-method-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid #dee2e6;
+}
+
+.shipping-method-card:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.shipping-method-card.border-primary {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.delivery-estimate {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .shipping-method-card .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .shipping-method-card .text-end {
+        text-align: left !important;
+        margin-top: 0.5rem;
+    }
+}
+</style>
+{% endblock %}

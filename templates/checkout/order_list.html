@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Orders - {{ site_settings.site_name }}{% endblock %}
+
+{% block meta_description %}View and track all your orders. Check order status, delivery information, and order history.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="py-3 bg-light">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">My Account</a></li>
+            <li class="breadcrumb-item active">My Orders</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Orders List -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">My Orders</h2>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                        <i class="bi bi-shop me-2"></i>Continue Shopping
+                    </a>
+                </div>
+
+                {% if orders %}
+                    <div class="row">
+                        {% for order in orders %}
+                        <div class="col-12 mb-4">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 py-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-1 fw-bold">Order #{{ order.order_number }}</h6>
+                                            <small class="text-muted">{{ order.created_at|date:"M d, Y" }}</small>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="badge bg-{{ order.status|yesno:'success,warning,primary,info,danger,secondary' }} fs-6">
+                                                {{ order.get_status_display }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong class="text-primary">{{ site_settings.currency_symbol }}{{ order.total_amount }}</strong>
+                                            <br><small class="text-muted">{{ order.total_items }} item{{ order.total_items|pluralize }}</small>
+                                        </div>
+                                        <div class="col-md-3 text-end">
+                                            <a href="{% url 'checkout:order_detail' order.order_number %}" 
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-eye me-1"></i>View Details
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Order Items Preview -->
+                                        <div class="col-md-8">
+                                            <div class="d-flex flex-wrap gap-2">
+                                                {% for item in order.items.all|slice:":3" %}
+                                                <div class="d-flex align-items-center bg-light rounded p-2">
+                                                    {% if item.product.images.exists %}
+                                                        <img src="{{ item.product.images.first.image.url }}"
+                                                             alt="{{ item.product_name }}"
+                                                             class="img-fluid rounded me-2"
+                                                             style="width: 40px; height: 40px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="bg-secondary rounded me-2 d-flex align-items-center justify-content-center"
+                                                             style="width: 40px; height: 40px;">
+                                                            <i class="bi bi-image text-white small"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div>
+                                                        <small class="fw-bold d-block">{{ item.product_name|truncatechars:20 }}</small>
+                                                        <small class="text-muted">Qty: {{ item.quantity }}</small>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                {% if order.items.count > 3 %}
+                                                <div class="d-flex align-items-center bg-light rounded p-2">
+                                                    <small class="text-muted">+{{ order.items.count|add:"-3" }} more item{{ order.items.count|add:"-3"|pluralize }}</small>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Order Actions -->
+                                        <div class="col-md-4 text-end">
+                                            <div class="btn-group" role="group">
+                                                {% if order.status == 'delivered' %}
+                                                <button class="btn btn-outline-success btn-sm" disabled>
+                                                    <i class="bi bi-check-circle me-1"></i>Delivered
+                                                </button>
+                                                {% elif order.status == 'shipped' %}
+                                                <button class="btn btn-outline-info btn-sm">
+                                                    <i class="bi bi-truck me-1"></i>Track Package
+                                                </button>
+                                                {% elif order.can_be_cancelled %}
+                                                <button class="btn btn-outline-danger btn-sm" 
+                                                        onclick="cancelOrder('{{ order.order_number }}')">
+                                                    <i class="bi bi-x-circle me-1"></i>Cancel
+                                                </button>
+                                                {% endif %}
+                                                
+                                                <button class="btn btn-outline-secondary btn-sm" 
+                                                        onclick="reorderItems('{{ order.order_number }}')">
+                                                    <i class="bi bi-arrow-repeat me-1"></i>Reorder
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Delivery Information -->
+                                    {% if order.status == 'shipped' or order.status == 'delivered' %}
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <div class="alert alert-info">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-truck me-2"></i>
+                                                    <div>
+                                                        {% if order.status == 'shipped' %}
+                                                            <strong>Shipped</strong> - Your order is on its way!
+                                                            {% if order.shipped_at %}
+                                                                <br><small>Shipped on {{ order.shipped_at|date:"M d, Y" }}</small>
+                                                            {% endif %}
+                                                        {% elif order.status == 'delivered' %}
+                                                            <strong>Delivered</strong> - Your order has been delivered.
+                                                            {% if order.delivered_at %}
+                                                                <br><small>Delivered on {{ order.delivered_at|date:"M d, Y" }}</small>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if orders.has_other_pages %}
+                    <nav aria-label="Orders pagination">
+                        <ul class="pagination justify-content-center">
+                            {% if orders.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ orders.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for num in orders.paginator.page_range %}
+                                {% if orders.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if orders.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ orders.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+
+                {% else %}
+                    <!-- No Orders -->
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="bi bi-bag-x text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                        <h3 class="text-muted mb-3">No Orders Yet</h3>
+                        <p class="text-muted mb-4">
+                            You haven't placed any orders yet. Start shopping to see your orders here.
+                        </p>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-shop me-2"></i>Start Shopping
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.btn-group .btn {
+    border-radius: 0.375rem;
+    margin-left: 0.25rem;
+}
+
+.btn-group .btn:first-child {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .card-header .row > div {
+        margin-bottom: 0.5rem;
+    }
+    
+    .card-header .text-end {
+        text-align: left !important;
+    }
+    
+    .card-body .text-end {
+        text-align: left !important;
+        margin-top: 1rem;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Auto-refresh order status every 30 seconds for shipped orders
+    const shippedOrders = $('.badge:contains("Shipped")').length;
+    if (shippedOrders > 0) {
+        setInterval(function() {
+            // You could implement AJAX refresh here
+        }, 30000);
+    }
+});
+
+function cancelOrder(orderNumber) {
+    if (confirm('Are you sure you want to cancel this order?')) {
+        // Implement order cancellation
+        $.ajax({
+            url: `/checkout/orders/${orderNumber}/cancel/`,
+            method: 'POST',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast('Order cancelled successfully.', 'success');
+                    location.reload();
+                } else {
+                    showToast(response.error || 'Failed to cancel order.', 'danger');
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+            }
+        });
+    }
+}
+
+function reorderItems(orderNumber) {
+    if (confirm('Add all items from this order to your cart?')) {
+        // Implement reorder functionality
+        $.ajax({
+            url: `/checkout/orders/${orderNumber}/reorder/`,
+            method: 'POST',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast('Items added to cart successfully.', 'success');
+                    updateCartBadge(response.cart_total_items);
+                } else {
+                    showToast(response.error || 'Failed to add items to cart.', 'danger');
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+            }
+        });
+    }
+}
+</script>
+{% endblock %}

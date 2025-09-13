@@ -1,0 +1,248 @@
+{% extends 'checkout/base_checkout.html' %}
+{% load crispy_forms_tags %}
+
+{% block checkout_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-4">
+        <p class="text-muted">
+            Where should we deliver your order?
+        </p>
+    </div>
+
+    {% if user.is_authenticated %}
+    {% with user.addresses.all as user_addresses %}
+    {% if user_addresses %}
+    <div class="mb-4">
+        <h6 class="mb-3">Saved Addresses</h6>
+        <div class="row">
+            {% for address in user_addresses %}
+            {% if address.address_type == 'shipping' %}
+            <div class="col-md-6 mb-3">
+                <div class="card border saved-address" data-address-id="{{ address.id }}">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="saved_address" 
+                                   id="address_{{ address.id }}" value="{{ address.id }}"
+                                   {% if address.is_default %}checked{% endif %}>
+                            <label class="form-check-label" for="address_{{ address.id }}">
+                                <strong>{{ address.get_address_type_display }}</strong>
+                                {% if address.is_default %}<span class="badge bg-primary ms-2">Default</span>{% endif %}
+                                <br>
+                                <small class="text-muted">
+                                    {{ address.street_address }}
+                                    {% if address.apartment %}, {{ address.apartment }}{% endif %}<br>
+                                    {{ address.city }}, {{ address.state }} {{ address.postal_code }}<br>
+                                    {{ address.country }}
+                                </small>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="saved_address"
+                       id="new_address" value="new" checked>
+                <label class="form-check-label" for="new_address">
+                    <strong>Use a new address</strong>
+                </label>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+
+    <div id="new-address-form">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="id_street_address" class="form-label">
+                        Street Address <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="street_address" class="form-control"
+                           id="id_street_address" placeholder="123 Main Street" required>
+                    {% if form.street_address.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.street_address.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="id_apartment" class="form-label">
+                        Apartment, Suite, Unit (Optional)
+                    </label>
+                    <input type="text" name="apartment" class="form-control"
+                           id="id_apartment" placeholder="Apt, Suite, Unit (optional)">
+                    {% if form.apartment.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.apartment.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_city" class="form-label">
+                        City <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="city" class="form-control"
+                           id="id_city" placeholder="City" required>
+                    {% if form.city.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.city.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_state" class="form-label">
+                        State/Province <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="state" class="form-control"
+                           id="id_state" placeholder="State/Province" required>
+                    {% if form.state.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.state.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_postal_code" class="form-label">
+                        ZIP/Postal Code <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="postal_code" class="form-control"
+                           id="id_postal_code" placeholder="ZIP/Postal Code" required>
+                    {% if form.postal_code.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.postal_code.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_country" class="form-label">
+                        Country <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="country" class="form-control"
+                           id="id_country" value="United States" required>
+                    {% if form.country.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.country.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-12">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="save_address" name="save_address">
+                    <label class="form-check-label" for="save_address">
+                        Save this address for future orders
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="{% url 'checkout:contact' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Contact
+        </a>
+        <button type="submit" class="btn btn-primary">
+            Continue to Billing <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    // Handle saved address selection
+    $('input[name="saved_address"]').on('change', function() {
+        if ($(this).val() === 'new') {
+            $('#new-address-form').show();
+        } else {
+            $('#new-address-form').hide();
+            // Fill form with selected address data
+            const addressId = $(this).val();
+            // You could make an AJAX call here to get address details
+        }
+    });
+
+    // Initialize form visibility
+    if ($('input[name="saved_address"]:checked').val() !== 'new') {
+        $('#new-address-form').hide();
+    }
+
+    // Postal code formatting
+    $('#{{ form.postal_code.id_for_label }}').on('input', function() {
+        let value = $(this).val().toUpperCase();
+        // Basic US ZIP code formatting
+        if (/^\d{5}$/.test(value)) {
+            // Valid 5-digit ZIP
+        } else if (/^\d{5}-?\d{0,4}$/.test(value.replace('-', ''))) {
+            // ZIP+4 format
+            if (value.length === 9 && !value.includes('-')) {
+                value = value.slice(0, 5) + '-' + value.slice(5);
+            }
+        }
+        $(this).val(value);
+    });
+
+    // Address validation
+    function validateAddress() {
+        const requiredFields = ['street_address', 'city', 'state', 'postal_code', 'country'];
+        let isValid = true;
+
+        requiredFields.forEach(function(field) {
+            const input = $(`#id_${field}`);
+            if (!input.val().trim()) {
+                input.addClass('is-invalid');
+                isValid = false;
+            } else {
+                input.removeClass('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+
+    // Form submission validation
+    $('form').on('submit', function(e) {
+        if ($('input[name="saved_address"]:checked').val() === 'new') {
+            if (!validateAddress()) {
+                e.preventDefault();
+                showToast('Please fill in all required address fields.', 'danger');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
