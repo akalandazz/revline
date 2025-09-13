@@ -353,6 +353,61 @@
         </div>
     </div>
 </div>
+
+<!-- Reorder Confirmation Modal -->
+<div class="modal fade" id="reorderModal" tabindex="-1" aria-labelledby="reorderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="reorderModalLabel">
+                    <i class="bi bi-arrow-repeat text-primary me-2"></i>Reorder Items
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-cart-plus text-primary" style="font-size: 3rem;"></i>
+                </div>
+                <h6 class="text-center mb-3">Add all items from this order to your cart?</h6>
+                <div class="alert alert-info">
+                    <small>
+                        <i class="bi bi-info-circle me-1"></i>
+                        <strong>Please note:</strong> Items will be added to your current cart.
+                        Prices and availability may have changed since your original order.
+                    </small>
+                </div>
+                <div class="order-summary bg-light p-3 rounded">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Order #:</strong></span>
+                        <span id="reorder-modal-order-number">{{ order.order_number }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Original Total:</strong></span>
+                        <span class="text-primary fw-bold">{{ site_settings.currency_symbol }}{{ order.total_amount }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Items:</strong></span>
+                        <span>{{ order.total_items }} item{{ order.total_items|pluralize }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="confirmReorder">
+                    <span class="reorder-text">
+                        <i class="bi bi-cart-plus me-1"></i>Yes, Add to Cart
+                    </span>
+                    <span class="reorder-loading d-none">
+                        <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                        Adding to Cart...
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_css %}
@@ -490,24 +545,55 @@ $('#cancelOrderModal').on('hidden.bs.modal', function() {
 });
 
 function reorderItems(orderNumber) {
-    if (confirm('Add all items from this order to your cart?')) {
-        $.ajax({
-            url: `/checkout/orders/${orderNumber}/reorder/`,
-            method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            success: function(response) {
-                if (response.success) {
-                    showToast('Items added to cart successfully.', 'success');
-                    updateCartBadge(response.cart_total_items);
-                } else {
-                    showToast(response.error || 'Failed to add items to cart.', 'danger');
-                }
-            },
-            error: function() {
-                showToast('An error occurred. Please try again.', 'danger');
-            }
-        });
-    }
+    currentOrderNumber = orderNumber;
+    $('#reorder-modal-order-number').text(orderNumber);
+    $('#reorderModal').modal('show');
 }
+
+// Handle reorder modal confirmation
+$('#confirmReorder').on('click', function() {
+    if (!currentOrderNumber) return;
+    
+    const btn = $(this);
+    const reorderText = btn.find('.reorder-text');
+    const reorderLoading = btn.find('.reorder-loading');
+    
+    // Show loading state
+    reorderText.addClass('d-none');
+    reorderLoading.removeClass('d-none');
+    btn.prop('disabled', true);
+    
+    $.ajax({
+        url: `/checkout/orders/${currentOrderNumber}/reorder/`,
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        success: function(response) {
+            if (response.success) {
+                $('#reorderModal').modal('hide');
+                showToast(response.message || 'Items added to cart successfully.', 'success');
+                updateCartBadge(response.cart_total_items);
+            } else {
+                showToast(response.error || 'Failed to add items to cart.', 'danger');
+            }
+        },
+        error: function() {
+            showToast('An error occurred. Please try again.', 'danger');
+        },
+        complete: function() {
+            // Reset button state
+            reorderText.removeClass('d-none');
+            reorderLoading.addClass('d-none');
+            btn.prop('disabled', false);
+        }
+    });
+});
+
+// Reset reorder modal when closed
+$('#reorderModal').on('hidden.bs.modal', function() {
+    const btn = $('#confirmReorder');
+    btn.find('.reorder-text').removeClass('d-none');
+    btn.find('.reorder-loading').addClass('d-none');
+    btn.prop('disabled', false);
+});
 </script>
 {% endblock %}
