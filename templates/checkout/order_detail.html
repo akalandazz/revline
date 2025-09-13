@@ -298,6 +298,61 @@
         </div>
     </div>
 </section>
+
+<!-- Order Cancellation Modal -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="cancelOrderModalLabel">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Cancel Order
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-x-circle text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <h6 class="text-center mb-3">Are you sure you want to cancel this order?</h6>
+                <div class="alert alert-warning">
+                    <small>
+                        <i class="bi bi-info-circle me-1"></i>
+                        <strong>Please note:</strong> Once cancelled, this action cannot be undone.
+                        Your payment will be refunded according to our refund policy.
+                    </small>
+                </div>
+                <div class="order-summary bg-light p-3 rounded">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Order #:</strong></span>
+                        <span id="modal-order-number">{{ order.order_number }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Total Amount:</strong></span>
+                        <span class="text-primary fw-bold">{{ site_settings.currency_symbol }}{{ order.total_amount }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Items:</strong></span>
+                        <span>{{ order.total_items }} item{{ order.total_items|pluralize }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-arrow-left me-1"></i>Keep Order
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmCancelOrder">
+                    <span class="cancel-text">
+                        <i class="bi bi-x-circle me-1"></i>Yes, Cancel Order
+                    </span>
+                    <span class="cancel-loading d-none">
+                        <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                        Cancelling...
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_css %}
@@ -379,26 +434,60 @@ address {
 
 {% block extra_js %}
 <script>
+let currentOrderNumber = null;
+
 function cancelOrder(orderNumber) {
-    if (confirm('Are you sure you want to cancel this order?')) {
-        $.ajax({
-            url: `/checkout/orders/${orderNumber}/cancel/`,
-            method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            success: function(response) {
-                if (response.success) {
-                    showToast('Order cancelled successfully.', 'success');
-                    location.reload();
-                } else {
-                    showToast(response.error || 'Failed to cancel order.', 'danger');
-                }
-            },
-            error: function() {
-                showToast('An error occurred. Please try again.', 'danger');
-            }
-        });
-    }
+    currentOrderNumber = orderNumber;
+    $('#modal-order-number').text(orderNumber);
+    $('#cancelOrderModal').modal('show');
 }
+
+// Handle modal confirmation
+$('#confirmCancelOrder').on('click', function() {
+    if (!currentOrderNumber) return;
+    
+    const btn = $(this);
+    const cancelText = btn.find('.cancel-text');
+    const cancelLoading = btn.find('.cancel-loading');
+    
+    // Show loading state
+    cancelText.addClass('d-none');
+    cancelLoading.removeClass('d-none');
+    btn.prop('disabled', true);
+    
+    $.ajax({
+        url: `/checkout/orders/${currentOrderNumber}/cancel/`,
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        success: function(response) {
+            if (response.success) {
+                $('#cancelOrderModal').modal('hide');
+                showToast('Order cancelled successfully.', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast(response.error || 'Failed to cancel order.', 'danger');
+            }
+        },
+        error: function() {
+            showToast('An error occurred. Please try again.', 'danger');
+        },
+        complete: function() {
+            // Reset button state
+            cancelText.removeClass('d-none');
+            cancelLoading.addClass('d-none');
+            btn.prop('disabled', false);
+        }
+    });
+});
+
+// Reset modal when closed
+$('#cancelOrderModal').on('hidden.bs.modal', function() {
+    currentOrderNumber = null;
+    const btn = $('#confirmCancelOrder');
+    btn.find('.cancel-text').removeClass('d-none');
+    btn.find('.cancel-loading').addClass('d-none');
+    btn.prop('disabled', false);
+});
 
 function reorderItems(orderNumber) {
     if (confirm('Add all items from this order to your cart?')) {
