@@ -76,22 +76,12 @@
             --transition-base: 0.3s ease;
             --transition-slow: 0.5s ease;
             
-            /* Dark mode support */
+            /* Standard theme variables */
             --bg-primary: #ffffff;
             --bg-secondary: #f8f9fa;
             --text-primary: #1a1a1a;
             --text-secondary: #6c757d;
             --border-color: #dee2e6;
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2c3e50;
-            --text-primary: #ffffff;
-            --text-secondary: #adb5bd;
-            --border-color: #495057;
-            --glass-bg: rgba(0, 0, 0, 0.3);
-            --glass-border: rgba(255, 255, 255, 0.1);
         }
         
         /* Smooth scrolling and base styles */
@@ -511,27 +501,6 @@
             opacity: 0.05;
         }
         
-        /* Dark Mode Toggle */
-        .theme-toggle {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-full);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-base);
-            color: var(--text-primary);
-        }
-        
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            background: var(--primary-color);
-            color: white;
-        }
-        
         /* Loading States */
         .skeleton {
             background: linear-gradient(90deg, var(--bg-secondary) 25%, rgba(255,255,255,0.1) 50%, var(--bg-secondary) 75%);
@@ -629,11 +598,6 @@
                 
                 <!-- Navigation Links -->
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item me-2">
-                        <button class="btn theme-toggle" id="theme-toggle" title="Toggle Dark Mode">
-                            <i class="bi bi-moon-fill" id="theme-icon"></i>
-                        </button>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'products:product_list' %}">
                             <i class="bi bi-grid me-1"></i>Products
@@ -805,38 +769,6 @@
             return cookieValue;
         }
         const csrftoken = getCookie('csrftoken');
-        
-        // Theme Management
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        
-        // Initialize theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateThemeIcon(savedTheme);
-        
-        function updateThemeIcon(theme) {
-            if (theme === 'dark') {
-                themeIcon.className = 'bi bi-sun-fill';
-            } else {
-                themeIcon.className = 'bi bi-moon-fill';
-            }
-        }
-        
-        themeToggle?.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-            
-            // Add animation effect
-            themeToggle.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                themeToggle.style.transform = 'scale(1)';
-            }, 150);
-        });
         
         // Enhanced Navigation Scroll Effect (Fixed)
         const navbar = document.querySelector('.navbar');
