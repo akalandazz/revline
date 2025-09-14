@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count, Avg, Case, When, F
+from django.core.cache import cache
 
 from products.models import Product, Category, Brand
 from .models import Banner, Newsletter, ContactMessage, SiteSettings
@@ -15,24 +17,28 @@ def home(request):
     context = {
         # Hero banners
         'hero_banners': Banner.objects.filter(banner_type='hero', is_active=True)[:3],
-        
+
         # Featured products
         'featured_products': Product.objects.filter(
-            is_featured=True, 
+            is_featured=True,
             is_active=True
         ).select_related('brand').prefetch_related('images')[:8],
-        
+
         # New arrivals
         'new_products': Product.objects.filter(
             is_active=True
         ).select_related('brand').prefetch_related('images').order_by('-created_at')[:8],
-        
-        # Categories
-        'categories': Category.objects.filter(is_active=True, parent=None)[:6],
-        
+
+        # Categories with product count
+        'categories': Category.objects.filter(
+            is_active=True, parent=None
+        ).annotate(
+            product_count=Count('products', filter=Q(products__is_active=True))
+        )[:6],
+
         # Brands
         'brands': Brand.objects.filter(is_active=True)[:8],
-        
+
         # Newsletter form
         'newsletter_form': NewsletterForm(),
     }

@@ -143,12 +143,7 @@ class Product(models.Model):
     def is_in_stock(self):
         """Check if product is in stock."""
         return not self.manage_stock or self.stock_quantity > 0
-    
-    @property
-    def is_low_stock(self):
-        """Check if product stock is low."""
-        return self.manage_stock and 0 < self.stock_quantity <= self.low_stock_threshold
-    
+
     @property
     def average_rating(self):
         """Calculate average product rating."""
@@ -156,11 +151,12 @@ class Product(models.Model):
         if reviews.exists():
             return round(sum(review.rating for review in reviews) / reviews.count(), 1)
         return 0
-    
+
     @property
     def review_count(self):
         """Get total number of approved reviews."""
         return self.reviews.filter(is_approved=True).count()
+    
 
 
 class ProductImage(models.Model):
@@ -174,6 +170,9 @@ class ProductImage(models.Model):
     
     class Meta:
         ordering = ['order', 'id']
+        indexes = [
+            models.Index(fields=['product', 'is_primary']),
+        ]
     
     def __str__(self):
         return f"{self.product.name} - Image {self.order}"
@@ -241,6 +240,10 @@ class ProductReview(models.Model):
     class Meta:
         unique_together = ['product', 'user']
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['product', 'is_approved']),
+            models.Index(fields=['is_approved', 'created_at']),
+        ]
     
     def __str__(self):
         return f"{self.product.name} - {self.rating} stars by {self.user.username}"
