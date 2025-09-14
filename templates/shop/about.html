@@ -1,0 +1,537 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - {{ site_settings.site_name }}{% endblock %}
+
+{% block meta_description %}Learn about {{ site_settings.site_name }} - your trusted partner for premium sport car parts and accessories. Discover our mission, values, and commitment to automotive excellence.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="py-3 bg-light">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+            <li class="breadcrumb-item active">About Us</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- About Header -->
+<section class="py-5 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-3">About {{ site_settings.site_name }}</h1>
+                <p class="lead mb-0">Passionate about performance, committed to excellence. We're your trusted partner in the world of premium automotive parts and accessories.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Story -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="animate-on-scroll">
+                    <h2 class="display-5 fw-bold mb-4">Our Story</h2>
+                    <p class="lead text-muted mb-4">Founded with a passion for automotive excellence, {{ site_settings.site_name }} has been serving performance enthusiasts for over a decade.</p>
+                    <p class="mb-4">What started as a small garage operation has evolved into a trusted destination for high-quality car parts and accessories. We understand that every vehicle is unique, and every driver has specific performance goals.</p>
+                    <p class="mb-4">Our journey began when our founder, frustrated by the lack of quality aftermarket parts, decided to source and supply only the finest components from renowned manufacturers worldwide. Today, we continue that tradition of excellence.</p>
+                    
+                    <!-- Stats -->
+                    <div class="row g-4 mt-4">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h2 fw-bold text-primary mb-1">10K+</div>
+                                <div class="small text-muted">Happy Customers</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h2 fw-bold text-primary mb-1">15+</div>
+                                <div class="small text-muted">Years Experience</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative animate-on-scroll">
+                    <div class="hero-image-wrapper">
+                        <img src="{% static 'images/reviline-home.png' %}"
+                             alt="About {{ site_settings.site_name }}" class="img-fluid rounded-4 shadow-lg">
+                        
+                        <!-- Floating badge -->
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge badge-new fs-6 px-3 py-2">Trusted Since 2009</span>
+                        </div>
+                        
+                        <!-- Glassmorphism quality card -->
+                        <div class="position-absolute bottom-0 start-0 m-3">
+                            <div class="card-glass p-3 rounded-3">
+                                <div class="d-flex align-items-center text-white">
+                                    <div class="me-3">
+                                        <i class="bi bi-award-fill text-warning fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">Premium Quality</div>
+                                        <div class="small opacity-75">Guaranteed Excellence</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Our Mission & Vision</h2>
+                <p class="lead text-muted">Driving excellence through quality parts and exceptional service</p>
+            </div>
+        </div>
+        
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg rounded-4 h-100 animate-on-scroll">
+                    <div class="card-body p-5">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-bullseye text-white fs-2"></i>
+                        </div>
+                        <h3 class="fw-bold mb-4">Our Mission</h3>
+                        <p class="text-muted mb-4">To provide automotive enthusiasts with the highest quality performance parts and accessories, backed by expert knowledge and exceptional customer service. We strive to be the trusted partner that helps drivers unlock their vehicle's full potential.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Premium quality parts</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Expert technical support</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Competitive pricing</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Fast, reliable shipping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg rounded-4 h-100 animate-on-scroll">
+                    <div class="card-body p-5">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-eye text-white fs-2"></i>
+                        </div>
+                        <h3 class="fw-bold mb-4">Our Vision</h3>
+                        <p class="text-muted mb-4">To become the leading destination for performance automotive parts globally, recognized for our commitment to quality, innovation, and customer satisfaction. We envision a future where every automotive enthusiast has access to the parts they need to build their dream machine.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Global market leadership</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Continuous innovation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Sustainable practices</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Community building</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Values -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Our Core Values</h2>
+                <p class="lead text-muted">The principles that guide everything we do</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="text-center animate-on-scroll">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                         style="width: 100px; height: 100px;">
+                        <i class="bi bi-shield-check text-white fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Quality First</h4>
+                    <p class="text-muted">We never compromise on quality. Every product we sell meets our rigorous standards and comes from trusted manufacturers with proven track records.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="text-center animate-on-scroll">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                         style="width: 100px; height: 100px;">
+                        <i class="bi bi-people text-white fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Customer Focus</h4>
+                    <p class="text-muted">Our customers are at the heart of everything we do. We listen, understand their needs, and go above and beyond to exceed their expectations.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="text-center animate-on-scroll">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                         style="width: 100px; height: 100px;">
+                        <i class="bi bi-lightbulb text-white fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Innovation</h4>
+                    <p class="text-muted">We stay ahead of automotive trends and continuously seek innovative solutions to help our customers achieve their performance goals.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="text-center animate-on-scroll">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                         style="width: 100px; height: 100px;">
+                        <i class="bi bi-handshake text-white fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Integrity</h4>
+                    <p class="text-muted">We conduct business with honesty, transparency, and ethical practices. Our word is our bond, and we stand behind every product we sell.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="text-center animate-on-scroll">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                         style="width: 100px; height: 100px;">
+                        <i class="bi bi-lightning-charge text-white fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Performance</h4>
+                    <p class="text-muted">We're passionate about performance - both in the products we sell and in how we run our business. Excellence is our standard.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="text-center animate-on-scroll">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                         style="width: 100px; height: 100px;">
+                        <i class="bi bi-globe text-white fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Community</h4>
+                    <p class="text-muted">We're more than a retailer - we're part of the automotive community. We support events, enthusiasts, and the culture that drives us all.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Why Choose {{ site_settings.site_name }}?</h2>
+                <p class="lead text-muted">What sets us apart from the competition</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 animate-on-scroll">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-4" 
+                                 style="width: 60px; height: 60px; min-width: 60px;">
+                                <i class="bi bi-award text-white fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Premium Quality Guarantee</h5>
+                                <p class="text-muted mb-0">Every product in our catalog is carefully selected and tested. We offer a 30-day money-back guarantee and comprehensive warranties on all items.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 animate-on-scroll">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-4" 
+                                 style="width: 60px; height: 60px; min-width: 60px;">
+                                <i class="bi bi-headset text-white fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Expert Technical Support</h5>
+                                <p class="text-muted mb-0">Our team of automotive specialists provides technical guidance, installation support, and product recommendations tailored to your specific needs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 animate-on-scroll">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-4" 
+                                 style="width: 60px; height: 60px; min-width: 60px;">
+                                <i class="bi bi-truck text-white fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Fast & Reliable Shipping</h5>
+                                <p class="text-muted mb-0">Free shipping on orders over ${{ site_settings.free_shipping_threshold|default:"99" }}. Most orders ship within 24 hours with tracking provided.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 animate-on-scroll">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-4" 
+                                 style="width: 60px; height: 60px; min-width: 60px;">
+                                <i class="bi bi-tags text-white fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Competitive Pricing</h5>
+                                <p class="text-muted mb-0">We work directly with manufacturers to offer competitive prices without sacrificing quality. Price matching available on identical items.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 animate-on-scroll">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-4" 
+                                 style="width: 60px; height: 60px; min-width: 60px;">
+                                <i class="bi bi-search text-white fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Extensive Inventory</h5>
+                                <p class="text-muted mb-0">With thousands of parts in stock and access to manufacturer catalogs, we can source even the most specialized components for your project.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 animate-on-scroll">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-4" 
+                                 style="width: 60px; height: 60px; min-width: 60px;">
+                                <i class="bi bi-heart text-white fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Community Focus</h5>
+                                <p class="text-muted mb-0">We sponsor local car shows, support racing teams, and give back to the automotive community that has supported us throughout our journey.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 position-relative overflow-hidden" style="background: var(--gradient-hero);">
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+        <div class="position-absolute top-0 start-0 w-100 h-100"
+             style="background: radial-gradient(circle at 30% 20%, rgba(255, 107, 53, 0.4) 0%, transparent 60%);"></div>
+        <div class="position-absolute top-0 end-0 w-100 h-100"
+             style="background: radial-gradient(circle at 70% 80%, rgba(243, 156, 18, 0.4) 0%, transparent 60%);"></div>
+    </div>
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center text-white animate-on-scroll">
+                <h2 class="display-4 fw-bold mb-4">Ready to Experience the Difference?</h2>
+                <p class="lead mb-5 opacity-90">
+                    Join thousands of satisfied customers who trust {{ site_settings.site_name }} for their performance needs.
+                    Discover what makes us the preferred choice for automotive enthusiasts.
+                </p>
+                
+                <!-- CTA Buttons -->
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="bi bi-cart me-2"></i>Shop Now
+                    </a>
+                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-light btn-lg px-5">
+                        <i class="bi bi-chat-dots me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}
+
+.card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+}
+
+.hero-image-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.badge-new {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Animation for value icons */
+.bg-primary.rounded-circle {
+    transition: all 0.3s ease;
+}
+
+.bg-primary.rounded-circle:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
+}
+
+/* Stagger animation delays */
+.animate-on-scroll:nth-child(1) { animation-delay: 0.1s; }
+.animate-on-scroll:nth-child(2) { animation-delay: 0.2s; }
+.animate-on-scroll:nth-child(3) { animation-delay: 0.3s; }
+.animate-on-scroll:nth-child(4) { animation-delay: 0.4s; }
+.animate-on-scroll:nth-child(5) { animation-delay: 0.5s; }
+.animate-on-scroll:nth-child(6) { animation-delay: 0.6s; }
+
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .d-flex.gap-3 {
+        gap: 1rem !important;
+    }
+    
+    .bg-primary.rounded-circle {
+        width: 70px !important;
+        height: 70px !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Enhanced scroll animations with better performance
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                // Staggered animation
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('animated');
+                }, index * 100);
+                
+                // Unobserve after animation
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Initialize scroll animations
+    $('.animate-on-scroll').each(function() {
+        this.style.opacity = '0';
+        this.style.transform = 'translateY(30px)';
+        this.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        scrollObserver.observe(this);
+    });
+    
+    // Stats counter animation
+    const statsCounters = $('.h2.fw-bold.text-primary');
+    
+    const countUp = (element, target) => {
+        const increment = target / 100;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            
+            const displayValue = Math.floor(current);
+            if (target >= 1000) {
+                element.text(displayValue.toLocaleString() + 'K+');
+            } else {
+                element.text(displayValue + '+');
+            }
+        }, 30);
+    };
+    
+    // Start counter when stats section comes into view
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                statsCounters.each(function() {
+                    const text = $(this).text();
+                    if (text.includes('10K+')) {
+                        countUp($(this), 10000);
+                    } else if (text.includes('15+')) {
+                        countUp($(this), 15);
+                    }
+                });
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    if (statsCounters.length > 0) {
+        statsObserver.observe(statsCounters[0].closest('.row'));
+    }
+    
+    // Value icons hover effect
+    $('.bg-primary.rounded-circle').on('mouseenter', function() {
+        $(this).addClass('animate__animated animate__pulse');
+    }).on('mouseleave', function() {
+        $(this).removeClass('animate__animated animate__pulse');
+    });
+    
+    // Smooth scroll for CTA buttons
+    $('a[href^="#"]').on('click', function(e) {
+        e.preventDefault();
+        const target = $($(this).attr('href'));
+        if (target.length) {
+            $('html, body').animate({
+                scrollTop: target.offset().top - 100
+            }, 500);
+        }
+    });
+});
+</script>
+{% endblock %}
