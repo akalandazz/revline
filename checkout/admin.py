@@ -7,9 +7,16 @@ from .models import Order, OrderItem, OrderStatusHistory, ShippingMethod
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
-    extra = 0
+    extra = 1
     readonly_fields = ['total_price', 'product_name', 'product_sku', 'product_brand']
-    fields = ['product', 'product_name', 'product_sku', 'product_brand', 'quantity', 'unit_price', 'total_price']
+    fields = ['product', 'quantity', 'unit_price', 'product_name', 'product_sku', 'product_brand', 'total_price']
+    
+    def get_readonly_fields(self, request, obj=None):
+        """Make fields editable when adding new orders."""
+        if obj:  # Editing existing order
+            return ['total_price', 'product_name', 'product_sku', 'product_brand']
+        else:  # Adding new order
+            return ['total_price']
 
 
 class OrderStatusHistoryInline(admin.TabularInline):
@@ -33,42 +40,81 @@ class OrderAdmin(admin.ModelAdmin):
         'phone_number', 'shipping_city', 'billing_city'
     ]
     readonly_fields = [
-        'order_number', 'created_at', 'updated_at', 'shipped_at', 
-        'delivered_at', 'total_items', 'shipping_address_display', 
+        'order_number', 'created_at', 'updated_at', 'shipped_at',
+        'delivered_at', 'total_items', 'shipping_address_display',
         'billing_address_display'
     ]
     
-    fieldsets = (
-        ('Order Information', {
-            'fields': ('order_number', 'user', 'status', 'payment_status', 'payment_method')
-        }),
-        ('Customer Information', {
-            'fields': ('email', 'first_name', 'last_name', 'phone_number')
-        }),
-        ('Shipping Address', {
-            'fields': (
-                'shipping_street_address', 'shipping_apartment', 'shipping_city',
-                'shipping_state', 'shipping_postal_code', 'shipping_country',
-                'shipping_address_display'
+    def get_readonly_fields(self, request, obj=None):
+        """Make fields editable when adding new orders."""
+        if obj:  # Editing existing order
+            return self.readonly_fields
+        else:  # Adding new order
+            return ['order_number', 'created_at', 'updated_at', 'shipped_at',
+                   'delivered_at', 'total_items', 'shipping_address_display',
+                   'billing_address_display']
+    
+    def get_fieldsets(self, request, obj=None):
+        """Return different fieldsets for add vs change forms."""
+        if obj:  # Editing existing order
+            return (
+                ('Order Information', {
+                    'fields': ('order_number', 'user', 'status', 'payment_status', 'payment_method')
+                }),
+                ('Customer Information', {
+                    'fields': ('email', 'first_name', 'last_name', 'phone_number')
+                }),
+                ('Shipping Address', {
+                    'fields': (
+                        'shipping_street_address', 'shipping_apartment', 'shipping_city',
+                        'shipping_state', 'shipping_postal_code', 'shipping_country',
+                        'shipping_address_display'
+                    )
+                }),
+                ('Billing Address', {
+                    'fields': (
+                        'billing_street_address', 'billing_apartment', 'billing_city',
+                        'billing_state', 'billing_postal_code', 'billing_country',
+                        'billing_address_display'
+                    )
+                }),
+                ('Order Totals', {
+                    'fields': ('subtotal', 'shipping_cost', 'tax_amount', 'discount_amount', 'total_amount')
+                }),
+                ('Additional Information', {
+                    'fields': ('notes', 'total_items')
+                }),
+                ('Timestamps', {
+                    'fields': ('created_at', 'updated_at', 'shipped_at', 'delivered_at')
+                }),
             )
-        }),
-        ('Billing Address', {
-            'fields': (
-                'billing_street_address', 'billing_apartment', 'billing_city',
-                'billing_state', 'billing_postal_code', 'billing_country',
-                'billing_address_display'
+        else:  # Adding new order
+            return (
+                ('Order Information', {
+                    'fields': ('user', 'status', 'payment_status', 'payment_method')
+                }),
+                ('Customer Information', {
+                    'fields': ('email', 'first_name', 'last_name', 'phone_number')
+                }),
+                ('Shipping Address', {
+                    'fields': (
+                        'shipping_street_address', 'shipping_apartment', 'shipping_city',
+                        'shipping_state', 'shipping_postal_code', 'shipping_country'
+                    )
+                }),
+                ('Billing Address', {
+                    'fields': (
+                        'billing_street_address', 'billing_apartment', 'billing_city',
+                        'billing_state', 'billing_postal_code', 'billing_country'
+                    )
+                }),
+                ('Order Totals', {
+                    'fields': ('subtotal', 'shipping_cost', 'tax_amount', 'discount_amount', 'total_amount')
+                }),
+                ('Additional Information', {
+                    'fields': ('notes',)
+                }),
             )
-        }),
-        ('Order Totals', {
-            'fields': ('subtotal', 'shipping_cost', 'tax_amount', 'discount_amount', 'total_amount')
-        }),
-        ('Additional Information', {
-            'fields': ('notes', 'total_items')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at', 'shipped_at', 'delivered_at')
-        }),
-    )
     
     inlines = [OrderItemInline, OrderStatusHistoryInline]
     
@@ -124,6 +170,13 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_filter = ['order__status', 'product_brand', 'created_at']
     search_fields = ['order__order_number', 'product_name', 'product_sku', 'product_brand']
     readonly_fields = ['total_price', 'product_name', 'product_sku', 'product_brand', 'created_at']
+    
+    def get_readonly_fields(self, request, obj=None):
+        """Make fields editable when adding new order items."""
+        if obj:  # Editing existing order item
+            return ['total_price', 'product_name', 'product_sku', 'product_brand', 'created_at']
+        else:  # Adding new order item
+            return ['total_price', 'created_at']
     
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('order', 'product')
