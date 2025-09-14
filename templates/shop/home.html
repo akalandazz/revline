@@ -538,7 +538,7 @@ $(document).ready(function() {
         });
     });
     
-    // Enhanced scroll animations
+    // Enhanced scroll animations with better performance
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -546,12 +546,14 @@ $(document).ready(function() {
     
     const scrollObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Staggered animation
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                // Staggered animation with class-based approach
                 setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 100);
+                    entry.target.classList.add('animated');
+                }, index * 50); // Reduced stagger time
+                
+                // Unobserve after animation to improve performance
+                scrollObserver.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -560,31 +562,33 @@ $(document).ready(function() {
     $('.animate-on-scroll').each(function() {
         this.style.opacity = '0';
         this.style.transform = 'translateY(30px)';
-        this.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        this.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
         scrollObserver.observe(this);
     });
     
-    // Parallax effect for hero section
-    let ticking = false;
+    // Optimized parallax effect for hero section
+    let parallaxTicking = false;
     
     function updateParallax() {
         const scrolled = window.pageYOffset;
         const heroSection = document.querySelector('.hero-section');
         
-        if (heroSection) {
-            const speed = scrolled * 0.3;
+        if (heroSection && scrolled < window.innerHeight) {
+            // Only apply parallax when hero is visible and limit the effect
+            const speed = Math.min(scrolled * 0.2, 100); // Reduced speed and capped
             heroSection.style.transform = `translate3d(0, ${speed}px, 0)`;
         }
         
-        ticking = false;
+        parallaxTicking = false;
     }
     
+    // Use passive listener and throttle more efficiently
     window.addEventListener('scroll', function() {
-        if (!ticking) {
+        if (!parallaxTicking && window.pageYOffset < window.innerHeight * 1.5) {
             requestAnimationFrame(updateParallax);
-            ticking = true;
+            parallaxTicking = true;
         }
-    });
+    }, { passive: true });
     
     // Modern button ripple effect
     $('.btn').on('click', function(e) {
@@ -609,7 +613,7 @@ $(document).ready(function() {
     });
 });
 
-// Add CSS for animations
+// Add CSS for animations with better performance
 const style = document.createElement('style');
 style.textContent = `
     .spin-animation {
@@ -651,6 +655,30 @@ style.textContent = `
         28% { transform: scale(1); }
         42% { transform: scale(1.3); }
         70% { transform: scale(1); }
+    }
+    
+    /* Animation class for scroll animations */
+    .animate-on-scroll.animated {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    
+    /* Improve position sticky behavior */
+    .hero-section {
+        will-change: transform;
+    }
+    
+    /* Fix z-index layering */
+    .navbar {
+        z-index: 1030 !important;
+    }
+    
+    .product-overlay {
+        z-index: 10;
+    }
+    
+    .badge-sale, .badge-new {
+        z-index: 15;
     }
 `;
 document.head.appendChild(style);

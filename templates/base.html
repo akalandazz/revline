@@ -115,12 +115,17 @@
             -webkit-backdrop-filter: blur(var(--glass-blur));
             box-shadow: var(--shadow-lg);
             border-bottom: 1px solid var(--glass-border);
-            transition: all var(--transition-base);
+            transition: box-shadow var(--transition-base), backdrop-filter var(--transition-base);
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
         }
         
         .navbar.scrolled {
             box-shadow: var(--shadow-xl);
             backdrop-filter: blur(calc(var(--glass-blur) + 10px));
+            -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 10px));
         }
         
         .navbar-brand {
@@ -833,27 +838,30 @@
             }, 150);
         });
         
-        // Enhanced Navigation Scroll Effect
+        // Enhanced Navigation Scroll Effect (Fixed)
         const navbar = document.querySelector('.navbar');
         let lastScrollY = window.scrollY;
+        let ticking = false;
         
-        window.addEventListener('scroll', () => {
+        function updateNavbar() {
             const currentScrollY = window.scrollY;
             
+            // Add scrolled class for enhanced backdrop blur
             if (currentScrollY > 100) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
             
-            // Hide navbar on scroll down, show on scroll up
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
-            
             lastScrollY = currentScrollY;
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateNavbar);
+                ticking = true;
+            }
         });
         
         // Scroll Animations with Intersection Observer
@@ -876,16 +884,7 @@
             animateElements.forEach(el => observer.observe(el));
         });
         
-        // Parallax Effect for Hero Section
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroSection = document.querySelector('.hero-section');
-            
-            if (heroSection) {
-                const speed = scrolled * 0.5;
-                heroSection.style.transform = `translateY(${speed}px)`;
-            }
-        });
+        // Remove conflicting parallax effect - handled in home.html
         
         // Enhanced Button Interactions
         document.addEventListener('DOMContentLoaded', () => {
