@@ -251,36 +251,13 @@ The application provides a RESTful API accessible at `/api/`:
 - `POST /api/cart/add/` - Add item to cart
 - `GET /api/orders/` - User orders (authenticated)
 
-## 📊 Sample Data Management
+## 📊 Sample Data
 
-### Populate Sample Data
-
-The application includes a management command to populate your database with realistic sample data for development and testing purposes.
-
-**Command:**
+Populate database with sample data (5 brands, 10 categories, 50 products):
 ```bash
 python manage.py populate_sample_data
+# Docker: docker-compose exec web python manage.py populate_sample_data
 ```
-
-**What it creates:**
-- **5 Automotive Brands**: BMW, Mercedes-Benz, Audi, Toyota, Ford
-- **10 Product Categories**: Engine Parts, Brake Systems, Suspension & Steering, Wheels & Tires, Lighting & Electrical, Interior Accessories, Exterior Accessories, Fluids & Chemicals, Tools & Equipment, Performance Parts
-- **50 Diverse Products**: Realistic automotive parts with proper specifications, pricing, and compatibility data
-
-**Features:**
-- Interactive confirmation before clearing existing data
-- Realistic product data with proper SKUs, descriptions, and specifications
-- Random pricing with occasional sale prices (15% off)
-- Vehicle compatibility information (make, model, year ranges)
-- Proper stock quantities and product attributes
-- SEO-friendly meta titles and descriptions
-
-**Docker usage:**
-```bash
-docker-compose exec web python manage.py populate_sample_data
-```
-
-**Note:** The command will prompt you to confirm before clearing existing products, brands, and categories. This ensures you don't accidentally delete important data.
 
 ## 🧪 Testing
 
