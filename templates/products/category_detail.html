@@ -542,9 +542,14 @@ $(document).ready(function() {
                         button.prop('disabled', false);
                     }, 2000);
                 } else {
-                    showToast(response.error, 'danger');
-                    button.find('i').attr('class', originalIcon);
-                    button.prop('disabled', false);
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast(response.error, 'danger');
+                        button.find('i').attr('class', originalIcon);
+                        button.prop('disabled', false);
+                    }
                 }
             },
             error: function() {

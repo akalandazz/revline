@@ -512,9 +512,14 @@ $(document).ready(function() {
                         button.prop('disabled', false);
                     }, 3000);
                 } else {
-                    showToast(response.error, 'danger');
-                    button.html(originalText);
-                    button.prop('disabled', false);
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast(response.error, 'danger');
+                        button.html(originalText);
+                        button.prop('disabled', false);
+                    }
                 }
             },
             error: function() {
