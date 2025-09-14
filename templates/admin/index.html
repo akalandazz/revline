@@ -1,0 +1,322 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Dashboard' %} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">
+            <i class="fas fa-tachometer-alt"></i>
+            {% trans 'RevLine Dashboard' %}
+        </h1>
+        <div class="dashboard-date">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="current-date"></span>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card stat-card-primary">
+            <div class="stat-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="total-orders">{{ total_orders|default:0 }}</h3>
+                <p class="stat-label">{% trans 'Total Orders' %}</p>
+                <span class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +{{ orders_change|default:0 }}% {% trans 'this month' %}
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-success">
+            <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="total-revenue">${{ total_revenue|default:0|floatformat:2 }}</h3>
+                <p class="stat-label">{% trans 'Total Revenue' %}</p>
+                <span class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +{{ revenue_change|default:0 }}% {% trans 'this month' %}
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-info">
+            <div class="stat-icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="total-products">{{ total_products|default:0 }}</h3>
+                <p class="stat-label">{% trans 'Total Products' %}</p>
+                <span class="stat-change neutral">
+                    <i class="fas fa-minus"></i>
+                    {{ low_stock_count|default:0 }} {% trans 'low stock' %}
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-warning">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="total-users">{{ total_users|default:0 }}</h3>
+                <p class="stat-label">{% trans 'Total Users' %}</p>
+                <span class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +{{ users_change|default:0 }}% {% trans 'this month' %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content Grid -->
+    <div class="dashboard-grid">
+        <!-- Recent Orders -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-list-alt"></i> {% trans 'Recent Orders' %}</h3>
+                <a href="{% url 'admin:checkout_order_changelist' %}" class="widget-link">
+                    {% trans 'View All' %} <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="widget-content">
+                <div class="orders-list">
+                    {% for order in recent_orders %}
+                    <div class="order-item">
+                        <div class="order-info">
+                            <span class="order-number">#{{ order.order_number }}</span>
+                            <span class="order-customer">{{ order.full_name }}</span>
+                        </div>
+                        <div class="order-details">
+                            <span class="order-amount">${{ order.total_amount }}</span>
+                            <span class="order-status status-{{ order.status }}">{{ order.get_status_display }}</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>{% trans 'No recent orders' %}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Chart -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-chart-line"></i> {% trans 'Sales Overview' %}</h3>
+                <div class="chart-controls">
+                    <select id="chart-period">
+                        <option value="7">{% trans 'Last 7 days' %}</option>
+                        <option value="30" selected>{% trans 'Last 30 days' %}</option>
+                        <option value="90">{% trans 'Last 90 days' %}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="widget-content">
+                <canvas id="salesChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> {% trans 'Low Stock Alerts' %}</h3>
+                <a href="{% url 'admin:products_product_changelist' %}?stock_quantity__lte=5" class="widget-link">
+                    {% trans 'View All' %} <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="widget-content">
+                <div class="stock-alerts">
+                    {% for product in low_stock_products %}
+                    <div class="stock-item">
+                        <div class="stock-info">
+                            <span class="product-name">{{ product.name }}</span>
+                            <span class="product-sku">SKU: {{ product.sku }}</span>
+                        </div>
+                        <div class="stock-level">
+                            <span class="stock-count {% if product.stock_quantity == 0 %}out-of-stock{% else %}low-stock{% endif %}">
+                                {{ product.stock_quantity }} {% trans 'left' %}
+                            </span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <p>{% trans 'All products are well stocked' %}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-bolt"></i> {% trans 'Quick Actions' %}</h3>
+            </div>
+            <div class="widget-content">
+                <div class="quick-actions">
+                    <a href="{% url 'admin:products_product_add' %}" class="action-btn action-primary">
+                        <i class="fas fa-plus"></i>
+                        {% trans 'Add Product' %}
+                    </a>
+                    <a href="{% url 'admin:checkout_order_changelist' %}?status=pending" class="action-btn action-warning">
+                        <i class="fas fa-clock"></i>
+                        {% trans 'Pending Orders' %}
+                    </a>
+                    <a href="{% url 'admin:accounts_user_changelist' %}" class="action-btn action-info">
+                        <i class="fas fa-user-plus"></i>
+                        {% trans 'Manage Users' %}
+                    </a>
+                    <a href="{% url 'admin:shop_contactmessage_changelist' %}?is_read=False" class="action-btn action-success">
+                        <i class="fas fa-envelope"></i>
+                        {% trans 'New Messages' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-star"></i> {% trans 'Top Products' %}</h3>
+                <a href="{% url 'admin:products_product_changelist' %}?o=-created_at" class="widget-link">
+                    {% trans 'View All' %} <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="widget-content">
+                <div class="products-list">
+                    {% for product in top_products %}
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-name">{{ product.name }}</span>
+                            <span class="product-category">{{ product.category.name }}</span>
+                        </div>
+                        <div class="product-stats">
+                            <span class="product-price">${{ product.get_price }}</span>
+                            <span class="product-stock">{{ product.stock_quantity }} {% trans 'in stock' %}</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <p>{% trans 'No products available' %}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-server"></i> {% trans 'System Status' %}</h3>
+            </div>
+            <div class="widget-content">
+                <div class="system-status">
+                    <div class="status-item">
+                        <span class="status-label">{% trans 'Database' %}</span>
+                        <span class="status-indicator status-online">
+                            <i class="fas fa-circle"></i> {% trans 'Online' %}
+                        </span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">{% trans 'Cache' %}</span>
+                        <span class="status-indicator status-online">
+                            <i class="fas fa-circle"></i> {% trans 'Active' %}
+                        </span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">{% trans 'Storage' %}</span>
+                        <span class="status-indicator status-online">
+                            <i class="fas fa-circle"></i> {% trans 'Available' %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current date
+    const now = new Date();
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+
+    // Sales Chart
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ sales_labels|safe }},
+            datasets: [{
+                label: 'Sales',
+                data: {{ sales_data|safe }},
+                borderColor: '#ff6b35',
+                backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0,0,0,0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0,0,0,0.1)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart period change handler
+    document.getElementById('chart-period').addEventListener('change', function() {
+        // This would typically make an AJAX call to update the chart data
+        console.log('Chart period changed to:', this.value);
+    });
+
+    // Auto-refresh dashboard every 5 minutes
+    setInterval(function() {
+        location.reload();
+    }, 300000);
+});
+</script>
+{% endblock %}
