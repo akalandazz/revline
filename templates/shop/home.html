@@ -279,10 +279,14 @@
             <div class="col-lg-3 col-md-4 col-6">
                 <div class="text-center p-3">
                     {% if brand.logo %}
-                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" 
-                             class="img-fluid" style="max-height: 60px; opacity: 0.7;">
+                        <div class="brand-logo-thumbnail d-inline-block p-2 border rounded" style="width: 80px; height: 80px;">
+                            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}"
+                                 class="w-100 h-100" style="object-fit: contain; opacity: 0.8;">
+                        </div>
                     {% else %}
-                        <h6 class="text-muted">{{ brand.name }}</h6>
+                        <div class="brand-logo-thumbnail d-inline-flex align-items-center justify-content-center border rounded" style="width: 80px; height: 80px;">
+                            <h6 class="text-muted mb-0">{{ brand.name }}</h6>
+                        </div>
                     {% endif %}
                 </div>
             </div>
