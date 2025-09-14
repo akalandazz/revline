@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Wait for db to be ready
-export PGPASSWORD=revline_pass
-until pg_isready -h db -p 5432 -U revline_user -d revline_db; do
+export PGPASSWORD=$DB_PASSWORD
+until pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME; do
   echo "Waiting for database..."
   sleep 2
 done
@@ -10,6 +10,10 @@ done
 # Run migrations
 python manage.py makemigrations
 python manage.py migrate
+
+# Compile translation messages
+echo "Compiling translation messages..."
+python manage.py compilemessages
 
 # Collect static files
 python manage.py collectstatic --noinput
