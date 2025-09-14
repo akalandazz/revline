@@ -1,6 +1,8 @@
 import random
+import os
 from decimal import Decimal
 from django.core.management.base import BaseCommand
+from django.core.files import File
 from products.models import Product, Category, Brand, ProductImage
 
 
@@ -45,39 +47,50 @@ class Command(BaseCommand):
             {
                 'name': 'BMW',
                 'description': 'Premium German automotive manufacturer known for luxury vehicles and innovative technology.',
-                'website': 'https://www.bmw.com'
+                'website': 'https://www.bmw.com',
+                'logo': None  # No BMW logo available
             },
             {
                 'name': 'Mercedes-Benz',
                 'description': 'German luxury automotive brand renowned for engineering excellence and premium vehicles.',
-                'website': 'https://www.mercedes-benz.com'
+                'website': 'https://www.mercedes-benz.com',
+                'logo': None  # No Mercedes logo available
             },
             {
                 'name': 'Audi',
                 'description': 'German automotive manufacturer known for quattro all-wheel drive and advanced technology.',
-                'website': 'https://www.audi.com'
+                'website': 'https://www.audi.com',
+                'logo': None  # No Audi logo available
             },
             {
                 'name': 'Toyota',
                 'description': 'Japanese automotive manufacturer famous for reliability, quality, and hybrid technology.',
-                'website': 'https://www.toyota.com'
+                'website': 'https://www.toyota.com',
+                'logo': 'brands/toyota.png'
             },
             {
                 'name': 'Ford',
                 'description': 'American automotive company known for trucks, performance vehicles, and innovation.',
-                'website': 'https://www.ford.com'
+                'website': 'https://www.ford.com',
+                'logo': 'brands/ford-logo.png'
             }
         ]
         
         brands = []
         for brand_info in brand_data:
+            defaults = {
+                'description': brand_info['description'],
+                'website': brand_info['website'],
+                'is_active': True
+            }
+            
+            # Add logo if available
+            if brand_info['logo'] and os.path.exists(f"media/{brand_info['logo']}"):
+                defaults['logo'] = brand_info['logo']
+            
             brand, created = Brand.objects.get_or_create(
                 name=brand_info['name'],
-                defaults={
-                    'description': brand_info['description'],
-                    'website': brand_info['website'],
-                    'is_active': True
-                }
+                defaults=defaults
             )
             brands.append(brand)
             if created:
@@ -92,54 +105,70 @@ class Command(BaseCommand):
         category_data = [
             {
                 'name': 'Engine Parts',
-                'description': 'Essential engine components including filters, belts, and performance parts.'
+                'description': 'Essential engine components including filters, belts, and performance parts.',
+                'image': None
             },
             {
                 'name': 'Brake Systems',
-                'description': 'Complete brake components for safety and performance including pads, rotors, and calipers.'
+                'description': 'Complete brake components for safety and performance including pads, rotors, and calipers.',
+                'image': None
             },
             {
                 'name': 'Suspension & Steering',
-                'description': 'Suspension components and steering parts for optimal handling and comfort.'
+                'description': 'Suspension components and steering parts for optimal handling and comfort.',
+                'image': None
             },
             {
                 'name': 'Wheels & Tires',
-                'description': 'Wheels, tires, and related accessories for all vehicle types.'
+                'description': 'Wheels, tires, and related accessories for all vehicle types.',
+                'image': 'categories/category_wheels.png'
             },
             {
                 'name': 'Lighting & Electrical',
-                'description': 'Automotive lighting systems, electrical components, and accessories.'
+                'description': 'Automotive lighting systems, electrical components, and accessories.',
+                'image': None
             },
             {
                 'name': 'Interior Accessories',
-                'description': 'Interior upgrades, seat covers, floor mats, and comfort accessories.'
+                'description': 'Interior upgrades, seat covers, floor mats, and comfort accessories.',
+                'image': None
             },
             {
                 'name': 'Exterior Accessories',
-                'description': 'Body parts, exterior styling, and protection accessories.'
+                'description': 'Body parts, exterior styling, and protection accessories.',
+                'image': None
             },
             {
                 'name': 'Fluids & Chemicals',
-                'description': 'Motor oils, coolants, brake fluids, and automotive chemicals.'
+                'description': 'Motor oils, coolants, brake fluids, and automotive chemicals.',
+                'image': None
             },
             {
                 'name': 'Tools & Equipment',
-                'description': 'Automotive tools, diagnostic equipment, and maintenance accessories.'
+                'description': 'Automotive tools, diagnostic equipment, and maintenance accessories.',
+                'image': None
             },
             {
                 'name': 'Performance Parts',
-                'description': 'High-performance upgrades, exhaust systems, and tuning components.'
+                'description': 'High-performance upgrades, exhaust systems, and tuning components.',
+                'image': None
             }
         ]
         
         categories = []
         for cat_info in category_data:
+            defaults = {
+                'description': cat_info['description'],
+                'is_active': True
+            }
+            
+            # Add image if available
+            if cat_info['image'] and os.path.exists(f"media/{cat_info['image']}"):
+                defaults['image'] = cat_info['image']
+            
             category, created = Category.objects.get_or_create(
                 name=cat_info['name'],
-                defaults={
-                    'description': cat_info['description'],
-                    'is_active': True
-                }
+                defaults=defaults
             )
             categories.append(category)
             if created:
@@ -267,6 +296,8 @@ class Command(BaseCommand):
                 )
                 
                 if created:
+                    # Add product images if available
+                    self.add_product_images(product)
                     products_created += 1
                     self.stdout.write(f'  Created product: {product.name} (SKU: {product.sku})')
                 else:
@@ -276,3 +307,39 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f'Error creating product {product_name}: {str(e)}'))
         
         return products_created
+
+    def add_product_images(self, product):
+        """Add default product images"""
+        # Available product images
+        available_images = [
+            "products/cold_air_intake.png",
+            "products/exhaust_system.png",
+            "products/jack_stand_set.png",
+            "products/michelin.png",
+            "products/multimeter.png",
+            "products/obd2_scanner.png",
+            "products/performance_chip.png",
+            "products/socket_set.png",
+            "products/sport_springs.png",
+            "products/torque_wrench.png",
+            "products/turbo_upgrade_kit.png",
+        ]
+        
+        # Random chance to add 1-2 images
+        num_images = random.choice([1, 1, 1, 2])  # 75% chance 1 image, 25% chance 2 images
+        
+        if num_images > 0:
+            selected_images = random.sample(available_images, min(num_images, len(available_images)))
+            
+            for i, image_path in enumerate(selected_images):
+                if os.path.exists(f"media/{image_path}"):
+                    try:
+                        ProductImage.objects.create(
+                            product=product,
+                            image=image_path,
+                            alt_text=f"{product.name} - Image {i+1}",
+                            is_primary=(i == 0),  # First image is primary
+                            order=i
+                        )
+                    except Exception as e:
+                        self.stdout.write(f'    Warning: Could not add image {image_path}: {str(e)}')
