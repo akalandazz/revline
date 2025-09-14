@@ -47,14 +47,14 @@ class CheckoutContactForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        
+
         # Pre-fill form with user data if authenticated
         if user and user.is_authenticated:
             self.fields['email'].initial = user.email
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             self.fields['phone_number'].initial = user.phone_number
-        
+
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
@@ -72,13 +72,21 @@ class CheckoutContactForm(forms.Form):
             )
         )
 
+    def clean_phone_number(self):
+        """Clean phone number by removing formatting characters."""
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number:
+            # Remove all non-digit characters except +
+            phone_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
+        return phone_number
+
 
 class ShippingAddressForm(forms.Form):
     """Form for shipping address."""
     
     street_address = forms.CharField(
         max_length=255,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '123 Main Street'
@@ -94,7 +102,7 @@ class ShippingAddressForm(forms.Form):
     )
     city = forms.CharField(
         max_length=100,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'City'
@@ -102,7 +110,7 @@ class ShippingAddressForm(forms.Form):
     )
     state = forms.CharField(
         max_length=100,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'State/Province'
@@ -110,7 +118,7 @@ class ShippingAddressForm(forms.Form):
     )
     postal_code = forms.CharField(
         max_length=20,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'ZIP/Postal Code'
@@ -118,7 +126,7 @@ class ShippingAddressForm(forms.Form):
     )
     country = forms.CharField(
         max_length=100,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         initial='United States',
         widget=forms.TextInput(attrs={
             'class': 'form-control'
@@ -164,11 +172,11 @@ class ShippingAddressForm(forms.Form):
         )
     
     def clean(self):
-        """Custom validation to handle saved address vs new address."""
+        """Custom validation for shipping address form."""
         cleaned_data = super().clean()
-        
-        # This validation will be handled in the view since we need access to POST data
-        # to determine if a saved address was selected
+
+        # All required fields are now validated by Django's form validation
+        # since they are marked as required=True
         return cleaned_data
 
 
