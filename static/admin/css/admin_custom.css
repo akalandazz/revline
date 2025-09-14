@@ -76,9 +76,6 @@ div.breadcrumbs a:hover {
 }
 
 /* Links */
-a:link, a:visited {
-    color: var(--primary-color) !important;
-}
 
 a:hover {
     color: var(--accent-color) !important;
