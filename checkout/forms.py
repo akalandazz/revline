@@ -86,7 +86,7 @@ class ShippingAddressForm(forms.Form):
     
     street_address = forms.CharField(
         max_length=255,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '123 Main Street'
@@ -102,7 +102,7 @@ class ShippingAddressForm(forms.Form):
     )
     city = forms.CharField(
         max_length=100,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'City'
@@ -110,7 +110,7 @@ class ShippingAddressForm(forms.Form):
     )
     state = forms.CharField(
         max_length=100,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'State/Province'
@@ -118,7 +118,7 @@ class ShippingAddressForm(forms.Form):
     )
     postal_code = forms.CharField(
         max_length=20,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'ZIP/Postal Code'
@@ -126,7 +126,7 @@ class ShippingAddressForm(forms.Form):
     )
     country = forms.CharField(
         max_length=100,
-        required=False,  # Make optional since saved address might be used
+        required=True,
         initial='United States',
         widget=forms.TextInput(attrs={
             'class': 'form-control'
@@ -172,11 +172,11 @@ class ShippingAddressForm(forms.Form):
         )
     
     def clean(self):
-        """Custom validation to handle saved address vs new address."""
+        """Custom validation for shipping address form."""
         cleaned_data = super().clean()
-        
-        # This validation will be handled in the view since we need access to POST data
-        # to determine if a saved address was selected
+
+        # All required fields are now validated by Django's form validation
+        # since they are marked as required=True
         return cleaned_data
 
 
