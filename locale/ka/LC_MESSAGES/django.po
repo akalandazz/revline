@@ -1,0 +1,185 @@
+# Georgian translations for RevLine project.
+# Copyright (C) 2024 RevLine
+# This file is distributed under the same license as the RevLine package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: RevLine\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-14 19:00+0000\n"
+"PO-Revision-Date: 2024-09-14 19:00+0000\n"
+"Last-Translator: RevLine Team\n"
+"Language-Team: Georgian\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/base.html:593
+msgid "Search car parts..."
+msgstr "ძიება ავტონაწილების..."
+
+#: templates/base.html:604
+msgid "Products"
+msgstr "პროდუქტები"
+
+#: templates/base.html:614
+msgid "Profile"
+msgstr "პროფილი"
+
+#: templates/base.html:617
+msgid "Wishlist"
+msgstr "სურვილების სია"
+
+#: templates/base.html:621
+msgid "Logout"
+msgstr "გამოსვლა"
+
+#: templates/base.html:628
+msgid "Login"
+msgstr "შესვლა"
+
+#: templates/base.html:633
+msgid "Register"
+msgstr "რეგისტრაცია"
+
+#: templates/base.html:657
+msgid "Cart"
+msgstr "კალათა"
+
+#: templates/shop/home.html:4
+msgid "Premium Sport Car Parts"
+msgstr "პრემიუმ სპორტული ავტონაწილები"
+
+#: templates/shop/home.html:14
+msgid "Unleash Your Car's"
+msgstr "გაათავისუფლე შენი ავტომობილის"
+
+#: templates/shop/home.html:15
+msgid "Performance"
+msgstr "ძალუხევა"
+
+#: templates/shop/home.html:18
+msgid "Premium sport car parts and accessories engineered for the ultimate driving experience. Quality parts, competitive prices, expert service."
+msgstr "პრემიუმ სპორტული ავტონაწილები და აქსესუარები შექმნილი საუკეთესო მართვის გამოცდილებისთვის. ხარისხიანი ნაწილები, კონკურენტული ფასები, ექსპერტი მომსახურება."
+
+#: templates/shop/home.html:23
+msgid "Shop Now"
+msgstr "იყიდე ახლა"
+
+#: templates/shop/home.html:26
+msgid "Learn More"
+msgstr "იხილე მეტი"
+
+#: templates/shop/home.html:35
+msgid "Guaranteed Quality"
+msgstr "გარანტირებული ხარისხი"
+
+#: templates/shop/home.html:41
+msgid "Free Shipping"
+msgstr "უფასო მიწოდება"
+
+#: templates/shop/home.html:47
+msgid "10K+ Customers"
+msgstr "10K+ მომხმარებელი"
+
+#: templates/shop/home.html:96
+#, python-format
+msgid "Free shipping on orders over $%(threshold)s"
+msgstr "უფასო მიწოდება $%(threshold)s-ზე მეტი შესყიდვისას"
+
+#: templates/shop/home.html:107
+msgid "Quality Guarantee"
+msgstr "ხარისხის გარანტია"
+
+#: templates/shop/home.html:108
+msgid "30-day money back guarantee on all products"
+msgstr "ყველა პროდუქტზე 30-დღიანი ფულის უკან დაბრუნების გარანტია"
+
+#: templates/shop/home.html:118
+msgid "Expert Support"
+msgstr "ექსპერტი მხარდაჭერა"
+
+#: templates/shop/home.html:119
+msgid "Professional technical support and guidance"
+msgstr "პროფესიონალური ტექნიკური მხარდაჭერა და კონსულტაცია"
+
+#: templates/shop/home.html:129
+msgid "Fast Delivery"
+msgstr "სწრაფი მიწოდება"
+
+#: templates/shop/home.html:130
+msgid "Quick processing and fast shipping nationwide"
+msgstr "სწრაფი დამუშავება და სწრაფი მიწოდება ქვეყნის მასშტაბით"
+
+#: templates/shop/home.html:144
+msgid "Featured Products"
+msgstr "გამორჩეული პროდუქტები"
+
+#: templates/shop/home.html:145
+msgid "Handpicked premium parts for maximum performance"
+msgstr "ხელით შერჩეული პრემიუმ ნაწილები მაქსიმალური მუშაობისთვის"
+
+#: templates/shop/home.html:244
+msgid "View All Featured Products"
+msgstr "ყველა გამორჩეული პროდუქტის ნახვა"
+
+#: templates/shop/home.html:258
+msgid "Shop by Category"
+msgstr "იყიდე კატეგორიის მიხედვით"
+
+#: templates/shop/home.html:259
+msgid "Find the perfect parts for your vehicle"
+msgstr "იპოვე იდეალური ნაწილები შენი ავტომობილისთვის"
+
+#: templates/shop/home.html:297
+msgid "New Arrivals"
+msgstr "ახალი პროდუქტები"
+
+#: templates/shop/home.html:298
+msgid "Latest additions to our premium collection"
+msgstr "ბოლო დამატებები ჩვენს პრემიუმ კოლექციაში"
+
+#: templates/shop/home.html:328
+msgid "View Details"
+msgstr "დეტალების ნახვა"
+
+#: templates/shop/home.html:339
+msgid "View All New Products"
+msgstr "ყველა ახალი პროდუქტის ნახვა"
+
+#: templates/shop/home.html:353
+msgid "Trusted Brands"
+msgstr "სანდო ბრენდები"
+
+#: templates/shop/home.html:354
+msgid "We partner with the world's leading automotive brands"
+msgstr "ჩვენ ვთანამშრომლობთ მსოფლიოს წამყვან ავტომობილურ ბრენდებთან"
+
+#: templates/shop/home.html:391
+msgid "Ready to Upgrade Your Ride?"
+msgstr "მზად ხარ შენი ავტომობილის განახლებისთვის?"
+
+#: templates/shop/home.html:394
+msgid "Join over 10,000+ satisfied customers who trust RevLine for their performance needs. Experience the difference quality makes."
+msgstr "შეუერთდი 10,000+ კმაყოფილ მომხმარებელს, რომლებიც ენდობიან RevLine-ს მუშაობის საჭიროებებისთვის. განიცადე განსხვავება, რომელსაც ხარისხი ქმნის."
+
+#: templates/shop/home.html:404
+msgid "Happy Customers"
+msgstr "კმაყოფილი მომხმარებლები"
+
+#: templates/shop/home.html:410
+msgid "Average Rating"
+msgstr "საშუალო რეიტინგი"
+
+#: templates/shop/home.html:416
+msgid "Satisfaction Rate"
+msgstr "კმაყოფილების ხარისხი"
+
+#: templates/shop/home.html:423
+msgid "Start Shopping"
+msgstr "შოპინგის დაწყება"
+
+#: templates/shop/home.html:426
+msgid "Get Expert Advice"
+msgstr "ექსპერტი რჩევის მიღება"

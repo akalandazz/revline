@@ -1,34 +1,79 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}{{ site_settings.site_name }} - Premium Sport Car Parts{% endblock %}
+{% block title %}{{ site_settings.site_name }} - {% trans "Premium Sport Car Parts" %}{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Enhanced Hero Section -->
 <section class="hero-section">
     <div class="container">
-        <div class="row align-items-center min-vh-50">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">
-                    Unleash Your Car's
-                    <span style="background: linear-gradient(135deg, #ff6b35 0%, #f39c12 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Performance</span>
-                </h1>
-                <p class="lead mb-4">Premium sport car parts and accessories for the ultimate driving experience. Quality parts, competitive prices, expert service.</p>
-                <div class="d-flex gap-3">
-                    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
-                        <i class="bi bi-lightning-fill me-2"></i>Shop Now
-                    </a>
-                    <a href="{% url 'shop:about' %}" class="btn btn-outline-light btn-lg">
-                        <i class="bi bi-play-circle me-2"></i>Learn More
-                    </a>
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <div class="animate-on-scroll">
+                    <h1 class="hero-title mb-4">
+                        {% trans "Unleash Your Car's" %}
+                        <span class="d-block">{% trans "Performance" %}</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        {% trans "Premium sport car parts and accessories engineered for the ultimate driving experience. Quality parts, competitive prices, expert service." %}
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-lightning-fill me-2"></i>{% trans "Shop Now" %}
+                        </a>
+                        <a href="{% url 'shop:about' %}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-play-circle me-2"></i>{% trans "Learn More" %}
+                        </a>
+                    </div>
+                    
+                    <!-- Trust Indicators -->
+                    <div class="row g-3 mt-4">
+                        <div class="col-4">
+                            <div class="trust-badge text-center">
+                                <i class="bi bi-shield-check fs-4 text-success mb-2"></i>
+                                <div class="small fw-bold">{% trans "Guaranteed Quality" %}</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="trust-badge text-center">
+                                <i class="bi bi-truck fs-4 text-info mb-2"></i>
+                                <div class="small fw-bold">{% trans "Free Shipping" %}</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="trust-badge text-center">
+                                <i class="bi bi-people fs-4 text-warning mb-2"></i>
+                                <div class="small fw-bold">{% trans "10K+ Customers" %}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6 text-center">
-                <div class="position-relative">
-                    <img src="{% static 'images/reviline-home.png' %}"
-                         alt="Sport Car" class="img-fluid rounded-4 shadow-lg" style="max-height: 400px;">
-                    <div class="position-absolute top-0 end-0 m-3">
-                        <span class="badge bg-primary fs-6 px-3 py-2">Premium Quality</span>
+                <div class="position-relative animate-on-scroll">
+                    <div class="hero-image-wrapper">
+                        <img src="{% static 'images/reviline-home.png' %}"
+                             alt="Premium Sport Car" class="img-fluid rounded-4 shadow-lg" style="max-height: 500px;">
+                        
+                        <!-- Floating badges -->
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge badge-new fs-6 px-3 py-2">Premium Quality</span>
+                        </div>
+                        
+                        <!-- Glassmorphism stats card -->
+                        <div class="position-absolute bottom-0 start-0 m-3">
+                            <div class="card-glass p-3 rounded-3">
+                                <div class="d-flex align-items-center text-white">
+                                    <div class="me-3">
+                                        <i class="bi bi-star-fill text-warning fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">4.9/5 Rating</div>
+                                        <div class="small opacity-75">From 2,500+ reviews</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,44 +81,52 @@
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="py-5 bg-light">
+<!-- Enhanced Features Section -->
+<section class="py-5" style="background: var(--bg-secondary);">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-3 col-md-6">
-                <div class="text-center">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-truck text-white fs-2"></i>
+                <div class="text-center animate-on-scroll">
+                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-truck text-white fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">{% trans "Free Shipping" %}</h5>
+                        <p class="text-muted">{% blocktrans with threshold=site_settings.free_shipping_threshold|default:"100" %}Free shipping on orders over ${{ threshold }}{% endblocktrans %}</p>
                     </div>
-                    <h5>Free Shipping</h5>
-                    <p class="text-muted">Free shipping on orders over ${{ site_settings.free_shipping_threshold }}</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <div class="text-center">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-shield-check text-white fs-2"></i>
+                <div class="text-center animate-on-scroll">
+                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
+                        <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check text-white fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">{% trans "Quality Guarantee" %}</h5>
+                        <p class="text-muted">{% trans "30-day money back guarantee on all products" %}</p>
                     </div>
-                    <h5>Quality Guarantee</h5>
-                    <p class="text-muted">30-day money back guarantee on all products</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <div class="text-center">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-headset text-white fs-2"></i>
+                <div class="text-center animate-on-scroll">
+                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
+                        <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-headset text-white fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">{% trans "Expert Support" %}</h5>
+                        <p class="text-muted">{% trans "Professional technical support and guidance" %}</p>
                     </div>
-                    <h5>Expert Support</h5>
-                    <p class="text-muted">Professional technical support and guidance</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <div class="text-center">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-lightning-charge text-white fs-2"></i>
+                <div class="text-center animate-on-scroll">
+                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
+                        <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightning-charge text-white fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">{% trans "Fast Delivery" %}</h5>
+                        <p class="text-muted">{% trans "Quick processing and fast shipping nationwide" %}</p>
                     </div>
-                    <h5>Fast Delivery</h5>
-                    <p class="text-muted">Quick processing and fast shipping nationwide</p>
                 </div>
             </div>
         </div>
@@ -86,71 +139,97 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
-                <p class="lead text-muted">Handpicked premium parts for maximum performance</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "Featured Products" %}</h2>
+                <p class="lead text-muted">{% trans "Handpicked premium parts for maximum performance" %}</p>
             </div>
         </div>
         
         <div class="row g-4">
             {% for product in featured_products %}
             <div class="col-lg-3 col-md-6">
-                <div class="card product-card h-100">
-                    {% if product.images.exists %}
-                        <img src="{{ product.images.first.image.url }}" 
-                             class="card-img-top" alt="{{ product.name }}">
-                    {% else %}
-                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
-                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
-                        </div>
-                    {% endif %}
-                    
-                    <div class="card-body d-flex flex-column">
-                        {% if product.is_on_sale %}
-                            <div class="position-absolute top-0 start-0 m-2">
-                                <span class="badge-sale">{{ product.discount_percentage }}% OFF</span>
+                <div class="card product-card h-100 animate-on-scroll">
+                    <!-- Product Image -->
+                    <div class="position-relative">
+                        {% if product.images.exists %}
+                            <img src="{{ product.images.first.image.url }}"
+                                 class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 280px;">
+                                <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
                             </div>
                         {% endif %}
                         
-                        <h6 class="card-title">{{ product.name }}</h6>
-                        <p class="text-muted small">{{ product.brand.name }}</p>
+                        <!-- Sale Badge -->
+                        {% if product.is_on_sale %}
+                            <span class="badge-sale">{{ product.discount_percentage|default:"20" }}% OFF</span>
+                        {% endif %}
                         
-                        <div class="mt-auto">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div>
-                                    <span class="price">{{ site_settings.currency_symbol }}{{ product.get_price }}</span>
-                                    {% if product.is_on_sale %}
-                                        <span class="price-old ms-2">{{ site_settings.currency_symbol }}{{ product.price }}</span>
-                                    {% endif %}
-                                </div>
-                                {% if product.average_rating > 0 %}
-                                    <div class="text-warning">
-                                        {% for i in "12345" %}
-                                            {% if forloop.counter <= product.average_rating %}
-                                                <i class="bi bi-star-fill"></i>
-                                            {% else %}
-                                                <i class="bi bi-star"></i>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <small class="text-muted">({{ product.review_count }})</small>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="d-flex gap-2">
-                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary flex-fill">View Details</a>
-                                <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+                        <!-- Quick Actions Overlay -->
+                        <div class="product-overlay">
+                            <div class="quick-actions">
+                                <a href="{{ product.get_absolute_url }}" class="quick-action-btn" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="quick-action-btn add-to-wishlist-btn"
+                                        data-product-id="{{ product.id }}" title="Add to Wishlist">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                                <form class="add-to-cart-form d-inline" data-product-id="{{ product.id }}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-primary" 
-                                            {% if not product.is_in_stock %}disabled{% endif %}>
+                                    <button type="submit" class="quick-action-btn"
+                                            title="Add to Cart" {% if not product.is_in_stock %}disabled{% endif %}>
                                         <i class="bi bi-cart-plus"></i>
                                     </button>
                                 </form>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title fw-bold">{{ product.name }}</h6>
+                        <p class="text-muted small mb-2">{{ product.brand.name|default:"RevLine" }}</p>
+                        
+                        <!-- Rating -->
+                        {% if product.average_rating > 0 %}
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center gap-1">
+                                    <div class="text-warning">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= product.average_rating %}
+                                                <i class="bi bi-star-fill small"></i>
+                                            {% else %}
+                                                <i class="bi bi-star small"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <small class="text-muted">({{ product.review_count|default:"0" }})</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Price -->
+                        <div class="mt-auto">
+                            <div class="mb-3">
+                                <span class="price">{{ site_settings.currency_symbol|default:"$" }}{{ product.get_price|default:product.price }}</span>
+                                {% if product.is_on_sale %}
+                                    <span class="price-old ms-2">{{ site_settings.currency_symbol|default:"$" }}{{ product.price }}</span>
+                                {% endif %}
+                            </div>
                             
+                            <!-- Stock Status -->
                             {% if not product.is_in_stock %}
-                                <small class="text-danger mt-1">Out of Stock</small>
+                                <small class="text-danger">
+                                    <i class="bi bi-x-circle me-1"></i>Out of Stock
+                                </small>
                             {% elif product.is_low_stock %}
-                                <small class="text-warning mt-1">Low Stock</small>
+                                <small class="text-warning">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Low Stock
+                                </small>
+                            {% else %}
+                                <small class="text-success">
+                                    <i class="bi bi-check-circle me-1"></i>In Stock
+                                </small>
                             {% endif %}
                         </div>
                     </div>
@@ -161,7 +240,7 @@
         
         <div class="text-center mt-5">
             <a href="{% url 'products:product_list' %}?is_featured=true" class="btn btn-outline-primary btn-lg">
-                View All Featured Products <i class="bi bi-arrow-right ms-2"></i>
+                {% trans "View All Featured Products" %} <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
     </div>
@@ -174,8 +253,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">Shop by Category</h2>
-                <p class="lead text-muted">Find the perfect parts for your vehicle</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "Shop by Category" %}</h2>
+                <p class="lead text-muted">{% trans "Find the perfect parts for your vehicle" %}</p>
             </div>
         </div>
         
@@ -213,8 +292,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">New Arrivals</h2>
-                <p class="lead text-muted">Latest additions to our premium collection</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "New Arrivals" %}</h2>
+                <p class="lead text-muted">{% trans "Latest additions to our premium collection" %}</p>
             </div>
         </div>
         
@@ -245,7 +324,7 @@
                             </div>
                             
                             <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100">
-                                View Details <i class="bi bi-arrow-right ms-1"></i>
+                                {% trans "View Details" %} <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -256,7 +335,7 @@
         
         <div class="text-center mt-5">
             <a href="{% url 'products:product_list' %}?sort=-created_at" class="btn btn-outline-primary btn-lg">
-                View All New Products <i class="bi bi-arrow-right ms-2"></i>
+                {% trans "View All New Products" %} <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
     </div>
@@ -269,8 +348,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">Trusted Brands</h2>
-                <p class="lead text-muted">We partner with the world's leading automotive brands</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "Trusted Brands" %}</h2>
+                <p class="lead text-muted">{% trans "We partner with the world's leading automotive brands" %}</p>
             </div>
         </div>
         
@@ -296,19 +375,53 @@
 </section>
 {% endif %}
 
-<!-- CTA Section -->
-<section class="py-5" style="background: var(--gradient-primary);">
-    <div class="container">
+<!-- Enhanced CTA Section -->
+<section class="py-5 position-relative overflow-hidden" style="background: var(--gradient-hero);">
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+        <div class="position-absolute top-0 start-0 w-100 h-100"
+             style="background: radial-gradient(circle at 30% 20%, rgba(255, 107, 53, 0.4) 0%, transparent 60%);"></div>
+        <div class="position-absolute top-0 end-0 w-100 h-100"
+             style="background: radial-gradient(circle at 70% 80%, rgba(243, 156, 18, 0.4) 0%, transparent 60%);"></div>
+    </div>
+    <div class="container position-relative">
         <div class="row">
-            <div class="col-lg-8 mx-auto text-center text-white">
-                <h2 class="display-5 fw-bold mb-4">Ready to Upgrade Your Ride?</h2>
-                <p class="lead mb-4">Join thousands of satisfied customers who trust us for their performance needs.</p>
-                <div class="d-flex justify-content-center gap-3">
-                    <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg">
-                        <i class="bi bi-cart me-2"></i>Start Shopping
+            <div class="col-lg-10 mx-auto text-center text-white animate-on-scroll">
+                <h2 class="display-4 fw-bold mb-4" style="line-height: 1.2;">
+                    {% trans "Ready to Upgrade Your Ride?" %}
+                </h2>
+                <p class="lead mb-5 opacity-90">
+                    {% trans "Join over 10,000+ satisfied customers who trust RevLine for their performance needs. Experience the difference quality makes." %}
+                </p>
+                
+                <!-- Stats Row -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="card-glass p-4 rounded-3">
+                            <div class="h2 fw-bold text-primary mb-1">10K+</div>
+                            <div class="text-light">{% trans "Happy Customers" %}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-glass p-4 rounded-3">
+                            <div class="h2 fw-bold text-warning mb-1">4.9★</div>
+                            <div class="text-light">{% trans "Average Rating" %}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-glass p-4 rounded-3">
+                            <div class="h2 fw-bold text-success mb-1">99%</div>
+                            <div class="text-light">{% trans "Satisfaction Rate" %}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="bi bi-cart me-2"></i>{% trans "Start Shopping" %}
                     </a>
-                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-light btn-lg">
-                        <i class="bi bi-chat-dots me-2"></i>Get Expert Advice
+                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-light btn-lg px-5">
+                        <i class="bi bi-chat-dots me-2"></i>{% trans "Get Expert Advice" %}
                     </a>
                 </div>
             </div>
@@ -320,7 +433,7 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    // Add to cart functionality
+    // Enhanced Add to cart functionality with modern interactions
     $('.add-to-cart-form').on('submit', function(e) {
         e.preventDefault();
         
@@ -329,9 +442,9 @@ $(document).ready(function() {
         const button = form.find('button');
         const originalIcon = button.find('i').attr('class');
         
-        // Show loading state
+        // Modern loading animation
         button.prop('disabled', true);
-        button.find('i').attr('class', 'bi bi-arrow-repeat spinner-border spinner-border-sm');
+        button.find('i').attr('class', 'bi bi-arrow-clockwise').addClass('spin-animation');
         
         $.ajax({
             url: '{% url "cart:add_to_cart" %}',
@@ -346,30 +459,226 @@ $(document).ready(function() {
                     showToast(response.message, 'success');
                     updateCartBadge(response.cart_total_items);
                     
-                    // Change button to success state temporarily
-                    button.find('i').attr('class', 'bi bi-check-lg text-success');
+                    // Success animation
+                    button.find('i').attr('class', 'bi bi-check-lg').removeClass('spin-animation');
+                    button.addClass('btn-success').removeClass('btn-primary quick-action-btn');
+                    
                     setTimeout(function() {
                         button.find('i').attr('class', originalIcon);
+                        button.removeClass('btn-success').addClass('btn-primary quick-action-btn');
                         button.prop('disabled', false);
                     }, 2000);
                 } else {
                     if (response.redirect_url) {
-                        // Redirect to login page
                         window.location.href = response.redirect_url;
                     } else {
                         showToast(response.error, 'danger');
-                        button.find('i').attr('class', originalIcon);
-                        button.prop('disabled', false);
+                        resetButton();
                     }
                 }
             },
             error: function() {
                 showToast('An error occurred. Please try again.', 'danger');
-                button.find('i').attr('class', originalIcon);
-                button.prop('disabled', false);
+                resetButton();
             }
         });
+        
+        function resetButton() {
+            button.find('i').attr('class', originalIcon).removeClass('spin-animation');
+            button.prop('disabled', false);
+        }
+    });
+    
+    // Wishlist functionality
+    $('.add-to-wishlist-btn').on('click', function(e) {
+        e.preventDefault();
+        
+        const button = $(this);
+        const productId = button.data('product-id');
+        const heartIcon = button.find('i');
+        
+        if (!isUserAuthenticated) {
+            showToast('Please login to add items to wishlist', 'warning');
+            setTimeout(() => window.location.href = loginUrl, 1500);
+            return;
+        }
+        
+        // Wishlist animation
+        button.prop('disabled', true);
+        heartIcon.addClass('animate__animated animate__heartBeat');
+        
+        // Simulate wishlist functionality for demo purposes
+        setTimeout(() => {
+            if (heartIcon.hasClass('bi-heart-fill')) {
+                heartIcon.removeClass('bi-heart-fill text-danger').addClass('bi-heart');
+                showToast('Removed from wishlist', 'info');
+            } else {
+                heartIcon.removeClass('bi-heart').addClass('bi-heart-fill text-danger');
+                showToast('Added to wishlist!', 'success');
+            }
+            
+            setTimeout(() => {
+                heartIcon.removeClass('animate__animated animate__heartBeat');
+                button.prop('disabled', false);
+            }, 500);
+        }, 800);
+    });
+    
+    // Product card hover effects
+    $('.product-card').each(function() {
+        const card = $(this);
+        const overlay = card.find('.product-overlay');
+        
+        card.on('mouseenter', function() {
+            overlay.addClass('show');
+        }).on('mouseleave', function() {
+            overlay.removeClass('show');
+        });
+    });
+    
+    // Enhanced scroll animations with better performance
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                // Staggered animation with class-based approach
+                setTimeout(() => {
+                    entry.target.classList.add('animated');
+                }, index * 50); // Reduced stagger time
+                
+                // Unobserve after animation to improve performance
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Initialize scroll animations
+    $('.animate-on-scroll').each(function() {
+        this.style.opacity = '0';
+        this.style.transform = 'translateY(30px)';
+        this.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        scrollObserver.observe(this);
+    });
+    
+    // Optimized parallax effect for hero section
+    let parallaxTicking = false;
+    
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const heroSection = document.querySelector('.hero-section');
+        
+        if (heroSection && scrolled < window.innerHeight) {
+            // Only apply parallax when hero is visible and limit the effect
+            const speed = Math.min(scrolled * 0.2, 100); // Reduced speed and capped
+            heroSection.style.transform = `translate3d(0, ${speed}px, 0)`;
+        }
+        
+        parallaxTicking = false;
+    }
+    
+    // Use passive listener and throttle more efficiently
+    window.addEventListener('scroll', function() {
+        if (!parallaxTicking && window.pageYOffset < window.innerHeight * 1.5) {
+            requestAnimationFrame(updateParallax);
+            parallaxTicking = true;
+        }
+    }, { passive: true });
+    
+    // Modern button ripple effect
+    $('.btn').on('click', function(e) {
+        const button = $(this);
+        const ripple = $('<span class="ripple"></span>');
+        
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.css({
+            width: size + 'px',
+            height: size + 'px',
+            left: x + 'px',
+            top: y + 'px'
+        });
+        
+        button.append(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
     });
 });
+
+// Add CSS for animations with better performance
+const style = document.createElement('style');
+style.textContent = `
+    .spin-animation {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple-animation 0.6s ease-out;
+        pointer-events: none;
+    }
+    
+    @keyframes ripple-animation {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    .product-overlay.show {
+        opacity: 1 !important;
+    }
+    
+    .animate__heartBeat {
+        animation: heartBeat 1s ease-in-out;
+    }
+    
+    @keyframes heartBeat {
+        0% { transform: scale(1); }
+        14% { transform: scale(1.3); }
+        28% { transform: scale(1); }
+        42% { transform: scale(1.3); }
+        70% { transform: scale(1); }
+    }
+    
+    /* Animation class for scroll animations */
+    .animate-on-scroll.animated {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    
+    /* Improve position sticky behavior */
+    .hero-section {
+        will-change: transform;
+    }
+    
+    /* Fix z-index layering */
+    .navbar {
+        z-index: 1030 !important;
+    }
+    
+    .product-overlay {
+        z-index: 10;
+    }
+    
+    .badge-sale, .badge-new {
+        z-index: 15;
+    }
+`;
+document.head.appendChild(style);
 </script>
 {% endblock %}
