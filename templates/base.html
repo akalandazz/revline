@@ -349,7 +349,15 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     
+    <!-- User authentication data -->
+    {{ user.is_authenticated|json_script:"user-authenticated" }}
+    <script src="{% url 'accounts:login' %}" id="login-url" style="display:none;"></script>
+    
     <script>
+        // User authentication status
+        const isUserAuthenticated = JSON.parse(document.getElementById('user-authenticated').textContent);
+        const loginUrl = '{% url "accounts:login" %}';
+        
         // CSRF token for AJAX requests
         function getCookie(name) {
             let cookieValue = null;

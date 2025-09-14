@@ -275,9 +275,10 @@
                                                     <i class="bi bi-cart-plus"></i>
                                                 </button>
                                             </form>
-                                            <a href="{% url 'cart:add_to_wishlist' product.id %}" class="btn btn-outline-light btn-sm">
+                                            <button type="button" class="btn btn-outline-light btn-sm add-to-wishlist-btn"
+                                                    data-product-id="{{ product.id }}">
                                                 <i class="bi bi-heart"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -594,6 +595,58 @@ $(document).ready(function() {
         if (link) {
             window.location.href = link;
         }
+    });
+    
+    // Add to wishlist functionality
+    $('.add-to-wishlist-btn').on('click', function(e) {
+        e.preventDefault();
+        
+        // Check if user is authenticated before making request
+        if (!isUserAuthenticated) {
+            window.location.href = loginUrl;
+            return;
+        }
+        
+        const button = $(this);
+        const productId = button.data('product-id');
+        const originalIcon = button.find('i').attr('class');
+        
+        // Show loading state
+        button.prop('disabled', true);
+        button.find('i').attr('class', 'bi bi-arrow-repeat spinner-border spinner-border-sm');
+        
+        $.ajax({
+            url: `/cart/wishlist/add/${productId}/`,
+            method: 'POST',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    
+                    // Change button to success state
+                    button.find('i').attr('class', 'bi bi-heart-fill text-danger');
+                    button.removeClass('btn-outline-light').addClass('btn-outline-danger');
+                    
+                    setTimeout(function() {
+                        button.prop('disabled', false);
+                    }, 1000);
+                } else {
+                    showToast(response.message || 'Item already in wishlist', 'info');
+                    button.find('i').attr('class', originalIcon);
+                    button.prop('disabled', false);
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 403) {
+                    // User not authenticated, redirect to login
+                    window.location.href = '{% url "accounts:login" %}';
+                } else {
+                    showToast('An error occurred. Please try again.', 'danger');
+                    button.find('i').attr('class', originalIcon);
+                    button.prop('disabled', false);
+                }
+            }
+        });
     });
 });
 </script>
