@@ -64,7 +64,7 @@ class UserRegistrationForm(UserCreationForm):
             ),
             Submit('submit', 'Create Account', css_class='btn btn-primary btn-lg w-100 mt-3')
         )
-        
+
         # Customize password fields
         self.fields['password1'].widget.attrs.update({
             'placeholder': 'Password',
@@ -74,6 +74,14 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'Confirm Password',
             'class': 'form-control'
         })
+
+    def clean_phone_number(self):
+        """Clean phone number by removing formatting characters."""
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number:
+            # Remove all non-digit characters except +
+            phone_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
+        return phone_number
 
 
 class UserUpdateForm(forms.ModelForm):
@@ -103,6 +111,14 @@ class UserUpdateForm(forms.ModelForm):
             'date_of_birth',
             Submit('submit', 'Update Profile', css_class='btn btn-primary mt-3')
         )
+
+    def clean_phone_number(self):
+        """Clean phone number by removing formatting characters."""
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number:
+            # Remove all non-digit characters except +
+            phone_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
+        return phone_number
 
 
 class AddressForm(forms.ModelForm):

@@ -47,14 +47,14 @@ class CheckoutContactForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        
+
         # Pre-fill form with user data if authenticated
         if user and user.is_authenticated:
             self.fields['email'].initial = user.email
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             self.fields['phone_number'].initial = user.phone_number
-        
+
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
@@ -71,6 +71,14 @@ class CheckoutContactForm(forms.Form):
                 ),
             )
         )
+
+    def clean_phone_number(self):
+        """Clean phone number by removing formatting characters."""
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number:
+            # Remove all non-digit characters except +
+            phone_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
+        return phone_number
 
 
 class ShippingAddressForm(forms.Form):
