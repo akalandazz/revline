@@ -84,6 +84,9 @@ Users can switch languages through the dropdown menu in the navigation bar. All 
    # Load initial data (optional)
    docker-compose exec web python manage.py loaddata checkout/fixtures/shipping_methods.json
    
+   # Populate sample data with brands, categories, and products (optional)
+   docker-compose exec web python manage.py populate_sample_data
+   
    # Compile translation messages
    docker-compose exec web python manage.py compilemessages
    ```
@@ -126,6 +129,9 @@ Users can switch languages through the dropdown menu in the navigation bar. All 
    python manage.py createsuperuser
    python manage.py loaddata checkout/fixtures/shipping_methods.json
    python manage.py compilemessages
+   
+   # Populate sample data with brands, categories, and products (optional)
+   python manage.py populate_sample_data
    ```
 
 6. **Start development server**
@@ -244,6 +250,37 @@ The application provides a RESTful API accessible at `/api/`:
 - `GET /api/categories/` - Product categories
 - `POST /api/cart/add/` - Add item to cart
 - `GET /api/orders/` - User orders (authenticated)
+
+## 📊 Sample Data Management
+
+### Populate Sample Data
+
+The application includes a management command to populate your database with realistic sample data for development and testing purposes.
+
+**Command:**
+```bash
+python manage.py populate_sample_data
+```
+
+**What it creates:**
+- **5 Automotive Brands**: BMW, Mercedes-Benz, Audi, Toyota, Ford
+- **10 Product Categories**: Engine Parts, Brake Systems, Suspension & Steering, Wheels & Tires, Lighting & Electrical, Interior Accessories, Exterior Accessories, Fluids & Chemicals, Tools & Equipment, Performance Parts
+- **50 Diverse Products**: Realistic automotive parts with proper specifications, pricing, and compatibility data
+
+**Features:**
+- Interactive confirmation before clearing existing data
+- Realistic product data with proper SKUs, descriptions, and specifications
+- Random pricing with occasional sale prices (15% off)
+- Vehicle compatibility information (make, model, year ranges)
+- Proper stock quantities and product attributes
+- SEO-friendly meta titles and descriptions
+
+**Docker usage:**
+```bash
+docker-compose exec web python manage.py populate_sample_data
+```
+
+**Note:** The command will prompt you to confirm before clearing existing products, brands, and categories. This ensures you don't accidentally delete important data.
 
 ## 🧪 Testing
 
