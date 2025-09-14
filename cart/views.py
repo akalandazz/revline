@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 import json
 
 from .models import Cart, CartItem, WishlistItem
@@ -25,6 +26,18 @@ def cart_detail(request):
 @require_POST
 def add_to_cart(request):
     """Add product to cart via AJAX or form submission."""
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        # For AJAX requests, return JSON response
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'error': 'Authentication required',
+                'redirect_url': reverse('accounts:login')
+            })
+        # For regular form submissions, redirect to login
+        return redirect('accounts:login')
+    
     form = AddToCartForm(request.POST)
     
     if form.is_valid():
@@ -78,6 +91,14 @@ def update_cart_item(request):
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         return JsonResponse({'success': False, 'error': 'Invalid request'})
     
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'success': False,
+            'error': 'Authentication required',
+            'redirect_url': reverse('accounts:login')
+        })
+    
     try:
         data = json.loads(request.body)
         product_id = data.get('product_id')
@@ -117,6 +138,16 @@ def update_cart_item(request):
 @require_POST
 def remove_from_cart(request, product_id):
     """Remove item from cart."""
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'error': 'Authentication required',
+                'redirect_url': reverse('accounts:login')
+            })
+        return redirect('accounts:login')
+    
     cart = get_or_create_cart(request)
     
     try:
@@ -148,6 +179,16 @@ def remove_from_cart(request, product_id):
 
 def clear_cart(request):
     """Clear all items from cart."""
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'error': 'Authentication required',
+                'redirect_url': reverse('accounts:login')
+            })
+        return redirect('accounts:login')
+    
     cart = get_or_create_cart(request)
     cart.clear()
     

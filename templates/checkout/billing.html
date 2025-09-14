@@ -1,0 +1,231 @@
+{% extends 'checkout/base_checkout.html' %}
+{% load crispy_forms_tags %}
+
+{% block checkout_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-4">
+        <p class="text-muted">
+            Please provide your billing address for payment processing.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="{{ form.same_as_shipping.id_for_label }}" 
+                   name="{{ form.same_as_shipping.name }}" 
+                   {% if form.same_as_shipping.value %}checked{% endif %}>
+            <label class="form-check-label" for="{{ form.same_as_shipping.id_for_label }}">
+                <strong>Same as shipping address</strong>
+            </label>
+        </div>
+    </div>
+
+    <div id="billing-address-fields" {% if form.same_as_shipping.value %}style="display: none;"{% endif %}>
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="id_street_address" class="form-label">
+                        Street Address <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="street_address" class="form-control"
+                           id="id_street_address" placeholder="123 Main Street">
+                    {% if form.street_address.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.street_address.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="id_apartment" class="form-label">
+                        Apartment, Suite, Unit (Optional)
+                    </label>
+                    <input type="text" name="apartment" class="form-control"
+                           id="id_apartment" placeholder="Apt, Suite, Unit (optional)">
+                    {% if form.apartment.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.apartment.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_city" class="form-label">
+                        City <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="city" class="form-control"
+                           id="id_city" placeholder="City">
+                    {% if form.city.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.city.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_state" class="form-label">
+                        State/Province <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="state" class="form-control"
+                           id="id_state" placeholder="State/Province">
+                    {% if form.state.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.state.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_postal_code" class="form-label">
+                        ZIP/Postal Code <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="postal_code" class="form-control"
+                           id="id_postal_code" placeholder="ZIP/Postal Code">
+                    {% if form.postal_code.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.postal_code.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="id_country" class="form-label">
+                        Country <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" name="country" class="form-control"
+                           id="id_country" value="United States">
+                    {% if form.country.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.country.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-12">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="save_billing_address" name="save_billing_address">
+                    <label class="form-check-label" for="save_billing_address">
+                        Save this billing address for future orders
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="alert alert-info">
+        <div class="d-flex align-items-start">
+            <i class="bi bi-info-circle me-2 mt-1"></i>
+            <div>
+                <strong>Why do we need your billing address?</strong><br>
+                <small>
+                    Your billing address is used to verify your payment method and prevent fraud. 
+                    It must match the address associated with your payment method.
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="{% url 'checkout:shipping' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Shipping
+        </a>
+        <button type="submit" class="btn btn-primary">
+            Continue to Shipping Method <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    // Handle same as shipping checkbox
+    $('#{{ form.same_as_shipping.id_for_label }}').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#billing-address-fields').slideUp();
+            // Clear validation errors when hiding fields
+            $('#billing-address-fields input').removeClass('is-invalid');
+        } else {
+            $('#billing-address-fields').slideDown();
+        }
+    });
+
+    // Postal code formatting
+    $('#{{ form.postal_code.id_for_label }}').on('input', function() {
+        let value = $(this).val().toUpperCase();
+        // Basic US ZIP code formatting
+        if (/^\d{5}$/.test(value)) {
+            // Valid 5-digit ZIP
+        } else if (/^\d{5}-?\d{0,4}$/.test(value.replace('-', ''))) {
+            // ZIP+4 format
+            if (value.length === 9 && !value.includes('-')) {
+                value = value.slice(0, 5) + '-' + value.slice(5);
+            }
+        }
+        $(this).val(value);
+    });
+
+    // Address validation
+    function validateBillingAddress() {
+        // Only validate if not same as shipping
+        if ($('#{{ form.same_as_shipping.id_for_label }}').is(':checked')) {
+            return true;
+        }
+
+        const requiredFields = ['street_address', 'city', 'state', 'postal_code', 'country'];
+        let isValid = true;
+
+        requiredFields.forEach(function(field) {
+            const input = $(`#id_${field}`);
+            if (!input.val().trim()) {
+                input.addClass('is-invalid');
+                isValid = false;
+            } else {
+                input.removeClass('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+
+    // Form submission validation
+    $('form').on('submit', function(e) {
+        if (!validateBillingAddress()) {
+            e.preventDefault();
+            showToast('Please fill in all required billing address fields.', 'danger');
+        }
+    });
+
+    // Real-time validation
+    $('#billing-address-fields input[required]').on('blur', function() {
+        if (!$(this).val().trim()) {
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,726 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results for "{{ query }}" - {{ site_settings.site_name }}{% endblock %}
+
+{% block meta_description %}Search results for "{{ query }}" - Find the perfect car parts and accessories from our extensive collection. {{ total_results }} products found.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="py-3 bg-light">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+            <li class="breadcrumb-item active">Search Results</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Search Header -->
+<section class="py-4 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-4" 
+                         style="width: 80px; height: 80px;">
+                        <i class="bi bi-search text-white fs-2"></i>
+                    </div>
+                    <div>
+                        <h1 class="display-6 fw-bold mb-2">Search Results</h1>
+                        <p class="lead mb-0">
+                            {% if query %}
+                                Results for "<span class="fw-bold">{{ query }}</span>"
+                            {% else %}
+                                Browse all products
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="bg-white bg-opacity-25 rounded-4 p-4">
+                    <div class="text-center">
+                        <h3 class="fw-bold mb-1">{{ total_results }}</h3>
+                        <p class="mb-0">Product{{ total_results|pluralize }} Found</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Bar Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <form method="get" action="{% url 'shop:search' %}" class="search-form">
+                            <div class="input-group input-group-lg">
+                                <input type="text" name="q" class="form-control search-input" 
+                                       placeholder="Search for car parts, brands, categories..." 
+                                       value="{{ query }}" autocomplete="off">
+                                <button class="btn btn-primary px-4" type="submit">
+                                    <i class="bi bi-search me-2"></i>Search
+                                </button>
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-lightbulb me-1"></i>
+                                    Try searching for: "brake pads", "BMW parts", "engine oil", "suspension"
+                                </small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="py-5">
+    <div class="container">
+        {% if products %}
+            <div class="row">
+                <!-- Filters Sidebar -->
+                <div class="col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                        <div class="card-header bg-white border-0 py-3">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="bi bi-funnel me-2"></i>Refine Results
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="get" action="{% url 'shop:search' %}" id="filter-form">
+                                <input type="hidden" name="q" value="{{ query }}">
+                                
+                                <!-- Categories -->
+                                {% if categories %}
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Categories</h6>
+                                    <div class="category-filters" style="max-height: 200px; overflow-y: auto;">
+                                        {% for category in categories %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="category" 
+                                                   value="{{ category.slug }}" id="cat-{{ category.id }}">
+                                            <label class="form-check-label small" for="cat-{{ category.id }}">
+                                                {{ category.name }}
+                                                <small class="text-muted">({{ category.products.count }})</small>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Brands -->
+                                {% if brands %}
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Brands</h6>
+                                    <div class="brand-filters" style="max-height: 200px; overflow-y: auto;">
+                                        {% for brand in brands %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="brand" 
+                                                   value="{{ brand.slug }}" id="brand-{{ brand.id }}">
+                                            <label class="form-check-label small" for="brand-{{ brand.id }}">
+                                                {{ brand.name }}
+                                                <small class="text-muted">({{ brand.products.count }})</small>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Price Range -->
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Price Range</h6>
+                                    <div class="price-range">
+                                        <div class="d-flex gap-2 mb-3">
+                                            <input type="number" name="min_price" class="form-control form-control-sm"
+                                                   placeholder="Min" value="{{ request.GET.min_price }}">
+                                            <input type="number" name="max_price" class="form-control form-control-sm"
+                                                   placeholder="Max" value="{{ request.GET.max_price }}">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                                            <i class="bi bi-search me-1"></i>Apply Filter
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Condition -->
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Condition</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="condition" id="condition-all"
+                                               value="" {% if not request.GET.condition %}checked{% endif %}>
+                                        <label class="form-check-label" for="condition-all">
+                                            All Conditions
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="condition" id="condition-new"
+                                               value="new" {% if request.GET.condition == 'new' %}checked{% endif %}>
+                                        <label class="form-check-label" for="condition-new">
+                                            New
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="condition" id="condition-used"
+                                               value="used" {% if request.GET.condition == 'used' %}checked{% endif %}>
+                                        <label class="form-check-label" for="condition-used">
+                                            Used
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Availability -->
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Availability</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="in_stock" id="in-stock"
+                                               value="true" {% if request.GET.in_stock %}checked{% endif %}>
+                                        <label class="form-check-label" for="in-stock">
+                                            In Stock Only
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Clear Filters -->
+                                {% if request.GET.category or request.GET.brand or request.GET.min_price or request.GET.max_price or request.GET.condition or request.GET.in_stock %}
+                                <div class="mb-0">
+                                    <a href="{% url 'shop:search' %}?q={{ query }}" class="btn btn-outline-secondary btn-sm w-100">
+                                        <i class="bi bi-x-circle me-1"></i>Clear All Filters
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div class="col-lg-9">
+                    <!-- Sort and View Options -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <span class="text-muted">
+                                Showing {{ products.start_index }}-{{ products.end_index }} of {{ total_results }} results
+                                {% if query %}for "<strong>{{ query }}</strong>"{% endif %}
+                            </span>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-sort-down me-1"></i>Sort
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item {% if request.GET.sort == 'relevance' or not request.GET.sort %}active{% endif %}" 
+                                       href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'sort' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort=relevance">Relevance</a></li>
+                                <li><a class="dropdown-item {% if request.GET.sort == 'name' %}active{% endif %}" 
+                                       href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'sort' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort=name">Name A-Z</a></li>
+                                <li><a class="dropdown-item {% if request.GET.sort == '-name' %}active{% endif %}" 
+                                       href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'sort' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort=-name">Name Z-A</a></li>
+                                <li><a class="dropdown-item {% if request.GET.sort == 'price' %}active{% endif %}" 
+                                       href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'sort' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort=price">Price Low-High</a></li>
+                                <li><a class="dropdown-item {% if request.GET.sort == '-price' %}active{% endif %}" 
+                                       href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'sort' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort=-price">Price High-Low</a></li>
+                                <li><a class="dropdown-item {% if request.GET.sort == '-created_at' %}active{% endif %}" 
+                                       href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'sort' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort=-created_at">Newest First</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row g-4" id="products-grid">
+                        {% for product in products %}
+                        <div class="col-xl-4 col-md-6">
+                            <div class="card product-card h-100 border-0 shadow-sm">
+                                <div class="position-relative overflow-hidden">
+                                    {% if product.images.exists %}
+                                        <img src="{{ product.images.first.image.url }}"
+                                             class="card-img-top" alt="{{ product.name }}"
+                                             style="height: 250px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                                             style="height: 250px;">
+                                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- Badges -->
+                                    {% if product.is_on_sale %}
+                                        <div class="position-absolute top-0 start-0 m-2">
+                                            <span class="badge-sale">{{ product.discount_percentage }}% OFF</span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if product.condition == 'new' %}
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge bg-success">New</span>
+                                        </div>
+                                    {% elif product.condition == 'used' %}
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge bg-warning">Used</span>
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- Quick Actions -->
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-gradient-dark opacity-0 quick-actions"
+                                         style="transition: opacity 0.3s ease;">
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ product.get_absolute_url }}" class="btn btn-light btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-primary btn-sm"
+                                                        {% if not product.is_in_stock %}disabled{% endif %}>
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-outline-light btn-sm add-to-wishlist-btn"
+                                                    data-product-id="{{ product.id }}">
+                                                <i class="bi bi-heart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body d-flex flex-column">
+                                    <div class="mb-2">
+                                        <small class="text-muted">{{ product.brand.name }}</small>
+                                        <span class="mx-2 text-muted">•</span>
+                                        <small class="text-muted">{{ product.category.name }}</small>
+                                    </div>
+
+                                    <h6 class="card-title mb-2">
+                                        <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                                            {{ product.name|truncatechars:50 }}
+                                        </a>
+                                    </h6>
+
+                                    <p class="text-muted small mb-3">{{ product.short_description|default:product.description|truncatechars:80 }}</p>
+
+                                    <div class="mt-auto">
+                                        <!-- Rating -->
+                                        {% if product.average_rating > 0 %}
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="text-warning me-2">
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= product.average_rating %}
+                                                            <i class="bi bi-star-fill"></i>
+                                                        {% else %}
+                                                            <i class="bi bi-star"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <small class="text-muted">({{ product.review_count }})</small>
+                                            </div>
+                                        {% endif %}
+
+                                        <!-- Price -->
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <div>
+                                                <span class="price fw-bold">{{ site_settings.currency_symbol }}{{ product.get_price }}</span>
+                                                {% if product.is_on_sale %}
+                                                    <span class="price-old ms-2">{{ site_settings.currency_symbol }}{{ product.price }}</span>
+                                                {% endif %}
+                                            </div>
+                                            {% if product.is_low_stock %}
+                                                <small class="text-warning">Low Stock</small>
+                                            {% endif %}
+                                        </div>
+
+                                        <!-- Action Buttons -->
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary flex-fill">
+                                                View Details
+                                            </a>
+                                            <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-primary"
+                                                        {% if not product.is_in_stock %}disabled{% endif %}>
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                        {% if not product.is_in_stock %}
+                                            <small class="text-danger mt-2 d-block text-center">Out of Stock</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if products.has_other_pages %}
+                    <nav aria-label="Search results pagination" class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            {% if products.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'page' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ products.previous_page_number }}">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                                </li>
+                            {% endif %}
+
+                            {% for num in products.paginator.page_range %}
+                                {% if products.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'page' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if products.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ query }}&{% for key,value in request.GET.items %}{% if key != 'page' and key != 'q' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ products.next_page_number }}">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <!-- No Results Found -->
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="bi bi-search text-muted" style="font-size: 4rem;"></i>
+                </div>
+                <h3 class="text-muted mb-3">
+                    {% if query %}
+                        No results found for "{{ query }}"
+                    {% else %}
+                        No search query provided
+                    {% endif %}
+                </h3>
+                <p class="text-muted mb-4">
+                    {% if query %}
+                        Try different keywords or browse our categories below
+                    {% else %}
+                        Please enter a search term to find products
+                    {% endif %}
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                        <i class="bi bi-grid me-2"></i>Browse All Products
+                    </a>
+                    <a href="{% url 'products:product_list' %}?is_featured=true" class="btn btn-outline-primary">
+                        <i class="bi bi-star me-2"></i>Featured Products
+                    </a>
+                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-chat-dots me-2"></i>Need Help?
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Popular Searches Section -->
+{% if not products or total_results == 0 %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h4 class="fw-bold">Popular Searches</h4>
+                <p class="text-muted">Try searching for these popular items</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="{% url 'shop:search' %}?q=brake+pads" class="btn btn-outline-primary btn-sm">Brake Pads</a>
+                    <a href="{% url 'shop:search' %}?q=engine+oil" class="btn btn-outline-primary btn-sm">Engine Oil</a>
+                    <a href="{% url 'shop:search' %}?q=air+filter" class="btn btn-outline-primary btn-sm">Air Filter</a>
+                    <a href="{% url 'shop:search' %}?q=suspension" class="btn btn-outline-primary btn-sm">Suspension</a>
+                    <a href="{% url 'shop:search' %}?q=headlights" class="btn btn-outline-primary btn-sm">Headlights</a>
+                    <a href="{% url 'shop:search' %}?q=tires" class="btn btn-outline-primary btn-sm">Tires</a>
+                    <a href="{% url 'shop:search' %}?q=battery" class="btn btn-outline-primary btn-sm">Battery</a>
+                    <a href="{% url 'shop:search' %}?q=exhaust" class="btn btn-outline-primary btn-sm">Exhaust</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}
+
+.search-input {
+    border-radius: 10px 0 0 10px;
+    border: 2px solid #e9ecef;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15) !important;
+}
+
+.product-card:hover .quick-actions {
+    opacity: 1 !important;
+}
+
+.quick-actions {
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+}
+
+.badge-sale {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.price {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.price-old {
+    text-decoration: line-through;
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.category-filters,
+.brand-filters {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) #f1f1f1;
+}
+
+.category-filters::-webkit-scrollbar,
+.brand-filters::-webkit-scrollbar {
+    width: 6px;
+}
+
+.category-filters::-webkit-scrollbar-track,
+.brand-filters::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.category-filters::-webkit-scrollbar-thumb,
+.brand-filters::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+    .display-6 {
+        font-size: 2rem;
+    }
+    
+    .col-lg-3 {
+        order: 2;
+    }
+    .col-lg-9 {
+        order: 1;
+    }
+    
+    .sticky-top {
+        position: relative !important;
+    }
+    
+    .input-group-lg .form-control {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Add to cart functionality
+    $('.add-to-cart-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const productId = form.data('product-id');
+        const button = form.find('button');
+        const originalIcon = button.find('i').attr('class');
+
+        // Show loading state
+        button.prop('disabled', true);
+        button.find('i').attr('class', 'bi bi-arrow-repeat spinner-border spinner-border-sm');
+
+        $.ajax({
+            url: '{% url "cart:add_to_cart" %}',
+            method: 'POST',
+            data: {
+                'product_id': productId,
+                'quantity': 1,
+                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    updateCartBadge(response.cart_total_items);
+
+                    // Change button to success state temporarily
+                    button.find('i').attr('class', 'bi bi-check-lg text-success');
+                    setTimeout(function() {
+                        button.find('i').attr('class', originalIcon);
+                        button.prop('disabled', false);
+                    }, 2000);
+                } else {
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast(response.error, 'danger');
+                        button.find('i').attr('class', originalIcon);
+                        button.prop('disabled', false);
+                    }
+                }
+            },
+            error: function() {
+                showToast('An error occurred. Please try again.', 'danger');
+                button.find('i').attr('class', originalIcon);
+                button.prop('disabled', false);
+            }
+        });
+    });
+
+    // Filter form submission
+    $('#filter-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const formData = $(this).serialize();
+        const url = '{% url "shop:search" %}?' + formData;
+
+        // Show loading state
+        $('#products-grid').addClass('opacity-50');
+
+        window.location.href = url;
+    });
+
+    // Auto-submit on filter changes
+    $('#filter-form input[type="checkbox"], #filter-form input[type="radio"]').on('change', function() {
+        $('#filter-form').trigger('submit');
+    });
+
+    // Price range filter
+    $('.price-range input').on('change', function() {
+        const minPrice = $('input[name="min_price"]').val();
+        const maxPrice = $('input[name="max_price"]').val();
+        
+        if (minPrice || maxPrice) {
+            $('#filter-form').trigger('submit');
+        }
+    });
+
+    // Search form enhancement
+    $('.search-form').on('submit', function() {
+        const searchInput = $(this).find('input[name="q"]');
+        const submitBtn = $(this).find('button[type="submit"]');
+        
+        if (searchInput.val().trim() === '') {
+            searchInput.focus();
+            return false;
+        }
+        
+        // Show loading state
+        submitBtn.html('<span class="spinner-border spinner-border-sm me-2"></span>Searching...');
+    });
+
+    // Focus search input on page load if no query
+    // Focus search input on page load if no query
+    {% if not query %}
+        $('.search-input').focus();
+    {% endif %}
+    
+    // Add to wishlist functionality
+    $('.add-to-wishlist-btn').on('click', function(e) {
+        e.preventDefault();
+        
+        // Check if user is authenticated before making request
+        if (!isUserAuthenticated) {
+            window.location.href = loginUrl;
+            return;
+        }
+        
+        const button = $(this);
+        const productId = button.data('product-id');
+        const originalIcon = button.find('i').attr('class');
+        
+        // Show loading state
+        button.prop('disabled', true);
+        button.find('i').attr('class', 'bi bi-arrow-repeat spinner-border spinner-border-sm');
+        
+        $.ajax({
+            url: `/cart/wishlist/add/${productId}/`,
+            method: 'POST',
+            headers: {'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()},
+            success: function(response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    
+                    // Change button to success state
+                    button.find('i').attr('class', 'bi bi-heart-fill text-danger');
+                    button.removeClass('btn-outline-light').addClass('btn-outline-danger');
+                    
+                    setTimeout(function() {
+                        button.prop('disabled', false);
+                    }, 1000);
+                } else {
+                    showToast(response.message || 'Item already in wishlist', 'info');
+                    button.find('i').attr('class', originalIcon);
+                    button.prop('disabled', false);
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 403) {
+                    // User not authenticated, redirect to login
+                    window.location.href = '{% url "accounts:login" %}';
+                } else {
+                    showToast('An error occurred. Please try again.', 'danger');
+                    button.find('i').attr('class', originalIcon);
+                    button.prop('disabled', false);
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

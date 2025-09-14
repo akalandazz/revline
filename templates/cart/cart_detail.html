@@ -10,7 +10,7 @@
 <nav aria-label="breadcrumb" class="py-3 bg-light">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
             <li class="breadcrumb-item active">Shopping Cart</li>
         </ol>
     </div>
@@ -341,7 +341,12 @@ $(document).ready(function() {
                         location.reload();
                     }, 1000);
                 } else {
-                    showToast(response.error, 'danger');
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast(response.error, 'danger');
+                    }
                 }
             },
             error: function() {
@@ -365,7 +370,12 @@ $(document).ready(function() {
                         location.reload();
                     }, 1000);
                 } else {
-                    showToast(response.error, 'danger');
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast(response.error, 'danger');
+                    }
                 }
             },
             error: function() {
@@ -389,7 +399,12 @@ $(document).ready(function() {
                         location.reload();
                     }, 1000);
                 } else {
-                    showToast('An error occurred.', 'danger');
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast('An error occurred.', 'danger');
+                    }
                 }
             },
             error: function() {

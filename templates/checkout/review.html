@@ -1,0 +1,381 @@
+{% extends 'checkout/base_checkout.html' %}
+{% load crispy_forms_tags %}
+
+{% block shipping_summary %}
+<div class="d-flex justify-content-between mb-2">
+    <span>Shipping</span>
+    <span>{{ site_settings.currency_symbol }}{{ shipping_cost }}</span>
+</div>
+{% endblock %}
+
+{% block tax_summary %}
+{% if tax_amount > 0 %}
+<div class="d-flex justify-content-between mb-3">
+    <span>Tax</span>
+    <span>{{ site_settings.currency_symbol }}{{ tax_amount }}</span>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block total_summary %}
+<div class="d-flex justify-content-between mb-3">
+    <span class="h6 mb-0">Total</span>
+    <span class="h6 mb-0 fw-bold text-primary">{{ site_settings.currency_symbol }}{{ total_amount }}</span>
+</div>
+{% endblock %}
+
+{% block checkout_content %}
+<div class="mb-4">
+    <p class="text-muted">
+        Please review your order details before completing your purchase.
+    </p>
+</div>
+
+<!-- Order Summary -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h6 class="mb-3">Order Items</h6>
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart.items.all %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 me-3">
+                                    {% if item.product.images.exists %}
+                                        <img src="{{ item.product.images.first.image.url }}"
+                                             alt="{{ item.product.name }}"
+                                             class="img-fluid rounded"
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                             style="width: 50px; height: 50px;">
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">{{ item.product.name }}</h6>
+                                    <small class="text-muted">{{ item.product.brand.name }}</small>
+                                    {% if item.product.sku %}
+                                        <br><small class="text-muted">SKU: {{ item.product.sku }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">{{ item.quantity }}</td>
+                        <td class="text-end">{{ site_settings.currency_symbol }}{{ item.unit_price }}</td>
+                        <td class="text-end fw-bold">{{ site_settings.currency_symbol }}{{ item.total_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <th colspan="3">Subtotal</th>
+                        <th class="text-end">{{ site_settings.currency_symbol }}{{ subtotal }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">Shipping ({{ shipping_method_data.name }})</th>
+                        <th class="text-end">{{ site_settings.currency_symbol }}{{ shipping_cost }}</th>
+                    </tr>
+                    {% if tax_amount > 0 %}
+                    <tr>
+                        <th colspan="3">Tax</th>
+                        <th class="text-end">{{ site_settings.currency_symbol }}{{ tax_amount }}</th>
+                    </tr>
+                    {% endif %}
+                    <tr class="table-primary">
+                        <th colspan="3" class="h6">Total</th>
+                        <th class="text-end h6">{{ site_settings.currency_symbol }}{{ total_amount }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Information -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h6 class="mb-3">Contact Information</h6>
+        <div class="card">
+            <div class="card-body">
+                <p class="mb-1"><strong>{{ contact_data.first_name }} {{ contact_data.last_name }}</strong></p>
+                <p class="mb-1">{{ contact_data.email }}</p>
+                {% if contact_data.phone_number %}
+                    <p class="mb-0">{{ contact_data.phone_number }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <h6 class="mb-3">Payment Method</h6>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    {% if payment_data.payment_method == 'credit_card' %}
+                        <i class="bi bi-credit-card text-primary me-2"></i>
+                        <span>Credit Card</span>
+                    {% elif payment_data.payment_method == 'paypal' %}
+                        <i class="bi bi-paypal text-primary me-2"></i>
+                        <span>PayPal</span>
+                    {% elif payment_data.payment_method == 'cash_on_delivery' %}
+                        <i class="bi bi-cash text-success me-2"></i>
+                        <span>Cash on Delivery</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Addresses -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h6 class="mb-3">Shipping Address</h6>
+        <div class="card">
+            <div class="card-body">
+                <address class="mb-0">
+                    {{ shipping_data.street_address }}<br>
+                    {% if shipping_data.apartment %}{{ shipping_data.apartment }}<br>{% endif %}
+                    {{ shipping_data.city }}, {{ shipping_data.state }} {{ shipping_data.postal_code }}<br>
+                    {{ shipping_data.country }}
+                </address>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <h6 class="mb-3">Billing Address</h6>
+        <div class="card">
+            <div class="card-body">
+                {% if billing_data.same_as_shipping %}
+                    <p class="text-muted mb-0">Same as shipping address</p>
+                {% else %}
+                    <address class="mb-0">
+                        {{ billing_data.street_address }}<br>
+                        {% if billing_data.apartment %}{{ billing_data.apartment }}<br>{% endif %}
+                        {{ billing_data.city }}, {{ billing_data.state }} {{ billing_data.postal_code }}<br>
+                        {{ billing_data.country }}
+                    </address>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Shipping Method -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h6 class="mb-3">Shipping Method</h6>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ shipping_method_data.name }}</strong>
+                        <br><small class="text-muted">{{ shipping_method_data.estimated_days }} business days</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="h6 mb-0">{{ site_settings.currency_symbol }}{{ shipping_cost }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Notes -->
+{% if payment_data.notes %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h6 class="mb-3">Order Notes</h6>
+        <div class="card">
+            <div class="card-body">
+                <p class="mb-0">{{ payment_data.notes }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Terms and Conditions -->
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-4">
+        <div class="card border-warning">
+            <div class="card-body">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" 
+                           id="{{ form.terms_accepted.id_for_label }}" 
+                           name="{{ form.terms_accepted.name }}" required>
+                    <label class="form-check-label" for="{{ form.terms_accepted.id_for_label }}">
+                        I agree to the <a href="#" target="_blank">Terms and Conditions</a> 
+                        and <a href="#" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
+                    </label>
+                    {% if form.terms_accepted.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.terms_accepted.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           id="{{ form.newsletter_signup.id_for_label }}" 
+                           name="{{ form.newsletter_signup.name }}"
+                           {% if form.newsletter_signup.value %}checked{% endif %}>
+                    <label class="form-check-label" for="{{ form.newsletter_signup.id_for_label }}">
+                        Subscribe to our newsletter for updates and special offers
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="{% url 'checkout:payment' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Payment
+        </a>
+        <button type="submit" class="btn btn-success btn-lg" id="place-order-btn">
+            <i class="bi bi-check-circle me-2"></i>Place Order - {{ site_settings.currency_symbol }}{{ total_amount }}
+        </button>
+    </div>
+</form>
+
+<!-- Security Notice -->
+<div class="alert alert-info mt-4">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-shield-check me-2"></i>
+        <div>
+            <strong>Secure Checkout</strong><br>
+            <small>
+                Your order and payment information is encrypted and secure. 
+                You will receive an email confirmation once your order is processed.
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    // Prevent double submission
+    let formSubmitted = false;
+    
+    // Form submission handling
+    $('form').on('submit', function(e) {
+        // Prevent double submission
+        if (formSubmitted) {
+            e.preventDefault();
+            return false;
+        }
+        
+        const termsAccepted = $('#{{ form.terms_accepted.id_for_label }}').is(':checked');
+        
+        if (!termsAccepted) {
+            e.preventDefault();
+            showToast('Please accept the terms and conditions to place your order.', 'danger');
+            $('#{{ form.terms_accepted.id_for_label }}').focus();
+            return;
+        }
+        
+        // Mark form as submitted to prevent double submission
+        formSubmitted = true;
+        
+        // Disable button and show loading state
+        const submitBtn = $('#place-order-btn');
+        submitBtn.prop('disabled', true);
+        submitBtn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Processing Order...');
+        
+        // Show processing message
+        showToast('Processing your order, please wait...', 'info');
+    });
+    
+    // Edit links functionality
+    $('.edit-section').on('click', function(e) {
+        e.preventDefault();
+        const section = $(this).data('section');
+        
+        // Redirect to appropriate checkout step
+        switch(section) {
+            case 'contact':
+                window.location.href = '{% url "checkout:contact" %}';
+                break;
+            case 'shipping':
+                window.location.href = '{% url "checkout:shipping" %}';
+                break;
+            case 'billing':
+                window.location.href = '{% url "checkout:billing" %}';
+                break;
+            case 'shipping_method':
+                window.location.href = '{% url "checkout:shipping_method" %}';
+                break;
+            case 'payment':
+                window.location.href = '{% url "checkout:payment" %}';
+                break;
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.card {
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+address {
+    font-style: normal;
+    line-height: 1.5;
+}
+
+.btn-success {
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn-success {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
+{% endblock %}

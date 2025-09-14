@@ -26,7 +26,7 @@ class UserRegistrationView(CreateView):
     model = User
     form_class = UserRegistrationForm
     template_name = 'accounts/register.html'
-    success_url = reverse_lazy('core:home')
+    success_url = reverse_lazy('shop:home')
     
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -86,4 +86,24 @@ def delete_address(request, address_id):
         messages.success(request, 'Address deleted successfully!')
     except Address.DoesNotExist:
         messages.error(request, 'Address not found.')
+    return redirect('accounts:profile')
+
+
+@login_required
+def edit_address(request, address_id):
+    """Edit user address."""
+    try:
+        address = Address.objects.get(id=address_id, user=request.user)
+    except Address.DoesNotExist:
+        messages.error(request, 'Address not found.')
+        return redirect('accounts:profile')
+    
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Address updated successfully!')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    
     return redirect('accounts:profile')

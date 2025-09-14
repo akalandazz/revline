@@ -18,7 +18,7 @@
                     <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
                         <i class="bi bi-lightning-fill me-2"></i>Shop Now
                     </a>
-                    <a href="{% url 'core:about' %}" class="btn btn-outline-light btn-lg">
+                    <a href="{% url 'shop:about' %}" class="btn btn-outline-light btn-lg">
                         <i class="bi bi-play-circle me-2"></i>Learn More
                     </a>
                 </div>
@@ -303,7 +303,7 @@
                     <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg">
                         <i class="bi bi-cart me-2"></i>Start Shopping
                     </a>
-                    <a href="{% url 'core:contact' %}" class="btn btn-outline-light btn-lg">
+                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-light btn-lg">
                         <i class="bi bi-chat-dots me-2"></i>Get Expert Advice
                     </a>
                 </div>
@@ -349,9 +349,14 @@ $(document).ready(function() {
                         button.prop('disabled', false);
                     }, 2000);
                 } else {
-                    showToast(response.error, 'danger');
-                    button.find('i').attr('class', originalIcon);
-                    button.prop('disabled', false);
+                    if (response.redirect_url) {
+                        // Redirect to login page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        showToast(response.error, 'danger');
+                        button.find('i').attr('class', originalIcon);
+                        button.prop('disabled', false);
+                    }
                 }
             },
             error: function() {

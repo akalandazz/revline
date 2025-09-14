@@ -3,12 +3,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Import admin customization
+from . import admin as admin_config
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('core.urls', namespace='core')),
+    path('', include('shop.urls', namespace='shop')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('products/', include('products.urls', namespace='products')),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('checkout/', include('checkout.urls', namespace='checkout')),
 ]
 
 if settings.DEBUG:

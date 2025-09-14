@@ -32,10 +32,11 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'core',
+    'shop',
     'accounts',
     'products',
     'cart',
+    'checkout',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -65,7 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.cart_context',
+                'shop.context_processors.cart_context',
             ],
         },
     },
@@ -125,6 +126,9 @@ USE_TZ = True
 # Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Media files
 MEDIA_URL = '/media/'
@@ -138,8 +142,8 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Login URLs
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'core:home'
-LOGOUT_REDIRECT_URL = 'core:home'
+LOGIN_REDIRECT_URL = 'shop:home'
+LOGOUT_REDIRECT_URL = 'shop:home'
 
 # Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
@@ -187,3 +191,8 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+# Admin customization
+ADMIN_SITE_HEADER = 'RevLine Administration'
+ADMIN_SITE_TITLE = 'RevLine Admin'
+ADMIN_INDEX_TITLE = 'Welcome to RevLine Administration'
