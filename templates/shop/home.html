@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}{{ site_settings.site_name }} - Premium Sport Car Parts{% endblock %}
+{% block title %}{{ site_settings.site_name }} - {% trans "Premium Sport Car Parts" %}{% endblock %}
 
 {% block content %}
 <!-- Enhanced Hero Section -->
@@ -11,19 +11,18 @@
             <div class="col-lg-6 hero-content">
                 <div class="animate-on-scroll">
                     <h1 class="hero-title mb-4">
-                        Unleash Your Car's
-                        <span class="d-block">Performance</span>
+                        {% trans "Unleash Your Car's" %}
+                        <span class="d-block">{% trans "Performance" %}</span>
                     </h1>
                     <p class="hero-subtitle">
-                        Premium sport car parts and accessories engineered for the ultimate driving experience.
-                        Quality parts, competitive prices, expert service.
+                        {% trans "Premium sport car parts and accessories engineered for the ultimate driving experience. Quality parts, competitive prices, expert service." %}
                     </p>
                     <div class="d-flex flex-wrap gap-3 mb-4">
                         <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
-                            <i class="bi bi-lightning-fill me-2"></i>Shop Now
+                            <i class="bi bi-lightning-fill me-2"></i>{% trans "Shop Now" %}
                         </a>
                         <a href="{% url 'shop:about' %}" class="btn btn-outline-light btn-lg">
-                            <i class="bi bi-play-circle me-2"></i>Learn More
+                            <i class="bi bi-play-circle me-2"></i>{% trans "Learn More" %}
                         </a>
                     </div>
                     
@@ -32,19 +31,19 @@
                         <div class="col-4">
                             <div class="trust-badge text-center">
                                 <i class="bi bi-shield-check fs-4 text-success mb-2"></i>
-                                <div class="small fw-bold">Guaranteed Quality</div>
+                                <div class="small fw-bold">{% trans "Guaranteed Quality" %}</div>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="trust-badge text-center">
                                 <i class="bi bi-truck fs-4 text-info mb-2"></i>
-                                <div class="small fw-bold">Free Shipping</div>
+                                <div class="small fw-bold">{% trans "Free Shipping" %}</div>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="trust-badge text-center">
                                 <i class="bi bi-people fs-4 text-warning mb-2"></i>
-                                <div class="small fw-bold">10K+ Customers</div>
+                                <div class="small fw-bold">{% trans "10K+ Customers" %}</div>
                             </div>
                         </div>
                     </div>
@@ -92,8 +91,8 @@
                         <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-truck text-white fs-2"></i>
                         </div>
-                        <h5 class="fw-bold">Free Shipping</h5>
-                        <p class="text-muted">Free shipping on orders over ${{ site_settings.free_shipping_threshold|default:"100" }}</p>
+                        <h5 class="fw-bold">{% trans "Free Shipping" %}</h5>
+                        <p class="text-muted">{% blocktrans with threshold=site_settings.free_shipping_threshold|default:"100" %}Free shipping on orders over ${{ threshold }}{% endblocktrans %}</p>
                     </div>
                 </div>
             </div>
@@ -103,8 +102,8 @@
                         <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-shield-check text-white fs-2"></i>
                         </div>
-                        <h5 class="fw-bold">Quality Guarantee</h5>
-                        <p class="text-muted">30-day money back guarantee on all products</p>
+                        <h5 class="fw-bold">{% trans "Quality Guarantee" %}</h5>
+                        <p class="text-muted">{% trans "30-day money back guarantee on all products" %}</p>
                     </div>
                 </div>
             </div>
@@ -114,8 +113,8 @@
                         <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-headset text-white fs-2"></i>
                         </div>
-                        <h5 class="fw-bold">Expert Support</h5>
-                        <p class="text-muted">Professional technical support and guidance</p>
+                        <h5 class="fw-bold">{% trans "Expert Support" %}</h5>
+                        <p class="text-muted">{% trans "Professional technical support and guidance" %}</p>
                     </div>
                 </div>
             </div>
@@ -125,8 +124,8 @@
                         <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-lightning-charge text-white fs-2"></i>
                         </div>
-                        <h5 class="fw-bold">Fast Delivery</h5>
-                        <p class="text-muted">Quick processing and fast shipping nationwide</p>
+                        <h5 class="fw-bold">{% trans "Fast Delivery" %}</h5>
+                        <p class="text-muted">{% trans "Quick processing and fast shipping nationwide" %}</p>
                     </div>
                 </div>
             </div>
@@ -140,8 +139,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
-                <p class="lead text-muted">Handpicked premium parts for maximum performance</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "Featured Products" %}</h2>
+                <p class="lead text-muted">{% trans "Handpicked premium parts for maximum performance" %}</p>
             </div>
         </div>
         
@@ -241,7 +240,7 @@
         
         <div class="text-center mt-5">
             <a href="{% url 'products:product_list' %}?is_featured=true" class="btn btn-outline-primary btn-lg">
-                View All Featured Products <i class="bi bi-arrow-right ms-2"></i>
+                {% trans "View All Featured Products" %} <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
     </div>
@@ -254,8 +253,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">Shop by Category</h2>
-                <p class="lead text-muted">Find the perfect parts for your vehicle</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "Shop by Category" %}</h2>
+                <p class="lead text-muted">{% trans "Find the perfect parts for your vehicle" %}</p>
             </div>
         </div>
         
@@ -293,8 +292,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">New Arrivals</h2>
-                <p class="lead text-muted">Latest additions to our premium collection</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "New Arrivals" %}</h2>
+                <p class="lead text-muted">{% trans "Latest additions to our premium collection" %}</p>
             </div>
         </div>
         
@@ -325,7 +324,7 @@
                             </div>
                             
                             <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100">
-                                View Details <i class="bi bi-arrow-right ms-1"></i>
+                                {% trans "View Details" %} <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -336,7 +335,7 @@
         
         <div class="text-center mt-5">
             <a href="{% url 'products:product_list' %}?sort=-created_at" class="btn btn-outline-primary btn-lg">
-                View All New Products <i class="bi bi-arrow-right ms-2"></i>
+                {% trans "View All New Products" %} <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
     </div>
@@ -349,8 +348,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">Trusted Brands</h2>
-                <p class="lead text-muted">We partner with the world's leading automotive brands</p>
+                <h2 class="display-5 fw-bold mb-3">{% trans "Trusted Brands" %}</h2>
+                <p class="lead text-muted">{% trans "We partner with the world's leading automotive brands" %}</p>
             </div>
         </div>
         
@@ -388,11 +387,10 @@
         <div class="row">
             <div class="col-lg-10 mx-auto text-center text-white animate-on-scroll">
                 <h2 class="display-4 fw-bold mb-4" style="line-height: 1.2;">
-                    Ready to Upgrade Your Ride?
+                    {% trans "Ready to Upgrade Your Ride?" %}
                 </h2>
                 <p class="lead mb-5 opacity-90">
-                    Join over 10,000+ satisfied customers who trust RevLine for their performance needs.
-                    Experience the difference quality makes.
+                    {% trans "Join over 10,000+ satisfied customers who trust RevLine for their performance needs. Experience the difference quality makes." %}
                 </p>
                 
                 <!-- Stats Row -->
@@ -400,19 +398,19 @@
                     <div class="col-md-4">
                         <div class="card-glass p-4 rounded-3">
                             <div class="h2 fw-bold text-primary mb-1">10K+</div>
-                            <div class="text-light">Happy Customers</div>
+                            <div class="text-light">{% trans "Happy Customers" %}</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card-glass p-4 rounded-3">
                             <div class="h2 fw-bold text-warning mb-1">4.9★</div>
-                            <div class="text-light">Average Rating</div>
+                            <div class="text-light">{% trans "Average Rating" %}</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card-glass p-4 rounded-3">
                             <div class="h2 fw-bold text-success mb-1">99%</div>
-                            <div class="text-light">Satisfaction Rate</div>
+                            <div class="text-light">{% trans "Satisfaction Rate" %}</div>
                         </div>
                     </div>
                 </div>
@@ -420,10 +418,10 @@
                 <!-- CTA Buttons -->
                 <div class="d-flex flex-wrap justify-content-center gap-3">
                     <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg px-5">
-                        <i class="bi bi-cart me-2"></i>Start Shopping
+                        <i class="bi bi-cart me-2"></i>{% trans "Start Shopping" %}
                     </a>
                     <a href="{% url 'shop:contact' %}" class="btn btn-outline-light btn-lg px-5">
-                        <i class="bi bi-chat-dots me-2"></i>Get Expert Advice
+                        <i class="bi bi-chat-dots me-2"></i>{% trans "Get Expert Advice" %}
                     </a>
                 </div>
             </div>
