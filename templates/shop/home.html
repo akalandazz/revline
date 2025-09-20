@@ -180,33 +180,7 @@
                                 <p class="hero-subtitle">
                                     {% trans "Don't miss our biggest sale of the year! Premium performance parts at unbeatable prices. Limited time only." %}
                                 </p>
-                                
-                                <!-- Countdown Timer -->
-                                <div class="countdown-timer">
-                                    <div class="countdown-label">{% trans "Offer ends in:" %}</div>
-                                    <div class="countdown-display">
-                                        <div class="countdown-unit">
-                                            <span class="countdown-number" id="countdown-days">05</span>
-                                            <span class="countdown-label">{% trans "Days" %}</span>
-                                        </div>
-                                        <div class="countdown-separator">:</div>
-                                        <div class="countdown-unit">
-                                            <span class="countdown-number" id="countdown-hours">12</span>
-                                            <span class="countdown-label">{% trans "Hours" %}</span>
-                                        </div>
-                                        <div class="countdown-separator">:</div>
-                                        <div class="countdown-unit">
-                                            <span class="countdown-number" id="countdown-minutes">34</span>
-                                            <span class="countdown-label">{% trans "Min" %}</span>
-                                        </div>
-                                        <div class="countdown-separator">:</div>
-                                        <div class="countdown-unit">
-                                            <span class="countdown-number" id="countdown-seconds">56</span>
-                                            <span class="countdown-label">{% trans "Sec" %}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
+
                                 <div class="hero-actions">
                                     <a href="{% url 'products:product_list' %}?sort=price" class="btn btn-hero-primary btn-offer">
                                         <i class="bi bi-tag-fill me-2"></i>
@@ -710,7 +684,6 @@ $(document).ready(function() {
             this.minSwipeDistance = 50;
             
             this.init();
-            this.startCountdownTimer();
         }
         
         init() {
@@ -933,35 +906,6 @@ $(document).ready(function() {
             // Start first indicator animation
             const activeProgress = this.indicators[0].querySelector('.indicator-progress');
             activeProgress.style.animation = `indicatorProgress ${this.autoplayDelay}ms linear`;
-        }
-        
-        startCountdownTimer() {
-            // Set initial countdown date (5 days from now for demo)
-            const countdownDate = new Date().getTime() + (5 * 24 * 60 * 60 * 1000);
-            
-            const timer = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = countdownDate - now;
-                
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                // Update countdown display
-                document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
-                document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
-                
-                if (distance < 0) {
-                    clearInterval(timer);
-                    document.getElementById('countdown-days').textContent = '00';
-                    document.getElementById('countdown-hours').textContent = '00';
-                    document.getElementById('countdown-minutes').textContent = '00';
-                    document.getElementById('countdown-seconds').textContent = '00';
-                }
-            }, 1000);
         }
         
         initScrollAnimations() {
