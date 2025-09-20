@@ -3968,47 +3968,6 @@
                         </ul>
                     </li>
                     
-                    <!-- User Account -->
-                    {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle racing-nav-link user-nav" href="#" role="button" data-bs-toggle="dropdown">
-                                <div class="user-avatar">
-                                    <i class="bi bi-person-circle"></i>
-                                </div>
-                                <span class="nav-text d-none d-lg-inline">{{ user.first_name|default:user.username }}</span>
-                                <div class="nav-accent"></div>
-                            </a>
-                            <ul class="dropdown-menu user-menu">
-                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
-                                    <i class="bi bi-speedometer text-primary me-2"></i>{% trans "My Garage" %}
-                                </a></li>
-                                <li><a class="dropdown-item" href="{% url 'cart:wishlist' %}">
-                                    <i class="bi bi-heart text-danger me-2"></i>{% trans "Wishlist" %}
-                                </a></li>
-                                <li><a class="dropdown-item" href="{% url 'checkout:order_list' %}">
-                                    <i class="bi bi-bag text-success me-2"></i>{% trans "Order History" %}
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                                    <i class="bi bi-power text-warning me-2"></i>{% trans "Logout" %}
-                                </a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link racing-nav-link" href="{% url 'accounts:login' %}">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>
-                                <span class="nav-text">{% trans "Login" %}</span>
-                                <div class="nav-accent"></div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link racing-nav-link btn-outline-primary ms-2" href="{% url 'accounts:register' %}">
-                                <i class="bi bi-person-plus me-1"></i>
-                                <span class="nav-text">{% trans "Register" %}</span>
-                            </a>
-                        </li>
-                    {% endif %}
                     
                     <!-- Language Selector -->
                     <li class="nav-item dropdown">
@@ -4054,6 +4013,47 @@
                             <div class="nav-accent"></div>
                         </a>
                     </li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle racing-nav-link user-nav" href="#" role="button" data-bs-toggle="dropdown">
+                                <div class="user-avatar">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                                <span class="nav-text d-none d-lg-inline">{{ user.first_name|default:user.username }}</span>
+                                <div class="nav-accent"></div>
+                            </a>
+                            <ul class="dropdown-menu user-menu">
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                    <i class="bi bi-speedometer text-primary me-2"></i>{% trans "My Garage" %}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'cart:wishlist' %}">
+                                    <i class="bi bi-heart text-danger me-2"></i>{% trans "Wishlist" %}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'checkout:order_list' %}">
+                                    <i class="bi bi-bag text-success me-2"></i>{% trans "Order History" %}
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                    <i class="bi bi-power text-warning me-2"></i>{% trans "Logout" %}
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link racing-nav-link" href="{% url 'accounts:login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                <span class="nav-text">{% trans "Login" %}</span>
+                                <div class="nav-accent"></div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link racing-nav-link btn-outline-primary ms-2" href="{% url 'accounts:register' %}">
+                                <i class="bi bi-person-plus me-1"></i>
+                                <span class="nav-text">{% trans "Register" %}</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
