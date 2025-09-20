@@ -7,35 +7,47 @@
 
 {% block content %}
 <!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="breadcrumb-modern">
+<nav aria-label="Breadcrumb navigation" class="breadcrumb-modern" role="navigation">
     <div class="container">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item">
-                <a href="{% url 'shop:home' %}">
-                    <i class="bi bi-house breadcrumb-icon"></i>Home
+        <ol class="breadcrumb mb-0" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{% url 'shop:home' %}" itemprop="item" aria-label="Go to home page">
+                    <i class="bi bi-house breadcrumb-icon" aria-hidden="true"></i>
+                    <span itemprop="name">Home</span>
                 </a>
+                <meta itemprop="position" content="1">
             </li>
             {% if category %}
-                <li class="breadcrumb-item">
-                    <a href="{% url 'products:product_list' %}">
-                        <i class="bi bi-grid breadcrumb-icon"></i>Products
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="{% url 'products:product_list' %}" itemprop="item" aria-label="Browse all products">
+                        <i class="bi bi-grid breadcrumb-icon" aria-hidden="true"></i>
+                        <span itemprop="name">Products</span>
                     </a>
+                    <meta itemprop="position" content="2">
                 </li>
-                <li class="breadcrumb-item active">
-                    <i class="bi bi-tag breadcrumb-icon"></i>{{ category.name }}
+                <li class="breadcrumb-item active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+                    <i class="bi bi-tag breadcrumb-icon" aria-hidden="true"></i>
+                    <span itemprop="name">{{ category.name }}</span>
+                    <meta itemprop="position" content="3">
                 </li>
             {% elif brand %}
-                <li class="breadcrumb-item">
-                    <a href="{% url 'products:product_list' %}">
-                        <i class="bi bi-grid breadcrumb-icon"></i>Products
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="{% url 'products:product_list' %}" itemprop="item" aria-label="Browse all products">
+                        <i class="bi bi-grid breadcrumb-icon" aria-hidden="true"></i>
+                        <span itemprop="name">Products</span>
                     </a>
+                    <meta itemprop="position" content="2">
                 </li>
-                <li class="breadcrumb-item active">
-                    <i class="bi bi-award breadcrumb-icon"></i>{{ brand.name }}
+                <li class="breadcrumb-item active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+                    <i class="bi bi-award breadcrumb-icon" aria-hidden="true"></i>
+                    <span itemprop="name">{{ brand.name }}</span>
+                    <meta itemprop="position" content="3">
                 </li>
             {% else %}
-                <li class="breadcrumb-item active">
-                    <i class="bi bi-grid breadcrumb-icon"></i>Products
+                <li class="breadcrumb-item active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+                    <i class="bi bi-grid breadcrumb-icon" aria-hidden="true"></i>
+                    <span itemprop="name">Products</span>
+                    <meta itemprop="position" content="2">
                 </li>
             {% endif %}
         </ol>
