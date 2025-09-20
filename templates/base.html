@@ -522,8 +522,8 @@
             left: 0;
         }
         
-        /* Brand and Racing Menu Styling */
-        .brands-menu, .racing-menu, .language-menu, .user-menu {
+        /* Brand and Menu Styling */
+        .brands-menu, .language-menu, .user-menu {
             background: rgba(26, 26, 26, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
@@ -535,7 +535,6 @@
         }
         
         .brands-menu .dropdown-item,
-        .racing-menu .dropdown-item,
         .language-menu .dropdown-item,
         .user-menu .dropdown-item {
             color: rgba(255, 255, 255, 0.9);
@@ -547,7 +546,6 @@
         }
         
         .brands-menu .dropdown-item:hover,
-        .racing-menu .dropdown-item:hover,
         .language-menu .dropdown-item:hover,
         .user-menu .dropdown-item:hover {
             color: white;
@@ -3638,7 +3636,7 @@
                 padding: 6px 12px;
             }
             
-            .brands-menu, .racing-menu, .language-menu, .user-menu {
+            .brands-menu, .language-menu, .user-menu {
                 min-width: 250px;
             }
             
@@ -3695,7 +3693,6 @@
             }
             
             .brands-menu .dropdown-item,
-            .racing-menu .dropdown-item,
             .language-menu .dropdown-item,
             .user-menu .dropdown-item {
                 padding: 0.6rem 0.8rem;
@@ -3737,7 +3734,7 @@
                 border: 2px solid var(--primary-color);
             }
             
-            .mega-menu, .brands-menu, .racing-menu, .language-menu, .user-menu {
+            .mega-menu, .brands-menu, .language-menu, .user-menu {
                 background: #000000;
                 border: 2px solid var(--primary-color);
             }
@@ -3967,29 +3964,6 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'products:product_list' %}">
                                 <i class="bi bi-grid me-2"></i>{% trans "All Brands" %}
-                            </a></li>
-                        </ul>
-                    </li>
-                    
-                    <!-- Racing Categories -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle racing-nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-flag-fill me-1"></i>
-                            <span class="nav-text">{% trans "Racing" %}</span>
-                            <div class="nav-accent"></div>
-                        </a>
-                        <ul class="dropdown-menu racing-menu">
-                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=track">
-                                <i class="bi bi-stopwatch text-primary me-2"></i>Track Day Essentials
-                            </a></li>
-                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=drag">
-                                <i class="bi bi-lightning-charge text-warning me-2"></i>Drag Racing
-                            </a></li>
-                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=drift">
-                                <i class="bi bi-arrow-repeat text-info me-2"></i>Drift Performance
-                            </a></li>
-                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=autocross">
-                                <i class="bi bi-diagram-3 text-success me-2"></i>Autocross Setup
                             </a></li>
                         </ul>
                     </li>
