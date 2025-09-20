@@ -323,58 +323,6 @@
     </div>
 </section>
 
-<!-- Enhanced Features Section -->
-<section class="py-5" style="background: var(--bg-secondary);">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="text-center animate-on-scroll">
-                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
-                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="bi bi-truck text-white fs-2"></i>
-                        </div>
-                        <h5 class="fw-bold">{% trans "Free Shipping" %}</h5>
-                        <p class="text-muted">{% blocktrans with threshold=site_settings.free_shipping_threshold|default:"100" %}Free shipping on orders over ${{ threshold }}{% endblocktrans %}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="text-center animate-on-scroll">
-                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
-                        <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="bi bi-shield-check text-white fs-2"></i>
-                        </div>
-                        <h5 class="fw-bold">{% trans "Quality Guarantee" %}</h5>
-                        <p class="text-muted">{% trans "30-day money back guarantee on all products" %}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="text-center animate-on-scroll">
-                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
-                        <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="bi bi-headset text-white fs-2"></i>
-                        </div>
-                        <h5 class="fw-bold">{% trans "Expert Support" %}</h5>
-                        <p class="text-muted">{% trans "Professional technical support and guidance" %}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="text-center animate-on-scroll">
-                    <div class="trust-badge mb-3 mx-auto" style="width: fit-content;">
-                        <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="bi bi-lightning-charge text-white fs-2"></i>
-                        </div>
-                        <h5 class="fw-bold">{% trans "Fast Delivery" %}</h5>
-                        <p class="text-muted">{% trans "Quick processing and fast shipping nationwide" %}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Featured Products Section -->
 {% if featured_products %}
 <section class="py-5">
