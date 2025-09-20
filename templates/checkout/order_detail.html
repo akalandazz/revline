@@ -7,13 +7,27 @@
 
 {% block content %}
 <!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="py-3 bg-light">
+<nav aria-label="breadcrumb" class="breadcrumb-modern">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">My Account</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'checkout:order_list' %}">My Orders</a></li>
-            <li class="breadcrumb-item active">Order #{{ order.order_number }}</li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'shop:home' %}">
+                    <i class="bi bi-house breadcrumb-icon"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'accounts:profile' %}">
+                    <i class="bi bi-person breadcrumb-icon"></i>My Account
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'checkout:order_list' %}">
+                    <i class="bi bi-list-ul breadcrumb-icon"></i>My Orders
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <i class="bi bi-receipt breadcrumb-icon"></i>Order #{{ order.order_number }}
+            </li>
         </ol>
     </div>
 </nav>

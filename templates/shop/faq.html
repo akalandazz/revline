@@ -7,11 +7,17 @@
 
 {% block content %}
 <!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="py-3 bg-light">
+<nav aria-label="breadcrumb" class="breadcrumb-modern">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
-            <li class="breadcrumb-item active">FAQ</li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'shop:home' %}">
+                    <i class="bi bi-house breadcrumb-icon"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <i class="bi bi-question-circle breadcrumb-icon"></i>FAQ
+            </li>
         </ol>
     </div>
 </nav>
