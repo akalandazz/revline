@@ -4,78 +4,320 @@
 {% block title %}{{ site_settings.site_name }} - {% trans "Premium Sport Car Parts" %}{% endblock %}
 
 {% block content %}
-<!-- Enhanced Hero Section -->
-<section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 hero-content">
-                <div class="animate-on-scroll">
-                    <h1 class="hero-title mb-4">
-                        {% trans "Unleash Your Car's" %}
-                        <span class="d-block">{% trans "Performance" %}</span>
-                    </h1>
-                    <p class="hero-subtitle">
-                        {% trans "Premium sport car parts and accessories engineered for the ultimate driving experience. Quality parts, competitive prices, expert service." %}
-                    </p>
-                    <div class="d-flex flex-wrap gap-3 mb-4">
-                        <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
-                            <i class="bi bi-lightning-fill me-2"></i>{% trans "Shop Now" %}
-                        </a>
-                        <a href="{% url 'shop:about' %}" class="btn btn-outline-light btn-lg">
-                            <i class="bi bi-play-circle me-2"></i>{% trans "Learn More" %}
-                        </a>
-                    </div>
-                    
-                    <!-- Trust Indicators -->
-                    <div class="row g-3 mt-4">
-                        <div class="col-4">
-                            <div class="trust-badge text-center">
-                                <i class="bi bi-shield-check fs-4 text-success mb-2"></i>
-                                <div class="small fw-bold">{% trans "Guaranteed Quality" %}</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="trust-badge text-center">
-                                <i class="bi bi-truck fs-4 text-info mb-2"></i>
-                                <div class="small fw-bold">{% trans "Free Shipping" %}</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="trust-badge text-center">
-                                <i class="bi bi-people fs-4 text-warning mb-2"></i>
-                                <div class="small fw-bold">{% trans "10K+ Customers" %}</div>
-                            </div>
-                        </div>
-                    </div>
+<!-- Modern Hero Carousel -->
+<section class="hero-carousel-container" id="heroCarousel" role="region" aria-label="Hero carousel">
+    <div class="hero-carousel-wrapper">
+        <!-- Carousel Slides -->
+        <div class="hero-slides">
+            
+            <!-- Slide 1: Performance Focus -->
+            <div class="hero-slide active" data-slide="0" data-bg="performance">
+                <div class="hero-slide-bg gradient-performance">
+                    <div class="hero-particles"></div>
                 </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <div class="position-relative animate-on-scroll">
-                    <div class="hero-image-wrapper">
-                        <img src="{% static 'images/reviline-home.png' %}"
-                             alt="Premium Sport Car" class="img-fluid rounded-4 shadow-lg" style="max-height: 500px;">
-                        
-                        <!-- Floating badges -->
-                        <div class="position-absolute top-0 end-0 m-3">
-                            <span class="badge badge-new fs-6 px-3 py-2">Premium Quality</span>
-                        </div>
-                        
-                        <!-- Glassmorphism stats card -->
-                        <div class="position-absolute bottom-0 start-0 m-3">
-                            <div class="card-glass p-3 rounded-3">
-                                <div class="d-flex align-items-center text-white">
-                                    <div class="me-3">
-                                        <i class="bi bi-star-fill text-warning fs-4"></i>
+                <div class="container">
+                    <div class="row align-items-center min-vh-90">
+                        <div class="col-lg-6 hero-content">
+                            <div class="slide-content-wrapper">
+                                <div class="slide-badge">
+                                    <i class="bi bi-lightning-charge me-2"></i>
+                                    <span>{% trans "Performance Edition" %}</span>
+                                </div>
+                                <h1 class="hero-title">
+                                    {% trans "Unleash Your Car's" %}
+                                    <span class="gradient-text">{% trans "Ultimate Performance" %}</span>
+                                </h1>
+                                <p class="hero-subtitle">
+                                    {% trans "Premium sport car parts and accessories engineered for the ultimate driving experience. Quality parts, competitive prices, expert service." %}
+                                </p>
+                                <div class="hero-stats-row">
+                                    <div class="hero-stat">
+                                        <div class="stat-number">500+</div>
+                                        <div class="stat-label">{% trans "Premium Parts" %}</div>
                                     </div>
-                                    <div>
-                                        <div class="fw-bold">4.9/5 Rating</div>
-                                        <div class="small opacity-75">From 2,500+ reviews</div>
+                                    <div class="hero-stat">
+                                        <div class="stat-number">98%</div>
+                                        <div class="stat-label">{% trans "Satisfaction" %}</div>
+                                    </div>
+                                    <div class="hero-stat">
+                                        <div class="stat-number">24/7</div>
+                                        <div class="stat-label">{% trans "Support" %}</div>
+                                    </div>
+                                </div>
+                                <div class="hero-actions">
+                                    <a href="{% url 'products:product_list' %}" class="btn btn-hero-primary">
+                                        <i class="bi bi-rocket-takeoff me-2"></i>
+                                        {% trans "Explore Performance Parts" %}
+                                    </a>
+                                    <a href="{% url 'shop:about' %}" class="btn btn-hero-outline">
+                                        <i class="bi bi-play-circle me-2"></i>
+                                        {% trans "Watch Demo" %}
+                                    </a>
+                                </div>
+                                
+                                <!-- Trust Indicators -->
+                                <div class="trust-indicators">
+                                    <div class="trust-item">
+                                        <i class="bi bi-shield-check"></i>
+                                        <span>{% trans "Quality Guaranteed" %}</span>
+                                    </div>
+                                    <div class="trust-item">
+                                        <i class="bi bi-truck"></i>
+                                        <span>{% trans "Free Shipping" %}</span>
+                                    </div>
+                                    <div class="trust-item">
+                                        <i class="bi bi-headset"></i>
+                                        <span>{% trans "Expert Support" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="hero-visual">
+                                <div class="hero-image-container">
+                                    <img src="{% static 'images/reviline-home.png' %}" alt="Premium Performance Car"
+                                         class="hero-image">
+                                    
+                                    <!-- Floating Elements -->
+                                    <div class="floating-element element-1">
+                                        <div class="glass-card pulse-animation">
+                                            <i class="bi bi-speedometer2 text-primary"></i>
+                                            <span>High Performance</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="floating-element element-2">
+                                        <div class="glass-card">
+                                            <div class="rating-display">
+                                                <div class="stars">★★★★★</div>
+                                                <div class="rating-text">4.9/5 Rating</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Slide 2: New Arrivals -->
+            <div class="hero-slide" data-slide="1" data-bg="arrivals">
+                <div class="hero-slide-bg gradient-arrivals">
+                    <div class="hero-particles"></div>
+                </div>
+                <div class="container">
+                    <div class="row align-items-center min-vh-90">
+                        <div class="col-lg-6 hero-content">
+                            <div class="slide-content-wrapper">
+                                <div class="slide-badge badge-new">
+                                    <i class="bi bi-stars me-2"></i>
+                                    <span>{% trans "New Arrivals" %}</span>
+                                </div>
+                                <h1 class="hero-title">
+                                    {% trans "Latest" %}
+                                    <span class="gradient-text">{% trans "Innovation" %}</span>
+                                    <span class="d-block">{% trans "Just Arrived" %}</span>
+                                </h1>
+                                <p class="hero-subtitle">
+                                    {% trans "Discover the newest additions to our premium collection. Cutting-edge technology meets unmatched quality in every component." %}
+                                </p>
+                                <div class="arrival-highlights">
+                                    <div class="highlight-item">
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                        <span>{% trans "Latest 2024 Models" %}</span>
+                                    </div>
+                                    <div class="highlight-item">
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                        <span>{% trans "Advanced Materials" %}</span>
+                                    </div>
+                                    <div class="highlight-item">
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                        <span>{% trans "Enhanced Performance" %}</span>
+                                    </div>
+                                </div>
+                                <div class="hero-actions">
+                                    <a href="{% url 'products:product_list' %}?sort=-created_at" class="btn btn-hero-primary">
+                                        <i class="bi bi-eye me-2"></i>
+                                        {% trans "View New Arrivals" %}
+                                    </a>
+                                    <a href="{% url 'products:product_list' %}?is_featured=true" class="btn btn-hero-outline">
+                                        <i class="bi bi-star me-2"></i>
+                                        {% trans "Featured Items" %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="hero-visual">
+                                <div class="hero-image-container arrivals-theme">
+                                    <img src="{% static 'images/reviline-home.png' %}" alt="New Arrival Products"
+                                         class="hero-image">
+                                    
+                                    <!-- New Badge -->
+                                    <div class="floating-element element-new">
+                                        <div class="glass-card bounce-animation">
+                                            <div class="new-badge">
+                                                <span class="new-text">NEW</span>
+                                                <div class="new-shine"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Innovation Indicator -->
+                                    <div class="floating-element element-innovation">
+                                        <div class="glass-card">
+                                            <i class="bi bi-lightbulb text-warning"></i>
+                                            <span>Innovation</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Special Offers -->
+            <div class="hero-slide" data-slide="2" data-bg="offers">
+                <div class="hero-slide-bg gradient-offers">
+                    <div class="hero-particles"></div>
+                </div>
+                <div class="container">
+                    <div class="row align-items-center min-vh-90">
+                        <div class="col-lg-6 hero-content">
+                            <div class="slide-content-wrapper">
+                                <div class="slide-badge badge-offer">
+                                    <i class="bi bi-gift me-2"></i>
+                                    <span>{% trans "Limited Time Offer" %}</span>
+                                </div>
+                                <h1 class="hero-title">
+                                    <span class="offer-text">{% trans "Up to" %}</span>
+                                    <span class="gradient-text display-1">40% OFF</span>
+                                    <span class="d-block">{% trans "Premium Parts" %}</span>
+                                </h1>
+                                <p class="hero-subtitle">
+                                    {% trans "Don't miss our biggest sale of the year! Premium performance parts at unbeatable prices. Limited time only." %}
+                                </p>
+                                
+                                <!-- Countdown Timer -->
+                                <div class="countdown-timer">
+                                    <div class="countdown-label">{% trans "Offer ends in:" %}</div>
+                                    <div class="countdown-display">
+                                        <div class="countdown-unit">
+                                            <span class="countdown-number" id="countdown-days">05</span>
+                                            <span class="countdown-label">{% trans "Days" %}</span>
+                                        </div>
+                                        <div class="countdown-separator">:</div>
+                                        <div class="countdown-unit">
+                                            <span class="countdown-number" id="countdown-hours">12</span>
+                                            <span class="countdown-label">{% trans "Hours" %}</span>
+                                        </div>
+                                        <div class="countdown-separator">:</div>
+                                        <div class="countdown-unit">
+                                            <span class="countdown-number" id="countdown-minutes">34</span>
+                                            <span class="countdown-label">{% trans "Min" %}</span>
+                                        </div>
+                                        <div class="countdown-separator">:</div>
+                                        <div class="countdown-unit">
+                                            <span class="countdown-number" id="countdown-seconds">56</span>
+                                            <span class="countdown-label">{% trans "Sec" %}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hero-actions">
+                                    <a href="{% url 'products:product_list' %}?sort=price" class="btn btn-hero-primary btn-offer">
+                                        <i class="bi bi-tag-fill me-2"></i>
+                                        {% trans "Shop Sale Items" %}
+                                    </a>
+                                    <a href="{% url 'shop:contact' %}" class="btn btn-hero-outline">
+                                        <i class="bi bi-chat-dots me-2"></i>
+                                        {% trans "Get Quote" %}
+                                    </a>
+                                </div>
+                                
+                                <!-- Offer Features -->
+                                <div class="offer-features">
+                                    <div class="feature-item">
+                                        <i class="bi bi-percent"></i>
+                                        <span>{% trans "Best Prices" %}</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-clock"></i>
+                                        <span>{% trans "Limited Time" %}</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-shield-check"></i>
+                                        <span>{% trans "Quality Assured" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="hero-visual">
+                                <div class="hero-image-container offers-theme">
+                                    <img src="{% static 'images/reviline-home.png' %}" alt="Special Offer Products"
+                                         class="hero-image">
+                                    
+                                    <!-- Sale Badge -->
+                                    <div class="floating-element element-sale">
+                                        <div class="glass-card sale-animation">
+                                            <div class="sale-badge">
+                                                <span class="sale-percent">40%</span>
+                                                <span class="sale-text">OFF</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Price Tag -->
+                                    <div class="floating-element element-price">
+                                        <div class="glass-card">
+                                            <div class="price-display">
+                                                <span class="old-price">$199</span>
+                                                <span class="new-price">$119</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="hero-navigation">
+            <!-- Previous Button -->
+            <button class="hero-nav-btn hero-nav-prev" aria-label="Previous slide">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            
+            <!-- Next Button -->
+            <button class="hero-nav-btn hero-nav-next" aria-label="Next slide">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Slide Indicators -->
+        <div class="hero-indicators">
+            <button class="hero-indicator active" data-slide="0" aria-label="Go to slide 1">
+                <span class="indicator-progress"></span>
+            </button>
+            <button class="hero-indicator" data-slide="1" aria-label="Go to slide 2">
+                <span class="indicator-progress"></span>
+            </button>
+            <button class="hero-indicator" data-slide="2" aria-label="Go to slide 3">
+                <span class="indicator-progress"></span>
+            </button>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-text">{% trans "Scroll to explore" %}</div>
+            <div class="scroll-arrow">
+                <i class="bi bi-chevron-down"></i>
             </div>
         </div>
     </div>
@@ -433,7 +675,378 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    // Enhanced Add to cart functionality with modern interactions
+    // Modern Hero Carousel Implementation
+    class HeroCarousel {
+        constructor() {
+            this.carousel = document.querySelector('#heroCarousel');
+            this.slides = document.querySelectorAll('.hero-slide');
+            this.indicators = document.querySelectorAll('.hero-indicator');
+            this.prevBtn = document.querySelector('.hero-nav-prev');
+            this.nextBtn = document.querySelector('.hero-nav-next');
+            this.currentSlide = 0;
+            this.isPlaying = true;
+            this.autoplayInterval = null;
+            this.autoplayDelay = 6000;
+            this.isTransitioning = false;
+            
+            // Touch/Swipe properties
+            this.touchStartX = 0;
+            this.touchEndX = 0;
+            this.touchStartY = 0;
+            this.touchEndY = 0;
+            this.minSwipeDistance = 50;
+            
+            this.init();
+            this.startCountdownTimer();
+        }
+        
+        init() {
+            this.setupEventListeners();
+            this.startAutoplay();
+            this.updateActiveStates();
+            this.initScrollAnimations();
+        }
+        
+        setupEventListeners() {
+            // Navigation buttons
+            this.prevBtn?.addEventListener('click', () => this.previousSlide());
+            this.nextBtn?.addEventListener('click', () => this.nextSlide());
+            
+            // Indicators
+            this.indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => this.goToSlide(index));
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => this.handleKeyboardNavigation(e));
+            
+            // Touch/Swipe events
+            this.carousel?.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+            this.carousel?.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+            this.carousel?.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+            
+            // Mouse drag events for desktop
+            this.carousel?.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+            this.carousel?.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+            this.carousel?.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+            this.carousel?.addEventListener('mouseleave', (e) => this.handleMouseLeave(e));
+            
+            // Pause on hover
+            this.carousel?.addEventListener('mouseenter', () => this.pauseAutoplay());
+            this.carousel?.addEventListener('mouseleave', () => this.resumeAutoplay());
+            
+            // Pause on focus (accessibility)
+            this.carousel?.addEventListener('focus', () => this.pauseAutoplay(), true);
+            this.carousel?.addEventListener('blur', () => this.resumeAutoplay(), true);
+            
+            // Visibility API for pausing when tab is not active
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    this.pauseAutoplay();
+                } else {
+                    this.resumeAutoplay();
+                }
+            });
+        }
+        
+        handleKeyboardNavigation(e) {
+            if (!this.carousel?.contains(document.activeElement) && e.target !== document.body) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this.previousSlide();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this.nextSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    this.goToSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    this.goToSlide(this.slides.length - 1);
+                    break;
+                case ' ':
+                case 'Enter':
+                    if (e.target.classList.contains('hero-indicator')) {
+                        e.preventDefault();
+                        const slideIndex = Array.from(this.indicators).indexOf(e.target);
+                        this.goToSlide(slideIndex);
+                    }
+                    break;
+            }
+        }
+        
+        // Touch Events
+        handleTouchStart(e) {
+            this.touchStartX = e.touches[0].clientX;
+            this.touchStartY = e.touches[0].clientY;
+            this.pauseAutoplay();
+        }
+        
+        handleTouchMove(e) {
+            const touchMoveX = e.touches[0].clientX;
+            const touchMoveY = e.touches[0].clientY;
+            const diffX = Math.abs(touchMoveX - this.touchStartX);
+            const diffY = Math.abs(touchMoveY - this.touchStartY);
+            
+            if (diffX > diffY) {
+                e.preventDefault();
+            }
+        }
+        
+        handleTouchEnd(e) {
+            this.touchEndX = e.changedTouches[0].clientX;
+            this.touchEndY = e.changedTouches[0].clientY;
+            this.handleSwipe();
+            this.resumeAutoplay();
+        }
+        
+        // Mouse Events for desktop drag
+        handleMouseDown(e) {
+            this.touchStartX = e.clientX;
+            this.touchStartY = e.clientY;
+            this.carousel.style.cursor = 'grabbing';
+            e.preventDefault();
+        }
+        
+        handleMouseMove(e) {
+            if (this.touchStartX === 0) return;
+        }
+        
+        handleMouseUp(e) {
+            if (this.touchStartX === 0) return;
+            this.touchEndX = e.clientX;
+            this.touchEndY = e.clientY;
+            this.handleSwipe();
+            this.carousel.style.cursor = '';
+            this.touchStartX = 0;
+        }
+        
+        handleMouseLeave(e) {
+            this.carousel.style.cursor = '';
+            this.touchStartX = 0;
+        }
+        
+        handleSwipe() {
+            const diffX = this.touchStartX - this.touchEndX;
+            const diffY = this.touchStartY - this.touchEndY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > this.minSwipeDistance) {
+                if (diffX > 0) {
+                    this.nextSlide();
+                } else {
+                    this.previousSlide();
+                }
+            }
+        }
+        
+        nextSlide() {
+            if (this.isTransitioning) return;
+            const nextIndex = (this.currentSlide + 1) % this.slides.length;
+            this.goToSlide(nextIndex);
+        }
+        
+        previousSlide() {
+            if (this.isTransitioning) return;
+            const prevIndex = this.currentSlide === 0 ? this.slides.length - 1 : this.currentSlide - 1;
+            this.goToSlide(prevIndex);
+        }
+        
+        goToSlide(index) {
+            if (index === this.currentSlide || this.isTransitioning) return;
+            
+            this.isTransitioning = true;
+            
+            // Update slides
+            this.slides[this.currentSlide].classList.remove('active');
+            this.slides[index].classList.add('active');
+            
+            // Update indicators
+            this.indicators[this.currentSlide].classList.remove('active');
+            this.indicators[index].classList.add('active');
+            
+            // Reset indicator progress animation
+            this.indicators.forEach(indicator => {
+                const progress = indicator.querySelector('.indicator-progress');
+                progress.style.animation = 'none';
+                progress.offsetHeight; // Trigger reflow
+                progress.style.animation = null;
+            });
+            
+            // Start new indicator animation
+            const activeProgress = this.indicators[index].querySelector('.indicator-progress');
+            activeProgress.style.animation = `indicatorProgress ${this.autoplayDelay}ms linear`;
+            
+            this.currentSlide = index;
+            
+            // Announce slide change for screen readers
+            this.announceSlideChange();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 800);
+        }
+        
+        startAutoplay() {
+            if (this.autoplayInterval) return;
+            
+            this.autoplayInterval = setInterval(() => {
+                if (this.isPlaying) {
+                    this.nextSlide();
+                }
+            }, this.autoplayDelay);
+        }
+        
+        pauseAutoplay() {
+            this.isPlaying = false;
+            if (this.autoplayInterval) {
+                clearInterval(this.autoplayInterval);
+                this.autoplayInterval = null;
+            }
+        }
+        
+        resumeAutoplay() {
+            this.isPlaying = true;
+            this.startAutoplay();
+        }
+        
+        updateActiveStates() {
+            // Set initial active states
+            this.slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === this.currentSlide);
+            });
+            
+            this.indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === this.currentSlide);
+            });
+            
+            // Start first indicator animation
+            const activeProgress = this.indicators[0].querySelector('.indicator-progress');
+            activeProgress.style.animation = `indicatorProgress ${this.autoplayDelay}ms linear`;
+        }
+        
+        announceSlideChange() {
+            // Create or update aria-live region for screen readers
+            let announcer = document.getElementById('carousel-announcer');
+            if (!announcer) {
+                announcer = document.createElement('div');
+                announcer.id = 'carousel-announcer';
+                announcer.setAttribute('aria-live', 'polite');
+                announcer.setAttribute('aria-atomic', 'true');
+                announcer.className = 'sr-only';
+                document.body.appendChild(announcer);
+            }
+            
+            const slideNames = ['Performance', 'New Arrivals', 'Special Offers'];
+            announcer.textContent = `Slide ${this.currentSlide + 1} of ${this.slides.length}: ${slideNames[this.currentSlide]}`;
+        }
+        
+        startCountdownTimer() {
+            // Set initial countdown date (5 days from now for demo)
+            const countdownDate = new Date().getTime() + (5 * 24 * 60 * 60 * 1000);
+            
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = countdownDate - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Update countdown display
+                document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
+                document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
+                
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById('countdown-days').textContent = '00';
+                    document.getElementById('countdown-hours').textContent = '00';
+                    document.getElementById('countdown-minutes').textContent = '00';
+                    document.getElementById('countdown-seconds').textContent = '00';
+                }
+            }, 1000);
+        }
+        
+        initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animated');
+                        }, index * 100);
+                        scrollObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                scrollObserver.observe(el);
+            });
+        }
+    }
+    
+    // Initialize the carousel
+    const heroCarousel = new HeroCarousel();
+    
+    // Scroll Indicator Functionality
+    $('.scroll-indicator').on('click', function() {
+        const nextSection = $('.hero-carousel-container').next('section');
+        if (nextSection.length) {
+            nextSection[0].scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+    
+    // Enhanced scroll indicator animations
+    let scrollIndicatorVisible = true;
+    
+    function updateScrollIndicator() {
+        const scrolled = window.pageYOffset;
+        const heroHeight = $('.hero-carousel-container').outerHeight();
+        const scrollIndicator = $('.scroll-indicator');
+        
+        if (scrolled > heroHeight * 0.1) {
+            if (scrollIndicatorVisible) {
+                scrollIndicator.fadeOut(300);
+                scrollIndicatorVisible = false;
+            }
+        } else {
+            if (!scrollIndicatorVisible) {
+                scrollIndicator.fadeIn(300);
+                scrollIndicatorVisible = true;
+            }
+        }
+    }
+    
+    // Throttled scroll event for scroll indicator
+    let scrollTicking = false;
+    $(window).on('scroll', function() {
+        if (!scrollTicking) {
+            requestAnimationFrame(updateScrollIndicator);
+            scrollTicking = true;
+            setTimeout(() => { scrollTicking = false; }, 16);
+        }
+    });
+    
+    // Enhanced Add to cart functionality
     $('.add-to-cart-form').on('submit', function(e) {
         e.preventDefault();
         
@@ -442,7 +1055,6 @@ $(document).ready(function() {
         const button = form.find('button');
         const originalIcon = button.find('i').attr('class');
         
-        // Modern loading animation
         button.prop('disabled', true);
         button.find('i').attr('class', 'bi bi-arrow-clockwise').addClass('spin-animation');
         
@@ -459,7 +1071,6 @@ $(document).ready(function() {
                     showToast(response.message, 'success');
                     updateCartBadge(response.cart_total_items);
                     
-                    // Success animation
                     button.find('i').attr('class', 'bi bi-check-lg').removeClass('spin-animation');
                     button.addClass('btn-success').removeClass('btn-primary quick-action-btn');
                     
@@ -503,11 +1114,9 @@ $(document).ready(function() {
             return;
         }
         
-        // Wishlist animation
         button.prop('disabled', true);
         heartIcon.addClass('animate__animated animate__heartBeat');
         
-        // Simulate wishlist functionality for demo purposes
         setTimeout(() => {
             if (heartIcon.hasClass('bi-heart-fill')) {
                 heartIcon.removeClass('bi-heart-fill text-danger').addClass('bi-heart');
@@ -536,58 +1145,6 @@ $(document).ready(function() {
         });
     });
     
-    // Enhanced scroll animations with better performance
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-                // Staggered animation with class-based approach
-                setTimeout(() => {
-                    entry.target.classList.add('animated');
-                }, index * 50); // Reduced stagger time
-                
-                // Unobserve after animation to improve performance
-                scrollObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    // Initialize scroll animations
-    $('.animate-on-scroll').each(function() {
-        this.style.opacity = '0';
-        this.style.transform = 'translateY(30px)';
-        this.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-        scrollObserver.observe(this);
-    });
-    
-    // Optimized parallax effect for hero section
-    let parallaxTicking = false;
-    
-    function updateParallax() {
-        const scrolled = window.pageYOffset;
-        const heroSection = document.querySelector('.hero-section');
-        
-        if (heroSection && scrolled < window.innerHeight) {
-            // Only apply parallax when hero is visible and limit the effect
-            const speed = Math.min(scrolled * 0.2, 100); // Reduced speed and capped
-            heroSection.style.transform = `translate3d(0, ${speed}px, 0)`;
-        }
-        
-        parallaxTicking = false;
-    }
-    
-    // Use passive listener and throttle more efficiently
-    window.addEventListener('scroll', function() {
-        if (!parallaxTicking && window.pageYOffset < window.innerHeight * 1.5) {
-            requestAnimationFrame(updateParallax);
-            parallaxTicking = true;
-        }
-    }, { passive: true });
-    
     // Modern button ripple effect
     $('.btn').on('click', function(e) {
         const button = $(this);
@@ -606,7 +1163,6 @@ $(document).ready(function() {
         });
         
         button.append(ripple);
-        
         setTimeout(() => ripple.remove(), 600);
     });
 });
@@ -682,3 +1238,89 @@ style.textContent = `
 document.head.appendChild(style);
 </script>
 {% endblock %}
+
+// Enhanced CSS for carousel animations and interactions
+const carouselStyle = document.createElement('style');
+carouselStyle.textContent = `
+    /* Screen reader only content */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+    
+    /* Enhanced carousel focus styles for accessibility */
+    .hero-nav-btn:focus,
+    .hero-indicator:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+    }
+    
+    .hero-carousel-container:focus-within .hero-nav-btn,
+    .hero-carousel-container:focus-within .hero-indicator {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Carousel cursor states */
+    .hero-carousel-container {
+        cursor: default;
+    }
+    
+    .hero-carousel-container:active {
+        cursor: grabbing;
+    }
+    
+    /* Enhanced indicator animations */
+    .hero-indicator.active {
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(1.1);
+    }
+    
+    .hero-indicator:not(.active):hover {
+        background: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+    }
+    
+    /* Navigation button enhancements */
+    .hero-nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+    
+    /* Smooth slide transitions */
+    .hero-slide {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform-style: preserve-3d;
+        will-change: transform, opacity;
+    }
+    
+    /* Performance optimizations */
+    .hero-carousel-container * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Enhanced mobile touch feedback */
+    @media (hover: none) and (pointer: coarse) {
+        .hero-nav-btn:active,
+        .hero-indicator:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+    }
+`;
+document.head.appendChild(carouselStyle);
