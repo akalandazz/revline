@@ -280,103 +280,129 @@
     </div>
 </section>
 
+<!-- Modern Section Separator -->
+<div class="section-separator">
+    <div class="separator-line"></div>
+    <div class="separator-icon">
+        <i class="bi bi-star-fill"></i>
+    </div>
+    <div class="separator-line"></div>
+</div>
+
 <!-- Featured Products Section -->
 {% if featured_products %}
-<section class="py-5">
-    <div class="container">
+<section class="featured-products-section py-5 position-relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="section-bg-pattern"></div>
+    
+    <div class="container position-relative">
         <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">{% trans "Featured Products" %}</h2>
-                <p class="lead text-muted">{% trans "Handpicked premium parts for maximum performance" %}</p>
+            <div class="col-lg-10 mx-auto text-center">
+                <div class="section-badge mb-4">
+                    <i class="bi bi-star me-2"></i>
+                    <span>{% trans "Premium Selection" %}</span>
+                </div>
+                <h2 class="section-title display-4 fw-bold mb-4">
+                    {% trans "Featured" %}
+                    <span class="gradient-text">{% trans "Products" %}</span>
+                </h2>
+                <p class="section-subtitle lead">{% trans "Handpicked premium parts engineered for maximum performance and reliability" %}</p>
+                <div class="section-divider mx-auto"></div>
             </div>
         </div>
         
         <div class="row g-4">
             {% for product in featured_products %}
             <div class="col-lg-3 col-md-6">
-                <div class="card product-card h-100 animate-on-scroll">
-                    <!-- Product Image -->
-                    <div class="position-relative">
+                <div class="modern-product-card h-100 animate-on-scroll" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                    <!-- Enhanced Product Image -->
+                    <div class="product-image-container">
                         {% if product.images.exists %}
                             <img src="{{ product.images.first.image.url }}"
-                                 class="card-img-top" alt="{{ product.name }}">
+                                 class="product-image" alt="{{ product.name }}">
                         {% else %}
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 280px;">
-                                <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                            <div class="product-image placeholder-image">
+                                <i class="bi bi-image"></i>
                             </div>
                         {% endif %}
                         
-                        <!-- Sale Badge -->
+                        <!-- Enhanced Sale Badge -->
                         {% if product.is_on_sale %}
-                            <span class="badge-sale">{{ product.discount_percentage|default:"20" }}% OFF</span>
+                            <div class="modern-badge sale-badge">
+                                <span class="badge-text">{{ product.discount_percentage|default:"20" }}% OFF</span>
+                                <div class="badge-shine"></div>
+                            </div>
                         {% endif %}
                         
-                        <!-- Quick Actions Overlay -->
-                        <div class="product-overlay">
-                            <div class="quick-actions">
-                                <a href="{{ product.get_absolute_url }}" class="quick-action-btn" title="View Details">
+                        <!-- Modern Overlay -->
+                        <div class="modern-overlay">
+                            <div class="overlay-actions">
+                                <a href="{{ product.get_absolute_url }}" class="action-btn primary" title="View Details">
                                     <i class="bi bi-eye"></i>
+                                    <span class="btn-text">View</span>
                                 </a>
-                                <button class="quick-action-btn add-to-wishlist-btn"
+                                <button class="action-btn secondary add-to-wishlist-btn"
                                         data-product-id="{{ product.id }}" title="Add to Wishlist">
                                     <i class="bi bi-heart"></i>
+                                    <span class="btn-text">Save</span>
                                 </button>
-                                <form class="add-to-cart-form d-inline" data-product-id="{{ product.id }}">
+                                <form class="add-to-cart-form" data-product-id="{{ product.id }}">
                                     {% csrf_token %}
-                                    <button type="submit" class="quick-action-btn"
+                                    <button type="submit" class="action-btn success"
                                             title="Add to Cart" {% if not product.is_in_stock %}disabled{% endif %}>
                                         <i class="bi bi-cart-plus"></i>
+                                        <span class="btn-text">Cart</span>
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Product Info -->
-                    <div class="card-body d-flex flex-column">
-                        <h6 class="card-title fw-bold">{{ product.name }}</h6>
-                        <p class="text-muted small mb-2">{{ product.brand.name|default:"RevLine" }}</p>
+                    <!-- Enhanced Product Info -->
+                    <div class="product-info">
+                        <div class="product-header">
+                            <h5 class="product-title">{{ product.name }}</h5>
+                            <p class="product-brand">{{ product.brand.name|default:"RevLine" }}</p>
+                        </div>
                         
-                        <!-- Rating -->
+                        <!-- Enhanced Rating -->
                         {% if product.average_rating > 0 %}
-                            <div class="mb-2">
-                                <div class="d-flex align-items-center gap-1">
-                                    <div class="text-warning">
-                                        {% for i in "12345" %}
-                                            {% if forloop.counter <= product.average_rating %}
-                                                <i class="bi bi-star-fill small"></i>
-                                            {% else %}
-                                                <i class="bi bi-star small"></i>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                    <small class="text-muted">({{ product.review_count|default:"0" }})</small>
+                            <div class="product-rating">
+                                <div class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= product.average_rating %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
+                                <span class="rating-count">({{ product.review_count|default:"0" }})</span>
                             </div>
                         {% endif %}
                         
-                        <!-- Price -->
-                        <div class="mt-auto">
-                            <div class="mb-3">
-                                <span class="price">{{ site_settings.currency_symbol|default:"$" }}{{ product.get_price|default:product.price }}</span>
-                                {% if product.is_on_sale %}
-                                    <span class="price-old ms-2">{{ site_settings.currency_symbol|default:"$" }}{{ product.price }}</span>
-                                {% endif %}
-                            </div>
-                            
-                            <!-- Stock Status -->
+                        <!-- Enhanced Price -->
+                        <div class="product-pricing">
+                            <span class="current-price">{{ site_settings.currency_symbol|default:"$" }}{{ product.get_price|default:product.price }}</span>
+                            {% if product.is_on_sale %}
+                                <span class="old-price">{{ site_settings.currency_symbol|default:"$" }}{{ product.price }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Enhanced Stock Status -->
+                        <div class="stock-status">
                             {% if not product.is_in_stock %}
-                                <small class="text-danger">
-                                    <i class="bi bi-x-circle me-1"></i>Out of Stock
-                                </small>
+                                <span class="status out-of-stock">
+                                    <i class="bi bi-x-circle"></i>Out of Stock
+                                </span>
                             {% elif product.is_low_stock %}
-                                <small class="text-warning">
-                                    <i class="bi bi-exclamation-triangle me-1"></i>Low Stock
-                                </small>
+                                <span class="status low-stock">
+                                    <i class="bi bi-exclamation-triangle"></i>Low Stock
+                                </span>
                             {% else %}
-                                <small class="text-success">
-                                    <i class="bi bi-check-circle me-1"></i>In Stock
-                                </small>
+                                <span class="status in-stock">
+                                    <i class="bi bi-check-circle"></i>In Stock
+                                </span>
                             {% endif %}
                         </div>
                     </div>
@@ -394,14 +420,34 @@
 </section>
 {% endif %}
 
+<!-- Modern Section Separator with Wave -->
+<div class="wave-separator">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg>
+</div>
+
 <!-- Categories Section -->
 {% if categories %}
-<section class="py-5 bg-light">
-    <div class="container">
+<section class="categories-section py-5 position-relative">
+    <!-- Enhanced Background -->
+    <div class="section-bg-gradient"></div>
+    
+    <div class="container position-relative">
         <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">{% trans "Shop by Category" %}</h2>
-                <p class="lead text-muted">{% trans "Find the perfect parts for your vehicle" %}</p>
+            <div class="col-lg-10 mx-auto text-center">
+                <div class="section-badge mb-4">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>
+                    <span>{% trans "Explore Categories" %}</span>
+                </div>
+                <h2 class="section-title display-4 fw-bold mb-4 text-white">
+                    {% trans "Shop by" %}
+                    <span class="gradient-text">{% trans "Category" %}</span>
+                </h2>
+                <p class="section-subtitle lead text-white-50">{% trans "Find the perfect parts for your vehicle with our comprehensive category system" %}</p>
+                <div class="section-divider mx-auto"></div>
             </div>
         </div>
         
@@ -409,21 +455,33 @@
             {% for category in categories %}
             <div class="col-lg-4 col-md-6">
                 <a href="{{ category.get_absolute_url }}" class="text-decoration-none">
-                    <div class="card category-card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            {% if category.image %}
-                                <img src="{{ category.image.url }}" alt="{{ category.name }}" 
-                                     class="mb-3 rounded" style="width: 80px; height: 80px; object-fit: cover;">
-                            {% else %}
-                                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                                     style="width: 80px; height: 80px;">
-                                    <i class="bi bi-gear text-white fs-2"></i>
+                    <div class="modern-category-card h-100 animate-on-scroll" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:200 }}">
+                        <div class="category-content">
+                            <!-- Enhanced Category Icon/Image -->
+                            <div class="category-icon-wrapper">
+                                {% if category.image %}
+                                    <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image">
+                                {% else %}
+                                    <div class="category-icon">
+                                        <i class="bi bi-gear"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="icon-glow"></div>
+                            </div>
+                            
+                            <!-- Enhanced Category Info -->
+                            <div class="category-info">
+                                <h4 class="category-title">{{ category.name }}</h4>
+                                <p class="category-description">{{ category.description|truncatewords:12 }}</p>
+                                <div class="category-stats">
+                                    <span class="product-count">{{ category.products.count }} products</span>
+                                    <i class="bi bi-arrow-right category-arrow"></i>
                                 </div>
-                            {% endif %}
-                            <h5 class="card-title">{{ category.name }}</h5>
-                            <p class="text-muted">{{ category.description|truncatewords:15 }}</p>
-                            <small class="text-primary">{{ category.products.count }} products</small>
+                            </div>
                         </div>
+                        
+                        <!-- Hover Effect Background -->
+                        <div class="category-hover-bg"></div>
                     </div>
                 </a>
             </div>
@@ -433,47 +491,78 @@
 </section>
 {% endif %}
 
+<!-- Geometric Section Divider -->
+<div class="geometric-separator">
+    <div class="geometric-shape shape-1"></div>
+    <div class="geometric-shape shape-2"></div>
+    <div class="geometric-shape shape-3"></div>
+</div>
+
 <!-- New Arrivals Section -->
 {% if new_products %}
-<section class="py-5">
-    <div class="container">
+<section class="new-arrivals-section py-5 position-relative">
+    <!-- Animated Background Circles -->
+    <div class="floating-shapes">
+        <div class="shape shape-circle-1"></div>
+        <div class="shape shape-circle-2"></div>
+        <div class="shape shape-triangle-1"></div>
+    </div>
+    
+    <div class="container position-relative">
         <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">{% trans "New Arrivals" %}</h2>
-                <p class="lead text-muted">{% trans "Latest additions to our premium collection" %}</p>
+            <div class="col-lg-10 mx-auto text-center">
+                <div class="section-badge mb-4">
+                    <i class="bi bi-lightning me-2"></i>
+                    <span>{% trans "Just Landed" %}</span>
+                </div>
+                <h2 class="section-title display-4 fw-bold mb-4">
+                    {% trans "New" %}
+                    <span class="gradient-text">{% trans "Arrivals" %}</span>
+                </h2>
+                <p class="section-subtitle lead">{% trans "Latest additions to our premium collection - cutting-edge performance parts" %}</p>
+                <div class="section-divider mx-auto"></div>
             </div>
         </div>
         
         <div class="row g-4">
             {% for product in new_products %}
             <div class="col-lg-3 col-md-6">
-                <div class="card product-card h-100">
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge bg-success">New</span>
+                <div class="new-arrival-card h-100 animate-on-scroll" data-aos="slide-up" data-aos-delay="{{ forloop.counter0|add:150 }}">
+                    <!-- New Badge -->
+                    <div class="new-badge-wrapper">
+                        <div class="new-badge">
+                            <span>NEW</span>
+                            <div class="badge-pulse"></div>
+                        </div>
                     </div>
                     
-                    {% if product.images.exists %}
-                        <img src="{{ product.images.first.image.url }}" 
-                             class="card-img-top" alt="{{ product.name }}">
-                    {% else %}
-                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
-                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
-                        </div>
-                    {% endif %}
-                    
-                    <div class="card-body d-flex flex-column">
-                        <h6 class="card-title">{{ product.name }}</h6>
-                        <p class="text-muted small">{{ product.brand.name }}</p>
-                        
-                        <div class="mt-auto">
-                            <div class="mb-3">
-                                <span class="price">{{ site_settings.currency_symbol }}{{ product.get_price }}</span>
+                    <!-- Product Image -->
+                    <div class="new-product-image">
+                        {% if product.images.exists %}
+                            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="placeholder-new-image">
+                                <i class="bi bi-image"></i>
                             </div>
-                            
-                            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100">
-                                {% trans "View Details" %} <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
+                        {% endif %}
+                        <div class="image-overlay">
+                            <i class="bi bi-eye"></i>
                         </div>
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div class="new-product-info">
+                        <h5 class="new-product-title">{{ product.name }}</h5>
+                        <p class="new-product-brand">{{ product.brand.name|default:"RevLine" }}</p>
+                        
+                        <div class="new-product-price">
+                            <span class="price-amount">{{ site_settings.currency_symbol|default:"$" }}{{ product.get_price }}</span>
+                        </div>
+                        
+                        <a href="{{ product.get_absolute_url }}" class="new-product-btn">
+                            <span>{% trans "Explore" %}</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -489,14 +578,36 @@
 </section>
 {% endif %}
 
+<!-- Hexagonal Pattern Separator -->
+<div class="hexagon-separator">
+    <div class="hexagon-pattern">
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+    </div>
+</div>
+
 <!-- Brands Section -->
 {% if brands %}
-<section class="py-5 bg-light">
-    <div class="container">
+<section class="brands-section py-5 position-relative">
+    <!-- Premium Background -->
+    <div class="brands-bg-pattern"></div>
+    
+    <div class="container position-relative">
         <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-5 fw-bold mb-3">{% trans "Trusted Brands" %}</h2>
-                <p class="lead text-muted">{% trans "We partner with the world's leading automotive brands" %}</p>
+            <div class="col-lg-10 mx-auto text-center">
+                <div class="section-badge mb-4">
+                    <i class="bi bi-award me-2"></i>
+                    <span>{% trans "Premium Partners" %}</span>
+                </div>
+                <h2 class="section-title display-4 fw-bold mb-4">
+                    {% trans "Trusted" %}
+                    <span class="gradient-text">{% trans "Brands" %}</span>
+                </h2>
+                <p class="section-subtitle lead">{% trans "We partner with the world's leading automotive brands to bring you quality and reliability" %}</p>
+                <div class="section-divider mx-auto"></div>
             </div>
         </div>
         
@@ -522,8 +633,17 @@
 </section>
 {% endif %}
 
+<!-- Dynamic Wave Separator -->
+<div class="dynamic-wave-separator">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
+    </svg>
+</div>
+
 <!-- Enhanced CTA Section -->
-<section class="py-5 position-relative overflow-hidden" style="background: var(--gradient-hero);">
+<section class="cta-section py-5 position-relative overflow-hidden">
+    <!-- Enhanced gradient background -->
+    <div class="cta-bg-gradient"></div>
     <div class="position-absolute top-0 start-0 w-100 h-100">
         <div class="position-absolute top-0 start-0 w-100 h-100"
              style="background: radial-gradient(circle at 30% 20%, rgba(255, 107, 53, 0.4) 0%, transparent 60%);"></div>
