@@ -2009,30 +2009,6 @@
             50% { transform: translateY(-10px); }
         }
         
-        /* Dynamic Wave Separator */
-        .dynamic-wave-separator {
-            position: relative;
-            height: 120px;
-            overflow: hidden;
-            background: var(--gradient-dark);
-        }
-        
-        .dynamic-wave-separator svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 120px;
-        }
-        
-        .dynamic-wave-separator svg path {
-            fill: var(--light-color);
-            animation: waveAnimation 8s ease-in-out infinite;
-        }
-        
-        @keyframes waveAnimation {
-            0%, 100% { d: path("M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"); }
-            50% { transform: scaleY(1.2); }
-        }
         
         /* Enhanced Section Styling */
         
@@ -2270,15 +2246,6 @@
                 max-width: 100px;
             }
             
-            .wave-separator,
-            .dynamic-wave-separator {
-                height: 80px;
-            }
-            
-            .wave-separator svg,
-            .dynamic-wave-separator svg {
-                height: 80px;
-            }
             
             .geometric-separator,
             .hexagon-separator {
