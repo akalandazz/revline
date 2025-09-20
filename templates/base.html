@@ -432,6 +432,74 @@
             overflow: hidden;
             font-size: 0.9rem;
         }
+
+        /* Login Button - Solid Blue Theme */
+        .racing-nav-link[href*="login"] {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white !important;
+            border: 1px solid rgba(0, 123, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .racing-nav-link[href*="login"]:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+            animation: loginPulse 0.6s ease-in-out;
+        }
+
+        /* Register Button - Primary Orange Theme */
+        .racing-nav-link[href*="register"] {
+            background: var(--gradient-primary);
+            color: white !important;
+            border: 1px solid rgba(255, 107, 53, 0.5);
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .racing-nav-link[href*="register"]:hover {
+            background: linear-gradient(135deg, #f39c12 0%, #ff6b35 100%);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+            animation: registerBounce 0.6s ease-in-out;
+        }
+
+        /* Logout Button - Red Glass Theme */
+        .dropdown-item[href*="logout"] {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: #dc3545 !important;
+            border-radius: var(--radius-md);
+            margin: 0.25rem;
+            transition: all var(--transition-base);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .dropdown-item[href*="logout"]:hover {
+            background: rgba(220, 53, 69, 0.2);
+            border-color: rgba(220, 53, 69, 0.5);
+            color: white !important;
+            transform: translateX(5px) scale(1.02);
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.5);
+            animation: logoutShake 0.5s ease-in-out;
+        }
+
+        @keyframes loginPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 123, 255, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 123, 255, 0.8), 0 0 40px rgba(0, 123, 255, 0.5); }
+        }
+
+        @keyframes registerBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(-2px) scale(1.05); }
+            40% { transform: translateY(-4px) scale(1.08); }
+            60% { transform: translateY(-3px) scale(1.06); }
+        }
+
+        @keyframes logoutShake {
+            0%, 100% { transform: translateX(5px) scale(1.02); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(5px) scale(1.02) rotate(-2deg); }
+            20%, 40%, 60%, 80% { transform: translateX(5px) scale(1.02) rotate(2deg); }
+        }
         
         .racing-nav-link .nav-text {
             position: relative;
