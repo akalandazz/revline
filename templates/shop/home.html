@@ -287,19 +287,6 @@
             </div>
         </div>
 
-        <!-- Navigation Controls -->
-        <div class="hero-navigation">
-            <!-- Previous Button -->
-            <button class="hero-nav-btn hero-nav-prev" aria-label="Previous slide">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            
-            <!-- Next Button -->
-            <button class="hero-nav-btn hero-nav-next" aria-label="Next slide">
-                <i class="bi bi-chevron-right"></i>
-            </button>
-        </div>
-
         <!-- Slide Indicators -->
         <div class="hero-indicators">
             <button class="hero-indicator active" data-slide="0" aria-label="Go to slide 1">
@@ -629,8 +616,6 @@ $(document).ready(function() {
             this.carousel = document.querySelector('#heroCarousel');
             this.slides = document.querySelectorAll('.hero-slide');
             this.indicators = document.querySelectorAll('.hero-indicator');
-            this.prevBtn = document.querySelector('.hero-nav-prev');
-            this.nextBtn = document.querySelector('.hero-nav-next');
             this.currentSlide = 0;
             this.isPlaying = true;
             this.autoplayInterval = null;
@@ -656,10 +641,6 @@ $(document).ready(function() {
         }
         
         setupEventListeners() {
-            // Navigation buttons
-            this.prevBtn?.addEventListener('click', () => this.previousSlide());
-            this.nextBtn?.addEventListener('click', () => this.nextSlide());
-            
             // Indicators
             this.indicators.forEach((indicator, index) => {
                 indicator.addEventListener('click', () => this.goToSlide(index));
@@ -1204,14 +1185,12 @@ carouselStyle.textContent = `
     }
     
     /* Enhanced carousel focus styles for accessibility */
-    .hero-nav-btn:focus,
     .hero-indicator:focus {
         outline: 3px solid var(--primary-color);
         outline-offset: 3px;
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
     }
     
-    .hero-carousel-container:focus-within .hero-nav-btn,
     .hero-carousel-container:focus-within .hero-indicator {
         opacity: 1;
         visibility: visible;
@@ -1237,12 +1216,6 @@ carouselStyle.textContent = `
         transform: scale(1.05);
     }
     
-    /* Navigation button enhancements */
-    .hero-nav-btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        transform: none !important;
-    }
     
     /* Smooth slide transitions */
     .hero-slide {
@@ -1260,7 +1233,6 @@ carouselStyle.textContent = `
     
     /* Enhanced mobile touch feedback */
     @media (hover: none) and (pointer: coarse) {
-        .hero-nav-btn:active,
         .hero-indicator:active {
             transform: scale(0.95);
             opacity: 0.8;
