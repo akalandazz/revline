@@ -12,8 +12,8 @@
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}">
-    <!-- Google Fonts -->
-    <link href="{% static 'vendor/fonts/inter.css' %}" rel="stylesheet">
+    <!-- Local Font System - E-commerce Optimized -->
+    <link rel="stylesheet" href="{% static 'fonts/local-fonts.css' %}">
     
     <style>
         :root {
@@ -43,17 +43,47 @@
             --glass-border: rgba(255, 255, 255, 0.2);
             --glass-blur: 20px;
             
-            /* Typography */
-            --font-size-xs: 0.75rem;
-            --font-size-sm: 0.875rem;
-            --font-size-base: 1rem;
-            --font-size-lg: 1.125rem;
-            --font-size-xl: 1.25rem;
-            --font-size-2xl: 1.5rem;
-            --font-size-3xl: 1.875rem;
-            --font-size-4xl: 2.25rem;
-            --font-size-5xl: 3rem;
-            --font-size-6xl: 3.75rem;
+            /* Modern Typography System - E-commerce Optimized */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            
+            /* Font Weights */
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            --font-weight-extrabold: 800;
+            --font-weight-black: 900;
+            
+            /* Font Sizes - Fluid Typography Scale */
+            --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8rem);
+            --font-size-sm: clamp(0.875rem, 0.8rem + 0.375vw, 0.9rem);
+            --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
+            --font-size-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
+            --font-size-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.4rem);
+            --font-size-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.75rem);
+            --font-size-3xl: clamp(1.875rem, 1.65rem + 1.125vw, 2.25rem);
+            --font-size-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 3rem);
+            --font-size-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+            --font-size-6xl: clamp(3.75rem, 3rem + 3.75vw, 5rem);
+            
+            /* Line Heights */
+            --line-height-tight: 1.25;
+            --line-height-snug: 1.375;
+            --line-height-normal: 1.5;
+            --line-height-relaxed: 1.625;
+            --line-height-loose: 2;
+            
+            /* Letter Spacing */
+            --letter-spacing-tighter: -0.05em;
+            --letter-spacing-tight: -0.025em;
+            --letter-spacing-normal: 0;
+            --letter-spacing-wide: 0.025em;
+            --letter-spacing-wider: 0.05em;
+            --letter-spacing-widest: 0.1em;
             
             /* Spacing */
             --space-xs: 0.25rem;
@@ -91,12 +121,17 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            font-family: var(--font-primary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-normal);
             color: var(--text-primary);
             background: var(--bg-primary);
             transition: background-color var(--transition-base), color var(--transition-base);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
         
         /* Enhanced Navigation */
@@ -912,6 +947,245 @@
             .breadcrumb-modern .breadcrumb-item.active::after {
                 animation: none;
                 transition: none;
+            }
+        }
+        
+        /* Modern Typography Classes - E-commerce Optimized */
+        
+        /* Display Typography */
+        .display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+            font-family: var(--font-display);
+            font-weight: var(--font-weight-bold);
+            line-height: var(--line-height-tight);
+            letter-spacing: var(--letter-spacing-tight);
+            color: var(--text-primary);
+        }
+        
+        .display-1 { font-size: var(--font-size-6xl); }
+        .display-2 { font-size: var(--font-size-5xl); }
+        .display-3 { font-size: var(--font-size-4xl); }
+        .display-4 { font-size: var(--font-size-3xl); }
+        .display-5 { font-size: var(--font-size-2xl); }
+        .display-6 { font-size: var(--font-size-xl); }
+        
+        /* Heading Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: var(--font-weight-semibold);
+            line-height: var(--line-height-tight);
+            letter-spacing: var(--letter-spacing-tight);
+            color: var(--text-primary);
+            margin-bottom: 0.5em;
+        }
+        
+        h1 { font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
+        h2 { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
+        h3 { font-size: var(--font-size-2xl); font-weight: var(--font-weight-semibold); }
+        h4 { font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); }
+        h5 { font-size: var(--font-size-lg); font-weight: var(--font-weight-medium); }
+        h6 { font-size: var(--font-size-base); font-weight: var(--font-weight-medium); }
+        
+        /* Body Text */
+        p, .text-body {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-relaxed);
+            color: var(--text-primary);
+            margin-bottom: 1em;
+        }
+        
+        .lead {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-relaxed);
+            color: var(--text-secondary);
+        }
+        
+        /* Small Text */
+        small, .text-small {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-normal);
+        }
+        
+        /* Labels and UI Text */
+        .text-label, label {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--line-height-normal);
+            letter-spacing: var(--letter-spacing-wide);
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+        
+        /* Button Typography */
+        .btn {
+            font-family: var(--font-primary);
+            font-weight: var(--font-weight-medium);
+            letter-spacing: var(--letter-spacing-wide);
+            text-transform: none;
+        }
+        
+        .btn-lg {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+        }
+        
+        .btn-sm {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        /* Navigation Typography */
+        .navbar-brand {
+            font-family: var(--font-display);
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-xl);
+            letter-spacing: var(--letter-spacing-tight);
+        }
+        
+        .nav-link {
+            font-family: var(--font-primary);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-base);
+            letter-spacing: var(--letter-spacing-normal);
+        }
+        
+        /* Card Typography */
+        .card-title {
+            font-family: var(--font-heading);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-lg);
+            line-height: var(--line-height-tight);
+            color: var(--text-primary);
+        }
+        
+        .card-text {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--text-secondary);
+        }
+        
+        /* Price Typography */
+        .price {
+            font-family: var(--font-display);
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-2xl);
+            line-height: var(--line-height-tight);
+            letter-spacing: var(--letter-spacing-tight);
+        }
+        
+        .price-old {
+            font-family: var(--font-primary);
+            font-weight: var(--font-weight-normal);
+            font-size: var(--font-size-base);
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+        
+        /* Badge Typography */
+        .badge {
+            font-family: var(--font-primary);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-xs);
+            letter-spacing: var(--letter-spacing-wide);
+            text-transform: uppercase;
+        }
+        
+        /* Form Typography */
+        .form-control, .form-select {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-normal);
+        }
+        
+        .form-label {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            letter-spacing: var(--letter-spacing-wide);
+            color: var(--text-primary);
+        }
+        
+        /* Breadcrumb Typography */
+        .breadcrumb-modern .breadcrumb {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            letter-spacing: var(--letter-spacing-normal);
+        }
+        
+        /* Hero Typography */
+        .hero-title {
+            font-family: var(--font-display);
+            font-weight: var(--font-weight-black);
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            line-height: var(--line-height-tight);
+            letter-spacing: var(--letter-spacing-tight);
+        }
+        
+        .hero-subtitle {
+            font-family: var(--font-primary);
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-relaxed);
+        }
+        
+        /* Product Card Typography */
+        .product-card .card-title {
+            font-family: var(--font-heading);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-lg);
+            line-height: var(--line-height-snug);
+            color: var(--text-primary);
+        }
+        
+        .product-card .card-text {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-normal);
+            line-height: var(--line-height-normal);
+            color: var(--text-secondary);
+        }
+        
+        /* Responsive Typography Adjustments */
+        @media (max-width: 768px) {
+            .display-1 { font-size: var(--font-size-4xl); }
+            .display-2 { font-size: var(--font-size-3xl); }
+            .display-3 { font-size: var(--font-size-2xl); }
+            .display-4 { font-size: var(--font-size-xl); }
+            .display-5 { font-size: var(--font-size-lg); }
+            .display-6 { font-size: var(--font-size-base); }
+            
+            h1 { font-size: var(--font-size-2xl); }
+            h2 { font-size: var(--font-size-xl); }
+            h3 { font-size: var(--font-size-lg); }
+            h4 { font-size: var(--font-size-base); }
+            h5 { font-size: var(--font-size-sm); }
+            h6 { font-size: var(--font-size-xs); }
+            
+            .navbar-brand {
+                font-size: var(--font-size-lg);
+            }
+        }
+        
+        /* Print Typography */
+        @media print {
+            body {
+                font-family: 'Times New Roman', serif;
+                font-size: 12pt;
+                line-height: 1.4;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Times New Roman', serif;
+                font-weight: bold;
             }
         }
     </style>
