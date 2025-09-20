@@ -134,7 +134,7 @@
             text-rendering: optimizeLegibility;
         }
         
-        /* Enhanced Navigation */
+        /* Enhanced Navigation - Optimized Sizes */
         .navbar {
             background: var(--gradient-dark) !important;
             backdrop-filter: blur(var(--glass-blur));
@@ -146,27 +146,493 @@
             position: sticky;
             top: 0;
             z-index: 1030;
+            padding: 0.5rem 0;
+            min-height: 60px;
         }
         
         .navbar.scrolled {
             box-shadow: var(--shadow-xl);
             backdrop-filter: blur(calc(var(--glass-blur) + 10px));
             -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 10px));
+            padding: 0.25rem 0;
+            min-height: 50px;
         }
         
         .navbar-brand {
             font-weight: 700;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             transition: all var(--transition-base);
+            padding: 0.25rem 0;
         }
         
         .navbar-brand:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
             filter: brightness(1.2);
+        }
+        
+        /* Enhanced Brand Styling - Optimized Sizes */
+        .brand-icon-wrapper {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .brand-icon {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            transition: all var(--transition-base);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .brand-glow {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(8px);
+            transition: all var(--transition-base);
+            animation: brandPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes brandPulse {
+            0%, 100% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 0.2; transform: scale(1.1); }
+        }
+        
+        .navbar-brand:hover .brand-glow {
+            opacity: 0.3;
+        }
+        
+        .navbar-brand:hover .brand-icon {
+            transform: rotate(180deg) scale(1.05);
+            color: white;
+            text-shadow: 0 0 15px var(--primary-color);
+        }
+        
+        .brand-text .brand-name {
+            font-family: var(--font-display);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        
+        .brand-tagline {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: var(--font-weight-medium);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-top: 1px;
+        }
+        
+        /* Racing Mobile Toggle - Compact */
+        .navbar-toggler {
+            border: none;
+            padding: 0.4rem;
+            background: transparent;
+            position: relative;
+            width: 36px;
+            height: 36px;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.4);
+            border-radius: var(--radius-md);
+        }
+        
+        .racing-lines {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--gradient-primary);
+            margin: 3px auto;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .racing-lines::before,
+        .racing-lines::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .racing-lines::before {
+            transform: translateY(-6px);
+        }
+        
+        .racing-lines::after {
+            transform: translateY(6px);
+        }
+        
+        .navbar-toggler[aria-expanded="true"] .racing-lines {
+            background: transparent;
+        }
+        
+        .navbar-toggler[aria-expanded="true"] .racing-lines::before {
+            transform: rotate(45deg);
+        }
+        
+        .navbar-toggler[aria-expanded="true"] .racing-lines::after {
+            transform: rotate(-45deg);
+        }
+        
+        /* Enhanced Performance Search - Compact */
+        .navbar-search {
+            max-width: 380px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .search-form {
+            position: relative;
+        }
+        
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: var(--radius-full);
+            border: 1px solid transparent;
+            transition: all var(--transition-base);
+            overflow: hidden;
+            height: 38px;
+        }
+        
+        .search-input-wrapper:focus-within {
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            z-index: 2;
+            transition: all var(--transition-base);
+        }
+        
+        .search-input-wrapper:focus-within .search-icon {
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+        
+        .turbo-search {
+            background: transparent;
+            border: none;
+            padding: 8px 16px 8px 36px;
+            color: white;
+            font-weight: var(--font-weight-medium);
+            width: 100%;
+            font-size: 0.85rem;
+            height: 100%;
+        }
+        
+        .turbo-search:focus {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            color: white;
+        }
+        
+        .turbo-search::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+        
+        .search-boost-btn {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            margin-right: 3px;
+            transition: all var(--transition-base);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+        }
+        
+        .search-boost-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .search-boost-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .search-boost-btn:hover::before {
+            left: 100%;
+        }
+        
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            margin-top: 6px;
+            padding: 0.4rem;
+            z-index: 1000;
+        }
+        
+        .suggestion-item {
+            padding: 0.4rem 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-size: 0.8rem;
+        }
+        
+        .suggestion-item:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateX(3px);
+        }
+        
+        /* Racing Navigation Links - Compact */
+        .racing-nav-link {
+            position: relative;
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: var(--font-weight-medium);
+            padding: 0.5rem 0.75rem !important;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+            overflow: hidden;
+            font-size: 0.9rem;
+        }
+        
+        .racing-nav-link .nav-text {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .nav-accent {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+            transition: all var(--transition-base);
+            transform: translateX(-50%);
+        }
+        
+        .racing-nav-link:hover {
+            color: white !important;
+            background: rgba(255, 107, 53, 0.08);
+            transform: translateY(-1px);
+        }
+        
+        .racing-nav-link:hover .nav-accent {
+            width: 70%;
+        }
+        
+        .racing-nav-link:hover i {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        /* Mega Menu Styling */
+        .mega-dropdown .dropdown-menu {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl);
+            padding: 2rem;
+            margin-top: 10px;
+            min-width: 800px;
+        }
+        
+        .mega-menu .mega-title {
+            color: white;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gradient-primary);
+            font-size: 1.1rem;
+        }
+        
+        .mega-menu .dropdown-item {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+            margin-bottom: 0.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mega-menu .dropdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            transition: left 0.3s ease;
+        }
+        
+        .mega-menu .dropdown-item:hover {
+            color: white;
+            background: rgba(255, 107, 53, 0.2);
+            transform: translateX(10px);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .mega-menu .dropdown-item:hover::before {
+            left: 0;
+        }
+        
+        /* Brand and Racing Menu Styling */
+        .brands-menu, .racing-menu, .language-menu, .user-menu {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: 0.5rem;
+            margin-top: 10px;
+            min-width: 200px;
+        }
+        
+        .brands-menu .dropdown-item,
+        .racing-menu .dropdown-item,
+        .language-menu .dropdown-item,
+        .user-menu .dropdown-item {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+        
+        .brands-menu .dropdown-item:hover,
+        .racing-menu .dropdown-item:hover,
+        .language-menu .dropdown-item:hover,
+        .user-menu .dropdown-item:hover {
+            color: white;
+            background: var(--gradient-primary);
+            transform: scale(1.02);
+        }
+        
+        /* User Navigation Styling */
+        .user-nav .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+        }
+        
+        .user-nav .user-avatar i {
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        /* Enhanced Cart Styling */
+        .cart-nav {
+            position: relative;
+        }
+        
+        .cart-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-icon {
+            font-size: 1.3rem;
+            transition: all var(--transition-base);
+        }
+        
+        .cart-badge-racing {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            font-weight: var(--font-weight-bold);
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: cartBounce 2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+        
+        .cart-pulse {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 28px;
+            height: 28px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: cartPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes cartBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        @keyframes cartPulse {
+            0% { transform: scale(0.8); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        
+        .cart-nav:hover .cart-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--primary-color);
         }
         
         /* Modern Button Styles */
@@ -2976,80 +3442,613 @@
                 transition: none !important;
             }
         }
+        
+        /* Racing Visual Effects */
+        @keyframes speedLines {
+            0% {
+                transform: translateX(-100px) scaleX(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(0) scaleX(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateX(100px) scaleX(0);
+                opacity: 0;
+            }
+        }
+        
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                linear-gradient(90deg, transparent 0%, rgba(255, 107, 53, 0.05) 50%, transparent 100%),
+                linear-gradient(45deg, transparent 0%, rgba(255, 107, 53, 0.02) 25%, transparent 50%);
+            pointer-events: none;
+            animation: racingEffect 8s linear infinite;
+        }
+        
+        @keyframes racingEffect {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* Turbo Boost Effect for Active Links */
+        .racing-nav-link.active,
+        .dropdown-item.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .racing-nav-link.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: turboBoost 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes turboBoost {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Racing Stripe Effects */
+        .navbar-brand::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            opacity: 0;
+            z-index: -1;
+            transition: all var(--transition-base);
+        }
+        
+        .navbar-brand:hover::before {
+            opacity: 0.1;
+            animation: racingGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes racingGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 107, 53, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), 0 0 35px rgba(255, 107, 53, 0.4); }
+        }
+        
+        /* Performance Meter Effect */
+        .mega-dropdown:hover .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-sm);
+            animation: performanceMeter 1s ease-out;
+        }
+        
+        @keyframes performanceMeter {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        
+        /* Responsive Design for Sports Car Navbar */
+        @media (max-width: 1200px) {
+            .mega-dropdown .dropdown-menu {
+                min-width: 600px;
+                padding: 1.5rem;
+            }
+            
+            .mega-menu .container .row .col-md-3 {
+                flex: 0 0 50%;
+                max-width: 50%;
+                margin-bottom: 1rem;
+            }
+            
+            .navbar-search {
+                max-width: 350px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .navbar-brand .brand-text .brand-name {
+                font-size: 1.3rem;
+            }
+            
+            .brand-tagline {
+                display: none !important;
+            }
+            
+            .navbar-search {
+                max-width: 100%;
+                margin: 1rem 0;
+                order: 1;
+            }
+            
+            .navbar-nav {
+                order: 2;
+            }
+            
+            .mega-dropdown .dropdown-menu {
+                min-width: auto;
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .mega-menu .container .row .col-md-3 {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-bottom: 1.5rem;
+            }
+            
+            .racing-nav-link {
+                padding: 1rem !important;
+                margin: 0.25rem 0;
+                border-radius: var(--radius-lg);
+                background: rgba(255, 255, 255, 0.05);
+            }
+            
+            .racing-nav-link .nav-text {
+                display: block !important;
+            }
+            
+            .nav-accent {
+                display: none;
+            }
+            
+            .racing-nav-link:hover {
+                background: var(--gradient-primary);
+                transform: translateX(10px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+            
+            .brand-icon {
+                font-size: 1.4rem;
+            }
+            
+            .search-input-wrapper {
+                border-radius: var(--radius-lg);
+            }
+            
+            .turbo-search {
+                padding: 10px 15px 10px 40px;
+                font-size: 0.9rem;
+            }
+            
+            .search-boost-btn {
+                padding: 6px 12px;
+            }
+            
+            .brands-menu, .racing-menu, .language-menu, .user-menu {
+                min-width: 250px;
+            }
+            
+            .cart-badge-racing {
+                font-size: 0.65rem;
+                padding: 2px 6px;
+                min-width: 18px;
+                height: 18px;
+            }
+            
+            .user-nav .user-avatar {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .user-nav .user-avatar i {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar .container {
+                padding: 0 1rem;
+            }
+            
+            .navbar-brand .brand-text .brand-name {
+                font-size: 1.1rem;
+            }
+            
+            .brand-icon {
+                font-size: 1.3rem;
+            }
+            
+            .search-input-wrapper {
+                margin: 0.5rem 0;
+            }
+            
+            .turbo-search::placeholder {
+                font-size: 0.85rem;
+            }
+            
+            .racing-nav-link {
+                padding: 0.75rem !important;
+                font-size: 0.9rem;
+            }
+            
+            .dropdown-menu {
+                border-radius: var(--radius-lg);
+            }
+            
+            .mega-menu .mega-title {
+                font-size: 1rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .brands-menu .dropdown-item,
+            .racing-menu .dropdown-item,
+            .language-menu .dropdown-item,
+            .user-menu .dropdown-item {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* High Performance Mode */
+        @media (prefers-reduced-motion: reduce) {
+            .brand-glow,
+            .cart-badge-racing,
+            .cart-pulse,
+            .racing-nav-link,
+            .search-boost-btn,
+            .navbar::before {
+                animation: none !important;
+            }
+            
+            .racing-nav-link:hover,
+            .navbar-brand:hover .brand-icon {
+                transform: none !important;
+            }
+        }
+        
+        /* High Contrast Racing Mode */
+        @media (prefers-contrast: high) {
+            .navbar {
+                background: #000000 !important;
+                border-bottom: 3px solid var(--primary-color);
+            }
+            
+            .racing-nav-link {
+                color: #ffffff !important;
+                border: 1px solid var(--primary-color);
+            }
+            
+            .search-input-wrapper {
+                background: #000000;
+                border: 2px solid var(--primary-color);
+            }
+            
+            .mega-menu, .brands-menu, .racing-menu, .language-menu, .user-menu {
+                background: #000000;
+                border: 2px solid var(--primary-color);
+            }
+        }
+        
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .racing-nav-link:hover,
+            .navbar-brand:hover,
+            .search-boost-btn:hover,
+            .dropdown-item:hover {
+                transform: none;
+            }
+            
+            .racing-nav-link,
+            .dropdown-item,
+            .search-boost-btn {
+                padding: 1rem;
+                min-height: 44px;
+            }
+            
+            .cart-nav,
+            .user-nav {
+                min-width: 60px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        
+        /* Racing Loading States */
+        .navbar-loading {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .navbar-loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--gradient-primary), transparent);
+            animation: racingLoad 2s ease-in-out infinite;
+        }
+        
+        @keyframes racingLoad {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Fuel Gauge Style Dropdown Indicators */
+        .dropdown-toggle::after {
+            border: none;
+            content: '▼';
+            font-size: 0.7rem;
+            color: var(--primary-color);
+            transition: all var(--transition-base);
+            transform: rotate(0deg);
+        }
+        
+        .dropdown-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg);
+            color: white;
+        }
+        
+        /* Performance Dashboard Effect */
+        .navbar.scrolled::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gradient-primary);
+            animation: speedometer 2s ease-out;
+        }
+        
+        @keyframes speedometer {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <!-- Modern Sports Car Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNavbar">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'shop:home' %}">
-                <i class="bi bi-speedometer2 me-2"></i>{{ site_settings.site_name }}
+            <!-- Enhanced Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'shop:home' %}">
+                <div class="brand-icon-wrapper me-2">
+                    <i class="bi bi-speedometer2 brand-icon"></i>
+                    <div class="brand-glow"></div>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">{{ site_settings.site_name }}</span>
+                    <small class="brand-tagline d-none d-md-block">Performance Parts</small>
+                </div>
             </a>
             
+            <!-- Mobile Toggle with Racing Animation -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+                <span class="racing-lines"></span>
+                <span class="racing-lines"></span>
+                <span class="racing-lines"></span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Search Bar -->
-                <form class="d-flex mx-auto" style="width: 100%; max-width: 400px;" method="get" action="{% url 'shop:search' %}">
-                     <div class="input-group">
-                         <input class="form-control search-bar" type="search" name="q" placeholder="{% trans 'Search car parts...' %}" value="{{ request.GET.q }}">
-                         <button class="btn btn-primary" type="submit">
-                             <i class="bi bi-search"></i>
-                         </button>
-                     </div>
-                 </form>
+                <!-- Enhanced Performance Search -->
+                <div class="navbar-search mx-auto">
+                    <form class="search-form" method="get" action="{% url 'shop:search' %}">
+                        <div class="search-input-wrapper">
+                            <i class="bi bi-search search-icon"></i>
+                            <input class="form-control turbo-search" type="search" name="q"
+                                   placeholder="{% trans 'Search performance parts, brands, models...' %}"
+                                   value="{{ request.GET.q }}">
+                            <button class="search-boost-btn" type="submit">
+                                <i class="bi bi-rocket-takeoff"></i>
+                            </button>
+                        </div>
+                        <div class="search-suggestions d-none">
+                            <div class="suggestion-item">Engine Performance</div>
+                            <div class="suggestion-item">Suspension & Handling</div>
+                            <div class="suggestion-item">Exhaust Systems</div>
+                            <div class="suggestion-item">Brake Upgrades</div>
+                        </div>
+                    </form>
+                </div>
                 
-                <!-- Navigation Links -->
+                <!-- Racing-Inspired Navigation Menu -->
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:product_list' %}">
-                            <i class="bi bi-grid me-1"></i>{% trans "Products" %}
+                    <!-- Performance Categories Mega Menu -->
+                    <li class="nav-item dropdown mega-dropdown">
+                        <a class="nav-link dropdown-toggle racing-nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear-fill me-1"></i>
+                            <span class="nav-text">{% trans "Performance" %}</span>
+                            <div class="nav-accent"></div>
                         </a>
+                        <div class="dropdown-menu mega-menu">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6 class="mega-title">
+                                            <i class="bi bi-lightning-charge text-warning me-2"></i>Engine
+                                        </h6>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=turbo">
+                                            <i class="bi bi-tornado me-2"></i>Turbo Systems
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=intake">
+                                            <i class="bi bi-wind me-2"></i>Cold Air Intakes
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=exhaust">
+                                            <i class="bi bi-speaker me-2"></i>Exhaust Systems
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="mega-title">
+                                            <i class="bi bi-disc text-danger me-2"></i>Brakes
+                                        </h6>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=brake-pads">
+                                            <i class="bi bi-hexagon me-2"></i>Performance Pads
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=rotors">
+                                            <i class="bi bi-circle me-2"></i>Racing Rotors
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=brake-kits">
+                                            <i class="bi bi-tools me-2"></i>Big Brake Kits
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="mega-title">
+                                            <i class="bi bi-speedometer text-primary me-2"></i>Suspension
+                                        </h6>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=coilovers">
+                                            <i class="bi bi-arrow-up-down me-2"></i>Coilovers
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=sway-bars">
+                                            <i class="bi bi-subtract me-2"></i>Sway Bars
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=struts">
+                                            <i class="bi bi-arrows-vertical me-2"></i>Strut Bars
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="mega-title">
+                                            <i class="bi bi-circle-fill text-success me-2"></i>Wheels & Tires
+                                        </h6>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=wheels">
+                                            <i class="bi bi-record-circle me-2"></i>Racing Wheels
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=tires">
+                                            <i class="bi bi-circle me-2"></i>Performance Tires
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'products:product_list' %}?category=spacers">
+                                            <i class="bi bi-square me-2"></i>Wheel Spacers
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
+                    
+                    <!-- Brands Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle racing-nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-award me-1"></i>
+                            <span class="nav-text">{% trans "Brands" %}</span>
+                            <div class="nav-accent"></div>
+                        </a>
+                        <ul class="dropdown-menu brands-menu">
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?brand=brembo">
+                                <i class="bi bi-star-fill text-warning me-2"></i>Brembo
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?brand=kw">
+                                <i class="bi bi-star-fill text-warning me-2"></i>KW Suspension
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?brand=akrapovic">
+                                <i class="bi bi-star-fill text-warning me-2"></i>Akrapovic
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?brand=hks">
+                                <i class="bi bi-star-fill text-warning me-2"></i>HKS
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}">
+                                <i class="bi bi-grid me-2"></i>{% trans "All Brands" %}
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Racing Categories -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle racing-nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-flag-fill me-1"></i>
+                            <span class="nav-text">{% trans "Racing" %}</span>
+                            <div class="nav-accent"></div>
+                        </a>
+                        <ul class="dropdown-menu racing-menu">
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=track">
+                                <i class="bi bi-stopwatch text-primary me-2"></i>Track Day Essentials
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=drag">
+                                <i class="bi bi-lightning-charge text-warning me-2"></i>Drag Racing
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=drift">
+                                <i class="bi bi-arrow-repeat text-info me-2"></i>Drift Performance
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}?category=autocross">
+                                <i class="bi bi-diagram-3 text-success me-2"></i>Autocross Setup
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- User Account -->
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle me-1"></i>{{ user.first_name|default:user.username }}
+                            <a class="nav-link dropdown-toggle racing-nav-link user-nav" href="#" role="button" data-bs-toggle="dropdown">
+                                <div class="user-avatar">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                                <span class="nav-text d-none d-lg-inline">{{ user.first_name|default:user.username }}</span>
+                                <div class="nav-accent"></div>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu user-menu">
                                 <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
-                                    <i class="bi bi-person me-2"></i>{% trans "Profile" %}
+                                    <i class="bi bi-speedometer text-primary me-2"></i>{% trans "My Garage" %}
                                 </a></li>
                                 <li><a class="dropdown-item" href="{% url 'cart:wishlist' %}">
-                                    <i class="bi bi-heart me-2"></i>{% trans "Wishlist" %}
+                                    <i class="bi bi-heart text-danger me-2"></i>{% trans "Wishlist" %}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'checkout:order_list' %}">
+                                    <i class="bi bi-bag text-success me-2"></i>{% trans "Order History" %}
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                                    <i class="bi bi-box-arrow-right me-2"></i>{% trans "Logout" %}
+                                    <i class="bi bi-power text-warning me-2"></i>{% trans "Logout" %}
                                 </a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:login' %}">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>{% trans "Login" %}
+                            <a class="nav-link racing-nav-link" href="{% url 'accounts:login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                <span class="nav-text">{% trans "Login" %}</span>
+                                <div class="nav-accent"></div>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:register' %}">
-                                <i class="bi bi-person-plus me-1"></i>{% trans "Register" %}
+                            <a class="nav-link racing-nav-link btn-outline-primary ms-2" href="{% url 'accounts:register' %}">
+                                <i class="bi bi-person-plus me-1"></i>
+                                <span class="nav-text">{% trans "Join Now" %}</span>
                             </a>
                         </li>
                     {% endif %}
+                    
                     <!-- Language Selector -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-globe me-1"></i>
-                            {% get_current_language as CURRENT_LANGUAGE %}
-                            {% for lang_code, lang_name in LANGUAGES %}
-                                {% if lang_code == CURRENT_LANGUAGE %}{{ lang_name }}{% endif %}
-                            {% endfor %}
+                        <a class="nav-link dropdown-toggle racing-nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe2 me-1"></i>
+                            <span class="nav-text d-none d-lg-inline">
+                                {% get_current_language as CURRENT_LANGUAGE %}
+                                {% for lang_code, lang_name in LANGUAGES %}
+                                    {% if lang_code == CURRENT_LANGUAGE %}{{ lang_name }}{% endif %}
+                                {% endfor %}
+                            </span>
+                            <div class="nav-accent"></div>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu language-menu">
                             {% get_available_languages as LANGUAGES %}
                             {% get_current_language as CURRENT_LANGUAGE %}
                             {% for lang_code, lang_name in LANGUAGES %}
@@ -3059,19 +4058,26 @@
                                         <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}" />
                                         <input name="language" type="hidden" value="{{ lang_code }}" />
                                         <button type="submit" class="dropdown-item {% if lang_code == CURRENT_LANGUAGE %}active{% endif %}">
-                                            {{ lang_name }}
+                                            <i class="bi bi-flag me-2"></i>{{ lang_name }}
                                         </button>
                                     </form>
                                 </li>
                             {% endfor %}
                         </ul>
                     </li>
+                    
+                    <!-- Enhanced Cart with Racing Theme -->
                     <li class="nav-item">
-                        <a class="nav-link position-relative" href="{% url 'cart:cart_detail' %}">
-                            <i class="bi bi-cart3 me-1"></i>{% trans "Cart" %}
-                            {% if cart_total_items > 0 %}
-                                <span class="cart-badge">{{ cart_total_items }}</span>
-                            {% endif %}
+                        <a class="nav-link racing-nav-link cart-nav position-relative" href="{% url 'cart:cart_detail' %}">
+                            <div class="cart-icon-wrapper">
+                                <i class="bi bi-cart3 cart-icon"></i>
+                                {% if cart_total_items > 0 %}
+                                    <span class="cart-badge-racing">{{ cart_total_items }}</span>
+                                    <div class="cart-pulse"></div>
+                                {% endif %}
+                            </div>
+                            <span class="nav-text d-none d-lg-inline">{% trans "Cart" %}</span>
+                            <div class="nav-accent"></div>
                         </a>
                     </li>
                 </ul>
