@@ -76,7 +76,7 @@
         <div class="row">
             <!-- Filters Sidebar -->
             <div class="col-lg-3 mb-4">
-                <div class="card border-0 shadow-sm">
+                <div class="card border-0 shadow-sm sidebar-filter">
                     <div class="card-header bg-white border-0 py-3">
                         <h5 class="mb-0 fw-bold">
                             <i class="bi bi-funnel me-2"></i>Filters
@@ -394,6 +394,23 @@
 
 .price-range input {
     border-radius: 6px;
+}
+
+/* Ensure sidebar badges stay on the right side */
+.sidebar-filter .btn {
+    position: relative;
+}
+
+.sidebar-filter .badge {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.sidebar-filter .btn span:first-child {
+    margin-right: 2rem; /* Add space for the badge */
 }
 
 @media (max-width: 768px) {
