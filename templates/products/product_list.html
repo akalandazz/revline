@@ -90,16 +90,17 @@
                             {% if categories %}
                             <div class="mb-4">
                                 <h6 class="fw-bold mb-3">Categories</h6>
-                                <div class="list-group list-group-flush">
+                                <div class="d-flex flex-column gap-2">
                                     <a href="?{% for key,value in current_filters.items %}{% if key != 'category' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
-                                       class="list-group-item list-group-item-action px-0 py-2 border-0 {% if not current_filters.category %}active{% endif %}">
-                                        All Categories
+                                       class="btn {% if not current_filters.category %}btn-primary text-white fw-semibold rounded-3 px-3 py-2{% else %}btn-outline-secondary text-dark rounded-3 px-3 py-2{% endif %} text-start d-flex justify-content-between align-items-center">
+                                        <span>All Categories</span>
+                                        <span class="badge {% if not current_filters.category %}bg-light text-primary{% else %}bg-secondary text-white{% endif %} rounded-pill">{{ total_products|default:0 }}</span>
                                     </a>
                                     {% for cat in categories %}
                                         <a href="?{% for key,value in current_filters.items %}{% if key != 'category' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}category={{ cat.slug }}"
-                                           class="list-group-item list-group-item-action px-0 py-2 border-0 {% if current_filters.category == cat.slug %}active{% endif %}">
-                                            {{ cat.name }}
-                                            <small class="text-muted">({{ cat.products.count }})</small>
+                                           class="btn {% if current_filters.category == cat.slug %}btn-primary text-white fw-semibold rounded-3 px-3 py-2{% else %}btn-outline-secondary text-dark rounded-3 px-3 py-2{% endif %} text-start d-flex justify-content-between align-items-center">
+                                            <span>{{ cat.name }}</span>
+                                            <span class="badge {% if current_filters.category == cat.slug %}bg-light text-primary{% else %}bg-secondary text-white{% endif %} rounded-pill">{{ cat.products.count }}</span>
                                         </a>
                                     {% endfor %}
                                 </div>
@@ -110,16 +111,17 @@
                             {% if brands %}
                             <div class="mb-4">
                                 <h6 class="fw-bold mb-3">Brands</h6>
-                                <div class="list-group list-group-flush">
+                                <div class="d-flex flex-column gap-2">
                                     <a href="?{% for key,value in current_filters.items %}{% if key != 'brand' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
-                                       class="list-group-item list-group-item-action px-0 py-2 border-0 {% if not current_filters.brand %}active{% endif %}">
-                                        All Brands
+                                       class="btn {% if not current_filters.brand %}btn-primary text-white fw-semibold rounded-3 px-3 py-2{% else %}btn-outline-secondary text-dark rounded-3 px-3 py-2{% endif %} text-start d-flex justify-content-between align-items-center">
+                                        <span>All Brands</span>
+                                        <span class="badge {% if not current_filters.brand %}bg-light text-primary{% else %}bg-secondary text-white{% endif %} rounded-pill">{{ total_brands|default:brands.count }}</span>
                                     </a>
                                     {% for b in brands %}
                                         <a href="?{% for key,value in current_filters.items %}{% if key != 'brand' and value %}{{ key }}={{ value }}&{% endif %}{% endfor %}brand={{ b.slug }}"
-                                           class="list-group-item list-group-item-action px-0 py-2 border-0 {% if current_filters.brand == b.slug %}active{% endif %}">
-                                            {{ b.name }}
-                                            <small class="text-muted">({{ b.products.count }})</small>
+                                           class="btn {% if current_filters.brand == b.slug %}btn-primary text-white fw-semibold rounded-3 px-3 py-2{% else %}btn-outline-secondary text-dark rounded-3 px-3 py-2{% endif %} text-start d-flex justify-content-between align-items-center">
+                                            <span>{{ b.name }}</span>
+                                            <span class="badge {% if current_filters.brand == b.slug %}bg-light text-primary{% else %}bg-secondary text-white{% endif %} rounded-pill">{{ b.products.count }}</span>
                                         </a>
                                     {% endfor %}
                                 </div>
